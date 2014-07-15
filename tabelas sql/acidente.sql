@@ -1,12 +1,12 @@
  CREATE TABLE acidente (
-   idAcidente int(11) NOT NULL auto_increment,
+   idAcidente INTEGER UNSIGNED NOT NULL auto_increment,
    localizacao varchar(100) NOT NULL,
    descricao varchar(100) NOT NULL,
    data varchar(100) NOT NULL,
    numeroVitimas int(11) NOT NULL,
    bombeiro boolean NOT NULL,
    policia boolean NOT NULL,
-   obstrucao int(11) NOT NULL,
+   obstrucao INTEGER UNSIGNED NOT NULL,
    PRIMARY KEY (idAcidente)
  );
  INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
