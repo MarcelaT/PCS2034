@@ -1,0 +1,32 @@
+<?php
+$title = 'Usuários cadastrados';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('usuario', array('action'=>'add'));?>">Criar novo usuário</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Login</th>
+	<th>Permissao</th>
+	<th>Nome</th>
+	<th>Email</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($usuarios as $usuario) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($usuario->login);?></td>
+	<td><?php echo $this->escapeHtml($usuario->permissao);?></td>
+	<td><?php echo $this->escapeHtml($usuario->nome);?></td>
+	<td><?php echo $this->escapeHtml($usuario->email);?></td>
+    <td>
+        <a href="<?php echo $this->url('usuario',
+            array('action'=>'edit', 'id' => $usuario->id));?>">Editar</a>
+        <a href="<?php echo $this->url('usuario',
+            array('action'=>'delete', 'id' => $usuario->id));?>">Remover</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
