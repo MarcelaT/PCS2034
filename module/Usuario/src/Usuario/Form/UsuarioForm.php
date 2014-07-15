@@ -17,44 +17,65 @@ class UsuarioForm extends Form
         ));
         $this->add(array(
             'name' => 'login',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+                'class' => 'form-control',
+            ),
             'options' => array(
                 'label' => 'Login',
             ),
         ));
         $this->add(array(
             'name' => 'senha',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+                'class' => 'form-control',
+            ),
             'options' => array(
                 'label' => 'Senha',
             ),
         ));
 		$this->add(array(
-            'name' => 'permissao',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Permissão',
-            ),
-        ));
-		$this->add(array(
             'name' => 'nome',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+                'class' => 'form-control',
+            ),
             'options' => array(
                 'label' => 'Nome',
             ),
         ));
 		$this->add(array(
             'name' => 'email',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+                'class' => 'form-control',
+            ),
             'options' => array(
                 'label' => 'Email',
+            ),
+        ));
+		$this->add(array(
+            'name' => 'permissao',
+            'type' => 'select',
+			'attributes' => array(
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Permissão',
+				'value_options' => array(
+					'administrador' => 'Administrador',
+					'coordenador' => 'Coordenador',
+					'especialista' => 'Especialista',
+					'lider_missao' => 'Líder da Missão',
+                ),
             ),
         ));
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Go',
+                'value' => 'Enviar',
                 'id' => 'submitbutton',
             ),
         ));
