@@ -1,11 +1,11 @@
 -- Usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
 	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	login varchar(255) NOT NULL UNIQUE,
-	senha varchar(255) NOT NULL,
-	nome varchar(255) DEFAULT NULL,
+	login varchar(100) NOT NULL UNIQUE,
+	senha varchar(100) NOT NULL,
+	nome varchar(100) DEFAULT NULL,
 	permissao enum('administrador','coordenador','especialista','lider_missao') DEFAULT NULL,
-	email varchar(255) DEFAULT NULL
+	email varchar(100) DEFAULT NULL
 );
 
 -- Valores interessantes
