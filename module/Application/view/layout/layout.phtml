@@ -41,6 +41,7 @@
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
 						<li class="active"><a href="<?php echo $this->basePath('login') ?>"><?php echo $this->translate('Login') ?></a></li>
 						<li class="active"><a href="<?php echo $this->basePath('usuarios') ?>"><?php echo $this->translate('Usuários') ?></a></li>
+						<li class="active"><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>"><?php echo $this->translate('Logout') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>

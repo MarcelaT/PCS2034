@@ -11,7 +11,7 @@ class UsuarioTable
 		$this->tableGateway = $tableGateway;
 	}
 
-    public function fetchAll() {
+	public function fetchAll() {
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
@@ -26,6 +26,15 @@ class UsuarioTable
 		return $row;
 	}
 
+	public function getUsuarioByLogin($login) {
+		$rowset = $this->tableGateway->select(array('login' => $login));
+		$row = $rowset->current();
+		if (!$row) {
+			throw new \Exception("Não foi localizado Usuário de id $id");
+		}
+		return $row;
+	}
+	
 	public function saveUsuario(Usuario $usuario) {
 		$data = array(
 			'login' => $usuario->login,
