@@ -22,20 +22,23 @@ class UsuarioController extends AbstractActionController
     public function addAction()
     {
 		$form = new UsuarioForm();
-        $form->get('submit')->setValue('Add');
+        $form->get('submit')->setValue('Adicionar');
 		
         $request = $this->getRequest();
+		
         if ($request->isPost()) {
             $usuario = new Usuario();
             $form->setInputFilter($usuario->getInputFilter());
             $form->setData($request->getPost());
 			
-            if ($form->isValid()) {
+			$submit = $request->getPost('submit');
+            if ($submit == 'Adicionar' && $form->isValid()) {
                 $usuario->exchangeArray($form->getData());
                 $this->getUsuarioTable()->saveUsuario($usuario);
-				 // Redirect to list of usuarios
-                return $this->redirect()->toRoute('usuario');
             }
+			
+			// Redirect to list of usuarios
+            return $this->redirect()->toRoute('usuario');
         }
         return array('form' => $form);
     }
@@ -62,19 +65,20 @@ class UsuarioController extends AbstractActionController
 
         $form  = new UsuarioForm();
         $form->bind($usuario);
-        $form->get('submit')->setAttribute('value', 'Edit');
+        $form->get('submit')->setAttribute('value', 'Editar');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setInputFilter($usuario->getInputFilter());
             $form->setData($request->getPost());
 
-            if ($form->isValid()) {
+			$submit = $request->getPost('submit');
+            if ($submit == 'Editar' && $form->isValid()) {
                 $this->getUsuarioTable()->saveUsuario($usuario);
-
-                // Redirect to list of usuarios
-                return $this->redirect()->toRoute('usuario');
             }
+			
+			// Redirect to list of usuarios
+            return $this->redirect()->toRoute('usuario');
         }
 
         return array(
@@ -92,9 +96,9 @@ class UsuarioController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $del = $request->getPost('del', 'No');
+            $del = $request->getPost('del');
 
-            if ($del == 'Yes') {
+            if ($del == 'Sim') {
                 $id = (int) $request->getPost('id');
                 $this->getUsuarioTable()->deleteUsuario($id);
             }
@@ -104,7 +108,7 @@ class UsuarioController extends AbstractActionController
         }
 
         return array(
-            'id'    => $id,
+            'id' => $id,
             'usuario' => $this->getUsuarioTable()->getUsuario($id)
         );
     }

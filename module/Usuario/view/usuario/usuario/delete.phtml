@@ -5,7 +5,8 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
 <p>Você tem certeza que deseja remover o usuário de login
-	'<?php echo $this->escapeHtml($usuario->login); ?>'?
+<br>
+'<?php echo $this->escapeHtml($usuario->login); ?>' ?
 </p>
 
 <?php
@@ -17,8 +18,8 @@ $url = $this->url('usuario', array(
 
 <form action="<?php echo $url; ?>" method="post">
 <div>
-	<input type="hidden" name="id" value="<?php echo (int) $usuario->id; ?>" />
-	<input type="submit" name="del" value="Yes" />
-	<input type="submit" name="del" value="No" />
+    <input type="hidden" name="id" value="<?php echo (int) $usuario->id; ?>" />
+    <input type="submit" class="btn btn-danger" name="del" value="Sim" />
+    <input type="submit" class="btn" name="del" value="Não" />
 </div>
 </form>

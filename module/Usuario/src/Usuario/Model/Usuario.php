@@ -14,20 +14,36 @@ class Usuario implements InputFilterAwareInterface
 	public $permissao;
 	public $nome;
 	public $email;
+	public $permissaoNome;
 	
 	// Filtro para validações
 	protected $inputFilter;
 
 	public function exchangeArray($data)
     {
-        $this->id     = (!empty($data['id'])) ? $data['id'] : null;
+        $this->id = (!empty($data['id'])) ? $data['id'] : null;
         $this->login = (!empty($data['login'])) ? $data['login'] : null;
         $this->senha  = (!empty($data['senha'])) ? md5($data['senha']) : null;
 		$this->permissao  = (!empty($data['permissao'])) ? $data['permissao'] : null;
 		$this->nome  = (!empty($data['nome'])) ? $data['nome'] : null;
 		$this->email  = (!empty($data['email'])) ? $data['email'] : null;
+		$this->permissaoNome  = (!empty($data['permissao'])) ? $this->getNomePermissao($data['permissao']) : null;
     }
 
+	// atribui um nome user-friendly ao enum de permissão
+	public function getNomePermissao($permissao)
+    {
+        if ($permissao == 'administrador') {
+			return 'Administrador';
+		} else if ($permissao == 'coordenador') {
+			return 'Coordenador';
+		} else if ($permissao == 'especialista') {
+			return 'Especialista';
+		} else if ($permissao == 'lider_missao') {
+			return 'Líder da Missão';
+		}
+    }
+	
 	public function getArrayCopy()
     {
         return get_object_vars($this);
@@ -66,7 +82,7 @@ class Usuario implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 255,
                         ),
                     ),
                 ),
@@ -86,7 +102,7 @@ class Usuario implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 255,
                         ),
                     ),
                 ),
@@ -106,7 +122,7 @@ class Usuario implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 255,
                         ),
                     ),
                 ),
@@ -125,7 +141,7 @@ class Usuario implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 255,
                         ),
                     ),
                 ),
@@ -144,7 +160,7 @@ class Usuario implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 255,
                         ),
                     ),
                 ),
