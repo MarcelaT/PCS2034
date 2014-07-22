@@ -7,29 +7,16 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application;
+namespace Acidente;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
+use Acidente\Model\Acidente;
+use Acidente\Model\AcidenteTable;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
-use Application\Model\Usuario;
-use Application\Model\UsuarioTable;
-
-use Application\Model\Acidente;
-use Application\Model\AcidenteTable;
-
 class Module
 {
-    public function onBootstrap(MvcEvent $e)
-    {
-        $eventManager        = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-    }
-
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
@@ -45,21 +32,21 @@ class Module
             ),
         );
     }
-	
-	public function getServiceConfig()
+
+ public function getServiceConfig()
     {
         return array(
             'factories' => array(
-                'Album\Model\AlbumTable' =>  function($sm) {
-                    $tableGateway = $sm->get('AlbumTableGateway');
-                    $table = new AlbumTable($tableGateway);
+                'Acidente\Model\AcidenteTable' =>  function($sm) {
+                    $tableGateway = $sm->get('AcidenteTableGateway');
+                    $table = new AcidenteTable($tableGateway);
                     return $table;
                 },
-                'AlbumTableGateway' => function ($sm) {
+                'AcidenteTableGateway' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Album());
-                    return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                    $resultSetPrototype->setArrayObjectPrototype(new Acidente());
+                    return new TableGateway('acidente', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );
