@@ -37,7 +37,7 @@ class UsuarioController extends AbstractActionController
 		// apenas administradores podem ter acesso!
 		$permissao = $this->getAuthService()->getStorage()->read('usuario')->permissao;
 		if ($permissao != 'administrador'){
-			return $this->redirect()->toRoute('login');
+			return $this->redirect()->toRoute('forbidden');
 		}
 		
 		return new ViewModel(array('usuarios' => $this->getUsuarioTable()->fetchAll()));
