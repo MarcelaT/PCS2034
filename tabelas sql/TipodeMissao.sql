@@ -1,8 +1,8 @@
  CREATE TABLE TipodeMissao (
-   idTipoMissao INTEGER UNSIGNED NOT NULL auto_increment,
+   id INTEGER UNSIGNED NOT NULL auto_increment,
    nome varchar(100) NOT NULL,
    descricao varchar(100) NOT NULL,
-   PRIMARY KEY (idTipoMissao)
+   PRIMARY KEY (id)
  );
  INSERT INTO TipodeMissao (nome, descricao)
      VALUES  ('Resgate Ambulancia',  'Envia ambulancia para resgate de feridos');
