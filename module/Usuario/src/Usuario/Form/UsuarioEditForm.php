@@ -4,7 +4,7 @@ namespace Usuario\Form;
 
 use Zend\Form\Form;
 
-class UsuarioForm extends Form
+class UsuarioEditForm extends Form
 {
 	public function __construct($name = null)
 	{
@@ -26,18 +26,6 @@ class UsuarioForm extends Form
 			),
 			'options' => array(
 				'label' => 'Login',
-			),
-		));
-		
-		// senha
-		$this->add(array(
-			'name' => 'senha',
-			'type' => 'text',
-			'attributes' => array(
-				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Senha',
 			),
 		));
 		

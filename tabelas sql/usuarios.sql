@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 	login varchar(100) NOT NULL UNIQUE,
 	senha varchar(100) NOT NULL,
 	nome varchar(100) DEFAULT NULL,
-	permissao enum('administrador','coordenador','especialista','lider_missao') DEFAULT NULL,
+	permissao enum('administrador','coordenador','especialista','lider_missao') NOT NULL DEFAULT 'administrador',
 	email varchar(100) DEFAULT NULL,
 	dataCriacao TIMESTAMP NOT NULL,
 	dataEdicao TIMESTAMP NOT NULL

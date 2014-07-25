@@ -15,8 +15,8 @@ class AuthController extends AbstractActionController
 
 	public function getForm() {
 		if (!$this->form) {
-			$user	   = new User();
-			$builder	= new AnnotationBuilder();
+			$user = new User();
+			$builder = new AnnotationBuilder();
 			$this->form = $builder->createForm($user);
 		}
 		
@@ -85,6 +85,8 @@ class AuthController extends AbstractActionController
 						$message = 'Usuário inexistente.';
 					} else if ($message == 'Supplied credential is invalid.') {
 						$message = 'Senha incorreta.';
+					} else if ($message == 'Authentication successful.') {
+						continue;
 					}
 					$this->flashmessenger()->addMessage($message);
 				}

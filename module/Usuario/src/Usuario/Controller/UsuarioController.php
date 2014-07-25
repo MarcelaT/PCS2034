@@ -6,7 +6,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use Usuario\Model\Usuario;
-use Usuario\Form\UsuarioForm;
+use Usuario\Form\UsuarioAddForm;
+use Usuario\Form\UsuarioEditForm;
+use Usuario\Form\UsuarioEditDadosForm;
+use Usuario\Form\UsuarioPassForm;
 
 class UsuarioController extends AbstractActionController
 {
@@ -19,29 +22,35 @@ class UsuarioController extends AbstractActionController
 		
 		return new ViewModel(array('usuarios' => $this->getUsuarioTable()->fetchAll()));
 	}
-
+	
 	public function addAction()
 	{
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
-		$form = new UsuarioForm();
+		$form = new UsuarioAddForm();
 		$form->get('submit')->setValue('Adicionar');
 		
 		$request = $this->getRequest();
 		
 		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('usuario');
+			}
+			
 			$usuario = new Usuario();
 			$form->setInputFilter($usuario->getInputFilter());
 			$form->setData($request->getPost());
 			
-			$submit = $request->getPost('submit');
-			if ($submit == 'Adicionar' && $form->isValid()) {
+			if ($submit == 'Adicionar' && $form->isValid() && $request->getPost('senha') != '') {
 				$usuario->exchangeArray($form->getData());
 				date_default_timezone_set("Brazil/East");
 				$dataAtual = date('Y-m-d H:i:s');
 				$usuario->dataCriacao = $dataAtual;
 				$usuario->dataEdicao = $dataAtual;
+				$usuario->senha = md5($request->getPost('senha'));
 				$this->getUsuarioTable()->saveUsuario($usuario);
 			}
 			
@@ -50,7 +59,7 @@ class UsuarioController extends AbstractActionController
 		}
 		return array('form' => $form);
 	}
-
+	
 	public function editAction()
 	{
 		// verifica a permissão do usuário
@@ -68,23 +77,31 @@ class UsuarioController extends AbstractActionController
 			return $this->redirect()->toRoute('usuario', array('action' => 'index'));
 		}
 
+		// valores que não aparecem explicitamente no Form
+		$senha = $usuario->senha;
 		$dataCriacao = $usuario->dataCriacao;
 		
-		$form  = new UsuarioForm();
+		$form  = new UsuarioEditForm();
+		$form->get('submit')->setValue('Editar');
 		$form->bind($usuario);
-		$form->get('submit')->setAttribute('value', 'Editar');
-
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('usuario');
+			}
+			
 			$form->setInputFilter($usuario->getInputFilter());
 			$form->setData($request->getPost());
-
-			$submit = $request->getPost('submit');
+			
 			if ($submit == 'Editar' && $form->isValid()) {
 				date_default_timezone_set("Brazil/East");
 				$dataAtual = date('Y-m-d H:i:s');
 				$usuario->dataEdicao = $dataAtual;
 				$usuario->dataCriacao = $dataCriacao;
+				$usuario->senha = $senha;
 				$this->getUsuarioTable()->saveUsuario($usuario);
 			}
 			
@@ -97,7 +114,133 @@ class UsuarioController extends AbstractActionController
 			'form' => $form,
 		);
 	}
+	
+	public function editdadosAction()
+	{
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('success');
+		}
 
+		// recupera o usuário pelo id
+		try {
+			$usuario = $this->getUsuarioTable()->getUsuario($id);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('success');
+		}
+
+		// valores que não aparecem explicitamente no Form
+		$senha = $usuario->senha;
+		$permissao = $usuario->permissao;
+		$dataCriacao = $usuario->dataCriacao;
+		
+		$form  = new UsuarioEditDadosForm();
+		$form->get('submit')->setValue('Editar');
+		$form->bind($usuario);
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('success');
+			}
+			
+			$form->setInputFilter($usuario->getInputFilter());
+			$form->setData($request->getPost());
+			
+			if ($submit == 'Editar' && $form->isValid()) {
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$usuario->dataEdicao = $dataAtual;
+				$usuario->dataCriacao = $dataCriacao;
+				$usuario->senha = $senha;
+				$usuario->permissao = $permissao;
+				$this->getUsuarioTable()->saveUsuario($usuario);
+				
+				// atualiza o usuário editado na sessão
+				$this->commonsPlugin()->writeStorage($usuario);
+			}
+			
+			// Redirect to list of usuarios
+			return $this->redirect()->toRoute('success');
+		}
+
+		return array(
+			'id' => $id,
+			'form' => $form,
+		);
+	}
+	
+	public function editpasswordAction()
+	{
+		// salva a permissão no layout
+		$this->commonsPlugin()->setPermissaoLayout();
+		
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('success');
+		}
+		
+		// recupera o usuário pelo id
+		try {
+			$usuario = $this->getUsuarioTable()->getUsuario($id);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('success');
+		}
+		
+		$form  = new UsuarioPassForm();
+		$form->get('submit')->setValue('Editar');
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('success');
+			}
+			
+			$senhaantiga = $request->getPost('senha-antiga');
+			$senhanova = $request->getPost('senha-nova');
+			$senhanovachk = $request->getPost('senha-nova-chk');
+			
+			if ($senhaantiga == '') {
+				$this->flashmessenger()->addMessage('Preencha o campo \'Senha Antiga\'.');
+				return $this->redirect()->toRoute('usuario',array('action'=>'editpassword', 'id' => $id));
+			} else if ($senhanova == '') {
+				$this->flashmessenger()->addMessage('Preencha o campo \'Nova Senha\'.');
+				return $this->redirect()->toRoute('usuario',array('action'=>'editpassword', 'id' => $id));
+			} else if (md5($senhaantiga) != $usuario->senha) {
+				$this->flashmessenger()->addMessage('A senha antiga digitada não corresponde à verdadeira senha.');
+				return $this->redirect()->toRoute('usuario',array('action'=>'editpassword', 'id' => $id));
+			} else if ($senhanova != $senhanovachk) {
+				$this->flashmessenger()->addMessage('Os campos de \'Nova Senha\' estão diferentes!');
+				return $this->redirect()->toRoute('usuario',array('action'=>'editpassword', 'id' => $id));
+			}
+			
+			$form->setData($request->getPost());
+			if ($submit == 'Editar' && $form->isValid()) {				
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$usuario->dataEdicao = $dataAtual;
+				$usuario->senha = md5($senhanova);
+				$this->getUsuarioTable()->saveUsuario($usuario);
+				
+				// atualiza o usuário editado na sessão
+				$this->commonsPlugin()->writeStorage($usuario);
+			}
+			
+			// Redirect to 'perfil'
+			return $this->redirect()->toRoute('success');
+		}
+
+		return array(
+			'id' => $id,
+			'form' => $form,
+			'messages' => $this->flashmessenger()->getMessages()
+		);
+	}
+	
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
@@ -107,20 +250,20 @@ class UsuarioController extends AbstractActionController
 		if (!$id) {
 			return $this->redirect()->toRoute('usuario');
 		}
-
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$del = $request->getPost('del');
-
+			
 			if ($del == 'Sim') {
 				$id = (int) $request->getPost('id');
 				$this->getUsuarioTable()->deleteUsuario($id);
 			}
-
+			
 			// Redirect to list of usuarios
 			return $this->redirect()->toRoute('usuario');
 		}
-
+		
 		return array(
 			'id' => $id,
 			'usuario' => $this->getUsuarioTable()->getUsuario($id)

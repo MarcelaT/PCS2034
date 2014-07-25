@@ -25,7 +25,7 @@ class Usuario implements InputFilterAwareInterface
 	{
 		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->login = (!empty($data['login'])) ? $data['login'] : null;
-		$this->senha  = (!empty($data['senha'])) ? md5($data['senha']) : null;
+		$this->senha  = (!empty($data['senha'])) ? $data['senha'] : null;
 		$this->permissao  = (!empty($data['permissao'])) ? $data['permissao'] : null;
 		$this->nome  = (!empty($data['nome'])) ? $data['nome'] : null;
 		$this->email  = (!empty($data['email'])) ? $data['email'] : null;
@@ -86,47 +86,7 @@ class Usuario implements InputFilterAwareInterface
 						'options' => array(
 							'encoding' => 'UTF-8',
 							'min'	  => 1,
-							'max'	  => 255,
-						),
-					),
-				),
-			));
-			
-			// senha
-			$inputFilter->add(array(
-				'name'	 => 'senha',
-				'required' => true,
-				'filters'  => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-				'validators' => array(
-					array(
-						'name'	=> 'StringLength',
-						'options' => array(
-							'encoding' => 'UTF-8',
-							'min'	  => 1,
-							'max'	  => 255,
-						),
-					),
-				),
-			));
-			
-			// permissao
-			$inputFilter->add(array(
-				'name'	 => 'permissao',
-				'required' => true,
-				'filters'  => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-				'validators' => array(
-					array(
-						'name'	=> 'StringLength',
-						'options' => array(
-							'encoding' => 'UTF-8',
-							'min'	  => 1,
-							'max'	  => 255,
+							'max'	  => 100,
 						),
 					),
 				),
@@ -145,7 +105,7 @@ class Usuario implements InputFilterAwareInterface
 						'options' => array(
 							'encoding' => 'UTF-8',
 							'min'	  => 1,
-							'max'	  => 255,
+							'max'	  => 100,
 						),
 					),
 				),
@@ -164,7 +124,7 @@ class Usuario implements InputFilterAwareInterface
 						'options' => array(
 							'encoding' => 'UTF-8',
 							'min'	  => 1,
-							'max'	  => 255,
+							'max'	  => 100,
 						),
 					),
 				),

@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	function getNomePermissao(enumPermissao) {
-        if (enumPermissao == 'administrador') {
+		if (enumPermissao == 'administrador') {
 			return 'Administrador';
 		} else if (enumPermissao == 'coordenador') {
 			return 'Coordenador';
@@ -16,31 +16,32 @@
 $title = 'Usuários cadastrados';
 $this->headTitle($title);
 ?>
+
 <h1><?php echo $this->escapeHtml($title);?></h1>
 <p>
-    <a class='btn btn-default' href="<?php echo $this->url('usuario', array('action'=>'add'));?>">Criar novo usuário</a>
+	<a class='btn btn-default' href="<?php echo $this->url('usuario', array('action'=>'add'));?>">Criar novo usuário</a>
 </p>
 
 <table class="table">
 <tr>
-    <th>Login</th>
+	<th>Login</th>
 	<th>Nome</th>
 	<th>Email</th>
 	<th>Permissao</th>
-    <th>&nbsp;</th>
+	<th>&nbsp;</th>
 </tr>
 <?php foreach ($usuarios as $usuario) : ?>
 <tr>
-    <td><?php echo $this->escapeHtml($usuario->login);?></td>
+	<td><?php echo $this->escapeHtml($usuario->login);?></td>
 	<td><?php echo $this->escapeHtml($usuario->nome);?></td>
 	<td><?php echo $this->escapeHtml($usuario->email);?></td>
 	<td><?php echo $this->escapeHtml($usuario->permissaoNome);?></td>
-    <td>
-        <a href="<?php echo $this->url('usuario',
-            array('action'=>'edit', 'id' => $usuario->id));?>">Editar</a> | 
-        <a href="<?php echo $this->url('usuario',
-            array('action'=>'delete', 'id' => $usuario->id));?>">Remover</a>
-    </td>
+	<td>
+		<a href="<?php echo $this->url('usuario',
+			array('action'=>'edit', 'id' => $usuario->id));?>">Editar</a> | 
+		<a href="<?php echo $this->url('usuario',
+			array('action'=>'delete', 'id' => $usuario->id));?>">Remover</a>
+	</td>
 </tr>
 <?php endforeach; ?>
 </table>
