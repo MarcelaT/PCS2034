@@ -11,40 +11,20 @@ use Usuario\Form\UsuarioForm;
 class UsuarioController extends AbstractActionController
 {
 	protected $usuarioTable;
-	protected $storage;
-	protected $authservice;
-	
-	public function getAuthService() {
-		if (!$this->authservice) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-		return $this->authservice;
-	}
-	
-	public function getSessionStorage() {
-		if (!$this->storage) {
-			$this->storage = $this->getAuthService()->getStorage();
-		}
-		return $this->storage;
-	}
 	
 	public function indexAction()
 	{
-		if (!$this->getAuthService()->hasIdentity()){
-			return $this->redirect()->toRoute('login');
-		}
-		
-		// apenas administradores podem ter acesso!
-		$permissao = $this->getAuthService()->getStorage()->read('usuario')->permissao;
-		if ($permissao != 'administrador'){
-			return $this->redirect()->toRoute('forbidden');
-		}
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		return new ViewModel(array('usuarios' => $this->getUsuarioTable()->fetchAll()));
 	}
 
 	public function addAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$form = new UsuarioForm();
 		$form->get('submit')->setValue('Adicionar');
 		
@@ -69,13 +49,15 @@ class UsuarioController extends AbstractActionController
 
 	public function editAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('usuario', array('action' => 'add'));
 		}
 
-		// Get the Usuario with the specified id.  An exception is thrown
-		// if it cannot be found, in which case go to the index page.
+		// recupera o usuário pelo id
 		try {
 			$usuario = $this->getUsuarioTable()->getUsuario($id);
 		} catch (\Exception $ex) {
@@ -108,6 +90,9 @@ class UsuarioController extends AbstractActionController
 
 	public function deleteAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('usuario');

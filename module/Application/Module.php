@@ -49,4 +49,5 @@ class Module
 			'factories' => array(),
 		);
 	}
+
 }

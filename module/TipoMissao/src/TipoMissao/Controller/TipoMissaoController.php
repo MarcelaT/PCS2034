@@ -11,40 +11,20 @@ use TipoMissao\Form\TipoMissaoForm;
 class TipoMissaoController extends AbstractActionController
 {
 	protected $tipoMissaoTable;
-	protected $storage;
-	protected $authservice;
-	
-	public function getAuthService() {
-		if (!$this->authservice) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-		return $this->authservice;
-	}
-	
-	public function getSessionStorage() {
-		if (!$this->storage) {
-			$this->storage = $this->getAuthService()->getStorage();
-		}
-		return $this->storage;
-	}
-	
+
 	public function indexAction()
 	{
-		if (!$this->getAuthService()->hasIdentity()){
-			return $this->redirect()->toRoute('login');
-		}
-		
-		// apenas administradores podem ter acesso!
-		$permissao = $this->getAuthService()->getStorage()->read('usuario')->permissao;
-		if ($permissao != 'administrador'){
-			return $this->redirect()->toRoute('forbidden');
-		}
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		return new ViewModel(array('tipoMissoes' => $this->getTipoMissaoTable()->fetchAll()));
 	}
 
 	public function addAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$form = new TipoMissaoForm();
 		$form->get('submit')->setValue('Adicionar');
 		
@@ -69,13 +49,15 @@ class TipoMissaoController extends AbstractActionController
 
 	public function editAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tipomissao', array('action' => 'add'));
 		}
 
-		// Get the Usuario with the specified id.  An exception is thrown
-		// if it cannot be found, in which case go to the index page.
+		// recupera o tipo de missao pelo id
 		try {
 			$tipoMissao = $this->getTipoMissaoTable()->getTipoMissao($id);
 		} catch (\Exception $ex) {
@@ -93,8 +75,6 @@ class TipoMissaoController extends AbstractActionController
 
 			$submit = $request->getPost('submit');
 			if ($submit == 'Editar' && $form->isValid()) {
-				//$tipoMissao->id = 1;
-
 				$this->getTipoMissaoTable()->saveTipoMissao($tipoMissao);
 			}
 			
@@ -110,6 +90,9 @@ class TipoMissaoController extends AbstractActionController
 
 	public function deleteAction()
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tipomissao');

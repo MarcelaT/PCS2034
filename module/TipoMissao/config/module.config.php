@@ -6,7 +6,11 @@ return array(
             'TipoMissao\Controller\TipoMissao' => 'TipoMissao\Controller\TipoMissaoController',
         ),
     ),
-
+	'controller_plugins' => array(
+		'invokables' => array(
+			'commonsPlugin' => 'SanAuth\Controller\Plugin\CommonsPlugin',
+		)
+	),
     // The following section is new and should be added to your file
     'router' => array(
         'routes' => array(

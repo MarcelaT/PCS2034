@@ -7,33 +7,21 @@ use Zend\View\Model\ViewModel;
 
 class SuccessController extends AbstractActionController
 {
-	protected $storage;
-	protected $authservice;
-	
-	public function getAuthService() {
-		if (!$this->authservice) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-		return $this->authservice;
-	}
-	
-	public function getSessionStorage() {
-		if (!$this->storage) {
-			$this->storage = $this->getAuthService()->getStorage();
-		}
-		return $this->storage;
-	}
 	
 	public function indexAction()
 	{
-		if (!$this->getAuthService()->hasIdentity()){
+		// salva a permissão no layout
+		$this->commonsPlugin()->setPermissaoLayout();
+		
+		// não permite que essa página seja acessada sem autenticacao
+		if (!$this->commonsPlugin()->isAutenticado()){
 			return $this->redirect()->toRoute('login');
 		}
 		
-		return new ViewModel(
-			array(
-				'usuario' => $this->getAuthService()->getStorage()->read('usuario'),
-			)
-		);
+		// recupera o nome do usuário
+		$usuario_nome = $this->commonsPlugin()->readStorage('usuario')->nome;
+		
+		// retorna para a view com o nome do usuário
+		return new ViewModel(array('nome_usuario' => $usuario_nome));
 	}
 }
