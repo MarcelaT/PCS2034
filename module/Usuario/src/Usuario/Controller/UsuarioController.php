@@ -117,6 +117,9 @@ class UsuarioController extends AbstractActionController
 	
 	public function editdadosAction()
 	{
+		// salva a permissão no layout
+		$this->commonsPlugin()->setPermissaoLayout();
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('success');

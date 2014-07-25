@@ -55,13 +55,13 @@
 						</li>
 						
 						<?php if ($isAutenticado): ?>
-						<li <?php if (strpos($route,'success') !== false || strpos($route,'editpassword') !== false): ?>class="active"<?php endif ?>>
+						<li <?php if (strpos($route,'success') !== false || strpos($route,'editpassword') !== false || strpos($route,'editdados') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('login') ?>"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<?php echo $this->translate('Perfil') ?></a>
 						</li>
 						<?php endif ?>
 						
 						<?php if ($isAdmin): ?>
-						<li <?php if (strpos($route,'usuarios') !== false && strpos($route,'editpassword') === false): ?>class="active"<?php endif ?>>
+						<li <?php if (strpos($route,'usuarios') !== false && strpos($route,'editpassword') === false && strpos($route,'editdados') === false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('usuarios') ?>"><?php echo $this->translate('Usuários') ?></a>
 						</li>
 						<?php endif ?>
