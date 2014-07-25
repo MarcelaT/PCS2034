@@ -14,6 +14,8 @@ class Usuario implements InputFilterAwareInterface
 	public $permissao;
 	public $nome;
 	public $email;
+	public $dataCriacao;
+	public $dataEdicao;
 	public $permissaoNome;
 	
 	// Filtro para validações
@@ -27,6 +29,8 @@ class Usuario implements InputFilterAwareInterface
 		$this->permissao  = (!empty($data['permissao'])) ? $data['permissao'] : null;
 		$this->nome  = (!empty($data['nome'])) ? $data['nome'] : null;
 		$this->email  = (!empty($data['email'])) ? $data['email'] : null;
+		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
+		$this->dataEdicao  = (!empty($data['dataEdicao'])) ? $data['dataEdicao'] : null;
 		$this->permissaoNome  = (!empty($data['permissao'])) ? $this->getNomePermissao($data['permissao']) : null;
 	}
 

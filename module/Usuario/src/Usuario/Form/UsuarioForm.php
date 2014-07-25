@@ -11,10 +11,13 @@ class UsuarioForm extends Form
 		// we want to ignore the name passed
 		parent::__construct('usuario');
 
+		// id
 		$this->add(array(
 			'name' => 'id',
 			'type' => 'Hidden',
 		));
+		
+		// login
 		$this->add(array(
 			'name' => 'login',
 			'type' => 'text',
@@ -25,6 +28,8 @@ class UsuarioForm extends Form
 				'label' => 'Login',
 			),
 		));
+		
+		// senha
 		$this->add(array(
 			'name' => 'senha',
 			'type' => 'text',
@@ -35,6 +40,8 @@ class UsuarioForm extends Form
 				'label' => 'Senha',
 			),
 		));
+		
+		// nome
 		$this->add(array(
 			'name' => 'nome',
 			'type' => 'text',
@@ -45,6 +52,8 @@ class UsuarioForm extends Form
 				'label' => 'Nome',
 			),
 		));
+		
+		// email
 		$this->add(array(
 			'name' => 'email',
 			'type' => 'text',
@@ -55,6 +64,8 @@ class UsuarioForm extends Form
 				'label' => 'Email',
 			),
 		));
+		
+		// permissao
 		$this->add(array(
 			'name' => 'permissao',
 			'type' => 'select',
@@ -71,6 +82,8 @@ class UsuarioForm extends Form
 				),
 			),
 		));
+		
+		//submit
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',

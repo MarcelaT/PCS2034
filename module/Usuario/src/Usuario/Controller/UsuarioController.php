@@ -38,6 +38,10 @@ class UsuarioController extends AbstractActionController
 			$submit = $request->getPost('submit');
 			if ($submit == 'Adicionar' && $form->isValid()) {
 				$usuario->exchangeArray($form->getData());
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$usuario->dataCriacao = $dataAtual;
+				$usuario->dataEdicao = $dataAtual;
 				$this->getUsuarioTable()->saveUsuario($usuario);
 			}
 			
@@ -64,6 +68,8 @@ class UsuarioController extends AbstractActionController
 			return $this->redirect()->toRoute('usuario', array('action' => 'index'));
 		}
 
+		$dataCriacao = $usuario->dataCriacao;
+		
 		$form  = new UsuarioForm();
 		$form->bind($usuario);
 		$form->get('submit')->setAttribute('value', 'Editar');
@@ -75,6 +81,10 @@ class UsuarioController extends AbstractActionController
 
 			$submit = $request->getPost('submit');
 			if ($submit == 'Editar' && $form->isValid()) {
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$usuario->dataEdicao = $dataAtual;
+				$usuario->dataCriacao = $dataCriacao;
 				$this->getUsuarioTable()->saveUsuario($usuario);
 			}
 			

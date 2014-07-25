@@ -42,6 +42,8 @@ class UsuarioTable
 			'permissao'  => $usuario->permissao,
 			'nome'  => $usuario->nome,
 			'email'  => $usuario->email,
+			'dataCriacao'  => $usuario->dataCriacao,
+			'dataEdicao'  => $usuario->dataEdicao,
 		);
 
 		$id = (int) $usuario->id;
