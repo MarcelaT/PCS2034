@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
 	dataEdicao TIMESTAMP NOT NULL
 );
 
+-- Índice (primary key)
+CREATE UNIQUE INDEX PK_usuario ON usuarios(id);
+
 -- Valores interessantes
 INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('admin',  md5('admin'), 'administrador', 'Administrador Do Sistema', 'admin@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
