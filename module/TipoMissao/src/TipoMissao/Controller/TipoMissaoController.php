@@ -41,7 +41,7 @@ class TipoMissaoController extends AbstractActionController
 				$this->getTipoMissaoTable()->saveTipoMissao($tipoMissao);
 			}
 			
-			// Redirect to list of usuarios
+			// Redirect to list of tipomissao
 			return $this->redirect()->toRoute('tipomissao');
 		}
 		return array('form' => $form);
@@ -78,7 +78,7 @@ class TipoMissaoController extends AbstractActionController
 				$this->getTipoMissaoTable()->saveTipoMissao($tipoMissao);
 			}
 			
-			// Redirect to list of usuarios
+			// Redirect to list of tipomissao
 			return $this->redirect()->toRoute('tipomissao');
 		}
 
@@ -107,7 +107,7 @@ class TipoMissaoController extends AbstractActionController
 				$this->getTipoMissaoTable()->deleteTipoMissao($id);
 			}
 
-			// Redirect to list of usuarios
+			// Redirect to list of tipomissao
 			return $this->redirect()->toRoute('tipomissao');
 		}
 

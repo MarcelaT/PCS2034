@@ -21,7 +21,7 @@ class TipoRecursoTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Recurso de id $id");
+			throw new \Exception("Não foi localizado TipoRecurso de id $id");
 		}
 		return $row;
 	}
@@ -38,7 +38,7 @@ class TipoRecursoTable
 			if ($this->getTipoRecurso($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
-				throw new \Exception('Recurso de id $id não existe!');
+				throw new \Exception('TipoRecurso de id $id não existe!');
 			}
 		}
 	}
@@ -47,7 +47,7 @@ class TipoRecursoTable
 		if ($this->getTipoRecurso($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Recurso de id $id não existe!');
+			throw new \Exception('TipoRecurso de id $id não existe!');
 		}
 	}
 }

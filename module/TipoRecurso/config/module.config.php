@@ -6,8 +6,12 @@ return array(
             'TipoRecurso\Controller\TipoRecurso' => 'TipoRecurso\Controller\TipoRecursoController',
         ),
     ),
-
-    // The following section is new and should be added to your file
+	'controller_plugins' => array(
+		'invokables' => array(
+			'commonsPlugin' => 'SanAuth\Controller\Plugin\CommonsPlugin',
+		)
+	),
+	
     'router' => array(
         'routes' => array(
             'tiporecurso' => array(

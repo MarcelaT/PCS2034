@@ -11,7 +11,7 @@ class TipoMissaoTable
 		$this->tableGateway = $tableGateway;
 	}
 
-    public function fetchAll() {
+	public function fetchAll() {
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
@@ -21,7 +21,7 @@ class TipoMissaoTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Missao de id $id");
+			throw new \Exception("Não foi localizado TipoMissao de id $id");
 		}
 		return $row;
 	}
@@ -39,7 +39,7 @@ class TipoMissaoTable
 			if ($this->getTipoMissao($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
-				throw new \Exception('Missao de id $id não existe!');
+				throw new \Exception('TipoMissao de id $id não existe!');
 			}
 		}
 	}
@@ -48,7 +48,7 @@ class TipoMissaoTable
 		if ($this->getTipoMissao($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Missao de id $id não existe!');
+			throw new \Exception('TipoMissao de id $id não existe!');
 		}
 	}
 }
