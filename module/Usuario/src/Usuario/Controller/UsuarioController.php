@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use Usuario\Model\Usuario;
+use Usuario\Form\UsuarioFilterForm;
 use Usuario\Form\UsuarioAddForm;
 use Usuario\Form\UsuarioEditForm;
 use Usuario\Form\UsuarioEditDadosForm;
@@ -20,7 +21,31 @@ class UsuarioController extends AbstractActionController
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
-		return new ViewModel(array('usuarios' => $this->getUsuarioTable()->fetchAll()));
+		$form = new UsuarioFilterForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		$usuarios = $this->getUsuarioTable()->fetchAll();
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega os campos do filtro
+				$login = $request->getPost('login');
+				$nome = $request->getPost('nome');
+				$email = $request->getPost('email');
+				$permissao = $request->getPost('permissao');
+
+				// preenche a lista filtrada de usuários
+				$usuarios = $this->getUsuarioTable()->getUsuariosFiltered($login, $nome, $email, $permissao);
+			}
+		}
+		
+		return new ViewModel(array(
+			'form' => $form,
+			'usuarios' => $usuarios,
+		));
 	}
 	
 	public function addAction()
