@@ -18,6 +18,9 @@ use Zend\Db\TableGateway\TableGateway;
 use Application\Model\Usuario;
 use Application\Model\UsuarioTable;
 
+use Application\Model\Acidente;
+use Application\Model\AcidenteTable;
+
 class Module
 {
 	public function onBootstrap(MvcEvent $e)

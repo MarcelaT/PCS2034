@@ -77,6 +77,12 @@
 							<a href="<?php echo $this->basePath('tiporecurso') ?>"><?php echo $this->translate('Tipo de recurso') ?></a>
 						</li>
 						<?php endif ?>
+
+						<?php if ($isCoordenador): ?>
+						<li class="active">
+							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
+						</li>
+						<?php endif ?>
 					</ul>
 						
 					<ul class="nav navbar-nav navbar-right">
