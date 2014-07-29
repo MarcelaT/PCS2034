@@ -83,9 +83,19 @@
 							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
 						</li>
 						<?php endif ?>
-					</ul>
 						
-					<ul class="nav navbar-nav navbar-right">
+						<?php if ($isAdmin): ?>
+						<li <?php if (strpos($route,'recurso') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('recurso') ?>"><?php echo $this->translate('Recurso') ?></a>
+						</li>
+						<?php endif ?>
+						
+						<?php if ($isAdmin): ?>
+						<li <?php if (strpos($route,'missao') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
+						</li>						
+						<?php endif ?>
+						
 						<?php if ($isAutenticado): ?>
 						<li <?php if (strpos($route,'logout') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>"><?php echo $this->translate('Logout') ?></a>
