@@ -6,7 +6,8 @@ return array(
 		'Usuario',
 		'SanAuth',
 		'TipoMissao',
-		'TipoRecurso'
+		'TipoRecurso',
+		'Missao'
 	),
 
 	// These are various options for the listeners attached to the ModuleManager

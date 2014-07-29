@@ -1,0 +1,72 @@
+<script type="text/javascript">
+    function getNomePermissao(enumPermissao) {
+        if (enumPermissao == 'administrador') {
+            return 'Administrador';
+        } else if (enumPermissao == 'coordenador') {
+            return 'Coordenador';
+        } else if (enumPermissao == 'especialista') {
+            return 'Especialista';
+        } else if (enumPermissao == 'lider_missao') {
+            return 'Líder da Missão';
+        }
+    }
+</script>
+
+<?php
+$title = 'Alocacao de tipo de missoes';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title);?></h1>
+
+<table class="table">
+<tr>
+    <th>Nome</th>
+    <th>Quantidade</th>
+    <th>&nbsp;</th>
+</tr>
+
+<tr>
+<form action="/PCS2034/public/tipomissao/alocarrecursos/1" method="POST" name="alocarrecursos">
+
+<?php foreach ($tipoRecursos as $tipoRecurso) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($tipoRecurso->nome);?></td>
+</tr>
+
+<tr>
+
+</tr>
+
+</form>
+
+</tr>
+
+
+
+
+<?php 
+/*
+$this->form()->prepare();
+    $this->form()->setAttribute('action', $this->url(
+        'missao',
+        array(
+            'action' => 'alocarrecursos',
+            'id'     => $this->id,
+        )
+    )); 
+    echo $this->form()->openTag($this->form());
+
+    echo $this->formHidden($this->form()->get('idTipoRecurso'));
+    echo $this->formRow($this->form()->get('quantidade'));
+    echo $this->form()->closeTag();
+*/
+?>
+
+
+
+
+</table>
+
+
+
+
