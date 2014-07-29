@@ -96,6 +96,12 @@
 						</li>						
 						<?php endif ?>
 						
+						<?php if ($isLider): ?>
+						<li <?php if (strpos($route,'missaoprotocolo') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo'));?>"><?php echo $this->translate('Atualizar status da missão') ?></a>
+						</li>						
+						<?php endif ?>
+						
 						<?php if ($isAutenticado): ?>
 						<li <?php if (strpos($route,'logout') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>"><?php echo $this->translate('Logout') ?></a>

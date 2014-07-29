@@ -26,7 +26,7 @@ class Missao implements InputFilterAwareInterface
 		$this->status  = (!empty($data['status'])) ? ($data['status']) : null;
 		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : null;
 		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
-
+		$this->statusNome  = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 	}
 
 	public function getArrayCopy()
@@ -37,6 +37,20 @@ class Missao implements InputFilterAwareInterface
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
+	}
+	
+	// atribui um nome user-friendly ao enum de status
+	public function getNomeStatus($status)
+	{
+		if ($status == 'cadastrada') {
+			return 'Cadastrada';
+		} else if ($status == 'em_andamento') {
+			return 'Em andamento';
+		} else if ($status == 'concluida') {
+			return 'Concluida';
+		} else if ($status == 'abortada') {
+			return 'Abortada';
+		}
 	}
 	
 	public function getInputFilter()

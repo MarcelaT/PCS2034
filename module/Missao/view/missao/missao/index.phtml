@@ -1,17 +1,3 @@
-<script type="text/javascript">
-    function getNomePermissao(enumPermissao) {
-        if (enumPermissao == 'administrador') {
-            return 'Administrador';
-        } else if (enumPermissao == 'coordenador') {
-            return 'Coordenador';
-        } else if (enumPermissao == 'especialista') {
-            return 'Especialista';
-        } else if (enumPermissao == 'lider_missao') {
-            return 'Líder da Missão';
-        }
-    }
-</script>
-
 <?php
 $title = 'Missoes';
 $this->headTitle($title);
@@ -31,7 +17,7 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($Missao->nome);?></td>
     <td><?php echo $this->escapeHtml($Missao->idTipoMissao);?></td>
     <td><?php echo $this->escapeHtml($Missao->protocolo);?></td>
-    <td><?php echo $this->escapeHtml($Missao->status);?></td>
+    <td><?php echo $this->escapeHtml($Missao->statusNome);?></td>
     <td>
         <a href="<?php echo $this->url('missao',
             array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> | 

@@ -1,0 +1,13 @@
+<?php
+$title = 'Status alterado para \'Concluída\' com sucesso!';
+$this->headTitle($title);
+?>
+<h3><?php echo $this->escapeHtml($title); ?></h3>
+
+<br />
+
+<ul class="nav nav-pills">
+	<li class="active"><a href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo')); ?>">Voltar</a></li>
+</ul>
+
+<br />
