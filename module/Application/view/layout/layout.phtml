@@ -79,25 +79,25 @@
 						<?php endif ?>
 
 						<?php if ($isCoordenador): ?>
-						<li class="active">
+						<li <?php if (strpos($route,'acidente') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
 						</li>
 						<?php endif ?>
 						
 						<?php if ($isAdmin): ?>
-						<li <?php if (strpos($route,'recurso') !== false): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->basePath('recurso') ?>"><?php echo $this->translate('Recurso') ?></a>
+						<li <?php if (strpos($route,'recurso') !== false && strpos($route,'tiporecurso') === false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('recurso') ?>"><?php echo $this->translate('Recursos') ?></a>
 						</li>
 						<?php endif ?>
 						
 						<?php if ($isAdmin): ?>
-						<li <?php if (strpos($route,'missao') !== false): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
+						<li <?php if (strpos($route,'missao') !== false && strpos($route,'tipomissao') === false && strpos($route,'missaoprotocolo') === false && strpos($route,'status') === false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões');?></a>
 						</li>						
 						<?php endif ?>
 						
 						<?php if ($isLider): ?>
-						<li <?php if (strpos($route,'missaoprotocolo') !== false): ?>class="active"<?php endif ?>>
+						<li <?php if (strpos($route,'missaoprotocolo') !== false || strpos($route,'status') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo'));?>"><?php echo $this->translate('Atualizar status da missão') ?></a>
 						</li>						
 						<?php endif ?>
