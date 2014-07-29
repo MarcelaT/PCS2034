@@ -10,13 +10,6 @@
 			return 'Líder da Missão';
 		}
 	}
-	
-	$('.row .btn').on('click', function(e) {
-		e.preventDefault();
-		var $this = $(this);
-		var $collapse = $this.closest('.collapse-group').find('.collapse');
-		$collapse.collapse('toggle');
-	});
 </script>
 
 <?php
@@ -69,7 +62,6 @@ $this->headTitle($title);
 </div>
 
 <hr class="divider">
-
 
 <table class="table">
 <tr>

@@ -1,22 +1,16 @@
 <?php
 
-namespace TipoRecurso\Form;
+namespace TipoMissao\Form;
 
 use Zend\Form\Form;
 
-class TipoRecursoForm extends Form
+class TipoMissaoFilterForm extends Form
 {
 	public function __construct($name = null)
 	{
 		// we want to ignore the name passed
-		parent::__construct('tipoRecurso');
+		parent::__construct('tipoMissao');
 
-		// id
-		$this->add(array(
-			'name' => 'id',
-			'type' => 'text',
-		));
-		
 		// nome
 		$this->add(array(
 			'name' => 'nome',
@@ -29,12 +23,24 @@ class TipoRecursoForm extends Form
 			),
 		));
 		
+		// descricao
+		$this->add(array(
+			'name' => 'descricao',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'label' => 'Descrição',
+			),
+		));
+		
 		// submit
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',
 			'attributes' => array(
-				'value' => 'Enviar',
+				'value' => 'Filtrar',
 				'id' => 'submitbutton',
 			),
 		));
