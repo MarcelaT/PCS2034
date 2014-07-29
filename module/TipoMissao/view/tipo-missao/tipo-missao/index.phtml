@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    function getNomePermissao(enumPermissao) {
+        if (enumPermissao == 'administrador') {
+            return 'Administrador';
+        } else if (enumPermissao == 'coordenador') {
+            return 'Coordenador';
+        } else if (enumPermissao == 'especialista') {
+            return 'Especialista';
+        } else if (enumPermissao == 'lider_missao') {
+            return 'Líder da Missão';
+        }
+    }
+</script>
+
+<?php
+$title = 'Tipos de missão cadastrados';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title);?></h1>
+<p>
+    <a class='btn btn-default' href="<?php echo $this->url('tipomissao', array('action'=>'add'));?>">Criar novo tipo de missão</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Nome</th>
+    <th>Descrição</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($tipoMissoes as $tipoMissao) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($tipoMissao->nome);?></td>
+    <td><?php echo $this->escapeHtml($tipoMissao->descricao);?></td>
+
+    <td>
+        <a href="<?php echo $this->url('tipomissao',
+            array('action'=>'edit', 'id' => $tipoMissao->id));?>">Editar</a> | 
+        <a href="<?php echo $this->url('tipomissao',
+            array('action'=>'delete', 'id' => $tipoMissao->id));?>">Remover</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

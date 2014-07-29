@@ -1,4 +1,14 @@
-Login Success.
+<h1>Autenticado com sucesso!</h1>
+<br />
+Olá, <?php echo $usuario->nome; ?>.
+<br />
 <br />
 
-<a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a>
+<ul class="nav nav-pills">
+	<li class="active"><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a>
+	<li><a href="<?php echo $this->url('usuario',array('action'=>'editdados', 'id' => $usuario->id)); ?>">Alterar dados cadastrais</a></li>
+	<li><a href="<?php echo $this->url('usuario',array('action'=>'editpassword', 'id' => $usuario->id));?>">Alterar senha</a></li>
+	</li>
+</ul>
+<br />
+Última edição no perfil feita em <?php echo $usuario->dataEdicao; ?>

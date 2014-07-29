@@ -1,0 +1,41 @@
+<script type="text/javascript">
+    function getNomePermissao(enumPermissao) {
+        if (enumPermissao == 'administrador') {
+            return 'Administrador';
+        } else if (enumPermissao == 'coordenador') {
+            return 'Coordenador';
+        } else if (enumPermissao == 'especialista') {
+            return 'Especialista';
+        } else if (enumPermissao == 'lider_missao') {
+            return 'Líder da Missão';
+        }
+    }
+</script>
+
+<?php
+$title = 'Tipos de recursos cadastrados';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title);?></h1>
+<p>
+    <a class='btn btn-default' href="<?php echo $this->url('tiporecurso', array('action'=>'add'));?>">Criar novo tipo de recurso</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Nome</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($tipoRecursos as $tipoRecurso) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($tipoRecurso->nome);?></td>
+
+    <td>
+        <a href="<?php echo $this->url('tiporecurso',
+            array('action'=>'edit', 'id' => $tipoRecurso->id));?>">Editar</a> | 
+        <a href="<?php echo $this->url('tiporecurso',
+            array('action'=>'delete', 'id' => $tipoRecurso->id));?>">Remover</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

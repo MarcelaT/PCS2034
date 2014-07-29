@@ -1,19 +1,23 @@
+-- Tipo de Recurso
 CREATE TABLE TipodeRecurso (
-   idTipoRecurso INTEGER UNSIGNED NOT NULL auto_increment,
-   nome varchar(100) NOT NULL,
-   idRecurso INTEGER UNSIGNED NOT NULL,
-   PRIMARY KEY (idTipoRecurso), 
-   FOREIGN KEY (idRecurso) REFERENCES Recurso(idRecurso)
- );
- INSERT INTO TipodeRecurso (nome, idRecurso )
-     VALUES  ('Carro de Guincho', 1);
- INSERT INTO TipodeRecurso (nome, idRecurso)
-     VALUES  ('Ambulancia', 2);
- INSERT INTO TipodeRecurso (nome, idRecurso)
-     VALUES  ('Paramedico', 2);
- INSERT INTO TipodeRecurso (nome, idRecurso)
-     VALUES  ('Bombeiros', 1);
- INSERT INTO TipodeRecurso (nome, idRecurso)
-     VALUES  ('Policial', 3);
- INSERT INTO TipodeRecurso (nome, idRecurso)
-     VALUES  ('Helicoptero', 1);
+	id INTEGER UNSIGNED NOT NULL auto_increment,
+	nome varchar(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+-- Índice (primary key)
+CREATE UNIQUE INDEX PK_tiporecurso ON TipodeRecurso(id);
+
+-- Valores interessantes
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Carro de Guincho');
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Ambulancia');
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Paramedico');
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Bombeiros');
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Policial');
+INSERT INTO TipodeRecurso (nome)
+	VALUES('Helicoptero');

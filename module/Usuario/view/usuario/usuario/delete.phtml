@@ -12,14 +12,14 @@ $this->headTitle($title);
 <?php
 $url = $this->url('usuario', array(
 	'action' => 'delete',
-	'id'     => $this->id,
+	'id'	 => $this->id,
 ));
 ?>
 
 <form action="<?php echo $url; ?>" method="post">
 <div>
-    <input type="hidden" name="id" value="<?php echo (int) $usuario->id; ?>" />
-    <input type="submit" class="btn btn-danger" name="del" value="Sim" />
-    <input type="submit" class="btn" name="del" value="Não" />
+	<input type="hidden" name="id" value="<?php echo (int) $usuario->id; ?>" />
+	<input type="submit" class="btn btn-danger" name="del" value="Sim" />
+	<input type="submit" class="btn" name="del" value="Não" />
 </div>
 </form>

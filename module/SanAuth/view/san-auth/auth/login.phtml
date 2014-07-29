@@ -1,16 +1,38 @@
 <?php
-
+$title = 'Autenticação';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
 $form = $this->form;
-$form->setAttribute('action', $this->url(
-    'login/process',
-    array(
-        'action'     => 'authenticate',
-    )
-));
+$form->setAttribute('action', $this->url('login/process', array('action' => 'authenticate')));
+$form->setAttribute('role', 'form');
 $form->prepare();
 
 echo $this->form()->openTag($form);
-echo $this->formCollection($form);
+foreach ($form as $element) :?>
+	<div class="form-group">
+		<?php 
+			if ($element->getOption('required')) { $req = 'required'; }
+			$type = $element->getAttribute('type');
+			$name = $element->getAttribute('name'); 
+			$label = $element->getLabel();
+			$value = $element->getValue();
+		?>
+		<?php if ($name == 'id') { ?>
+			<div class="hidden"><?php echo $this->formElement($element); ?></div>
+		<?php } else if ($type == 'select' || $type == 'checkbox') {
+			echo $this->formRow($form->get($name)); ?>
+		<?php } else if ($name == 'enviar') { ?>
+			<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
+			<input class='btn' name='submit' type='submit' value='Cancelar'>
+		<?php } else if ($label != '') { ?>
+			<label class="control-label"><?php echo $label ?></label>
+			<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+		<?php } ?> 
+	</div>
+<?php 
+endforeach;
 echo $this->form()->closeTag();
 
 if ($this->messages){

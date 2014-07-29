@@ -2,6 +2,7 @@
 namespace Usuario\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class UsuarioTable
 {
@@ -11,7 +12,7 @@ class UsuarioTable
 		$this->tableGateway = $tableGateway;
 	}
 
-    public function fetchAll() {
+	public function fetchAll() {
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
@@ -21,11 +22,44 @@ class UsuarioTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Usuário de id $id");
+			throw new \Exception("Não foi localizado Usuário de id ".$id);
 		}
 		return $row;
 	}
 
+	public function getUsuarioByLogin($login) {
+		$rowset = $this->tableGateway->select(array('login' => $login));
+		$row = $rowset->current();
+		if (!$row) {
+			throw new \Exception("Não foi localizado Usuário de login ".$login);
+		}
+		return $row;
+	}
+	
+	public function getUsuariosFiltered($login, $nome, $email, $permissao) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $login && $login != '') {
+			$select->where->like('login', '%'.$login.'%');
+		}
+		if (null !== $nome && $nome != '') {
+			$select->where->like('nome', '%'.$nome.'%');
+		}
+		if (null !== $email && $email != '') {
+			$select->where->like('email', '%'.$email.'%');
+		}
+		if (null !== $permissao && $permissao != 'qualquer') {
+			$select->where(array('permissao' => $permissao));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foram localizados Usuários com os parâmetros passados.");
+		}
+		return $resultSet;
+	}
+	
 	public function saveUsuario(Usuario $usuario) {
 		$data = array(
 			'login' => $usuario->login,
@@ -33,6 +67,8 @@ class UsuarioTable
 			'permissao'  => $usuario->permissao,
 			'nome'  => $usuario->nome,
 			'email'  => $usuario->email,
+			'dataCriacao'  => $usuario->dataCriacao,
+			'dataEdicao'  => $usuario->dataEdicao,
 		);
 
 		$id = (int) $usuario->id;
@@ -42,7 +78,7 @@ class UsuarioTable
 			if ($this->getUsuario($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
-				throw new \Exception('Usuário de id $id não existe!');
+				throw new \Exception('Usuário de id '.$id.' não existe!');
 			}
 		}
 	}
@@ -51,7 +87,7 @@ class UsuarioTable
 		if ($this->getUsuario($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Usuário de id $id não existe!');
+			throw new \Exception('Usuário de id '.$id.' não existe!');
 		}
 	}
 }

@@ -16,6 +16,9 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
+		// salva a permissão no layout
+		$this->commonsPlugin()->setPermissaoLayout();
+		
         return new ViewModel();
     }
 }

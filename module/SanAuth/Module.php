@@ -10,37 +10,37 @@ use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class Module implements AutoloaderProviderInterface
 {
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+	public function getAutoloaderConfig()
+	{
+		return array(
+			'Zend\Loader\ClassMapAutoloader' => array(
+				__DIR__ . '/autoload_classmap.php',
+			),
+			'Zend\Loader\StandardAutoloader' => array(
+				'namespaces' => array(
 				// if we're in a namespace deeper than one level we need to fix the \ in the path
-                    __NAMESPACE__ => __DIR__ . '/src/' . str_replace('\\', '/' , __NAMESPACE__),
-                ),
-            ),
-        );
-    }
+					__NAMESPACE__ => __DIR__ . '/src/' . str_replace('\\', '/' , __NAMESPACE__),
+				),
+			),
+		);
+	}
 
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
-    
-    public function getServiceConfig()
-    {
-        return array(
-            'factories'=>array(
+	public function getConfig()
+	{
+		return include __DIR__ . '/config/module.config.php';
+	}
+	
+	public function getServiceConfig()
+	{
+		return array(
+			'factories'=>array(
 				'SanAuth\Model\MyAuthStorage' => function($sm){
 					return new \SanAuth\Model\MyAuthStorage('zf_tutorial');  
 				},
 				
 				'AuthService' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-							$dbTableAuthAdapter  = new DbTableAuthAdapter($dbAdapter, 'usuarios','login','senha', 'MD5(?)');
+							$dbTableAuthAdapter  = new DbTableAuthAdapter($dbAdapter, 'usuarios','login','senha','MD5(?)');
 					
 					$authService = new AuthenticationService();
 					$authService->setAdapter($dbTableAuthAdapter);
@@ -48,8 +48,8 @@ class Module implements AutoloaderProviderInterface
 					 
 					return $authService;
 				},
-            ),
-        );
-    }
+			),
+		);
+	}
 
 }

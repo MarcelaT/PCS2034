@@ -1,0 +1,6 @@
+<h1><?php echo $this->translate('403 Forbidden') ?></h1>
+<h2><?php echo $this->message ?></h2>
+
+<p>Você não possui a permissão necessária para visualizar esta página.</p>
+
+<a href="<?php echo $this->url('login/process', array('action'=>'login')); ?>">Retornar ao perfil</a>

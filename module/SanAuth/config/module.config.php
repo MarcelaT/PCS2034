@@ -7,6 +7,11 @@ return array(
             'SanAuth\Controller\Success' => 'SanAuth\Controller\SuccessController'
         ),
     ),
+	'controller_plugins' => array(
+		'invokables' => array(
+			'commonsPlugin' => 'SanAuth\Controller\Plugin\CommonsPlugin',
+		)
+	),
     'router' => array(
         'routes' => array(
             
@@ -63,7 +68,7 @@ return array(
                     ),
                 ),
             ),
-            
+			
         ),
     ),
     'view_manager' => array(
