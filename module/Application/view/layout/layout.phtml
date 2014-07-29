@@ -28,9 +28,9 @@
 		<?php
 			$isAutenticado = isset($permissao) && $permissao;
 			$isAdmin = $isAutenticado && $permissao == 'administrador';
-			$isCoordenador = $isAutenticado && $permissao == 'coordenador';
-			$isEspecialista = $isAutenticado && $permissao == 'especialista';
-			$isLider = $isAutenticado && $permissao == 'lider_missao';
+			$isCoordenador = $isAdmin || $permissao == 'coordenador';
+			$isEspecialista = $isAdmin || $permissao == 'especialista';
+			$isLider = $isAdmin || $permissao == 'lider_missao';
 			
 			$uri = $this->serverUrl();
 			$url = $this->serverUrl(true);
