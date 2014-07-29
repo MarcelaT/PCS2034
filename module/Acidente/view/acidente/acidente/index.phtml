@@ -1,0 +1,36 @@
+<?php
+$title = 'Acidentes cadastrados';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('acidente', array('action'=>'addAcidente'));?>">Adicionar Acidente</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Localização</th>
+	<th>Descrição</th>
+	<th>Data</th>
+    <th>Número de Vítimas</th>
+    <th>Bombeiro</th>
+    <th>Polícia</th>
+    <th>Obstrução</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($acidentes as $acidente) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($acidente->localizacao);?></td>
+	<td><?php echo $this->escapeHtml($acidente->descricao);?></td>
+	<td><?php echo $this->escapeHtml($acidente->data);?></td>
+	<td><?php echo $this->escapeHtml($acidente->numeroVitimas);?></td>
+    <td><?php echo $this->escapeHtml($acidente->bombeiro);?></td>
+    <td><?php echo $this->escapeHtml($acidente->policia);?></td>
+    <td><?php echo $this->escapeHtml($acidente->obstrucao);?></td>
+    <td>
+        <a href="<?php echo $this->url('acidente',
+            array('action'=>'getAcidenteInfo', 'idAcidente' => $acidente->idAcidente));?>">Mais Informações</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

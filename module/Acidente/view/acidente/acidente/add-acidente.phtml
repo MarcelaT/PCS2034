@@ -1,0 +1,21 @@
+<?php
+$title = 'Cadastrar acidente';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php 
+echo "testando routes!";
+
+$form->setAttribute('action', $this->url('acidente', array('action' => 'addAcidente')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('idAcidente'));
+echo $this->formRow($form->get('localizacao'));
+echo $this->formRow($form->get('descricao'));
+echo $this->formRow($form->get('data'));
+echo $this->formRow($form->get('bombeiro'));
+echo $this->formRow($form->get('policia'));
+echo $this->formRow($form->get('obstrucao'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
