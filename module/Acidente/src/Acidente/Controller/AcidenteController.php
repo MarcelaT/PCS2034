@@ -14,6 +14,9 @@ class AcidenteController extends AbstractActionController
 	
     public function indexAction()
     {
+        // salva a permissão no layout
+        $this->commonsPlugin()->setPermissaoLayout();
+        
 		return new ViewModel(array(
              'acidentes' => $this->getAcidenteTable()->fetchAll(),
          ));
@@ -21,21 +24,37 @@ class AcidenteController extends AbstractActionController
 
     public function addAcidenteAction()
     {
+        // salva a permissão no layout
+        $this->commonsPlugin()->setPermissaoLayout();
+
 		$form = new AcidenteForm();
-        $form->get('submit')->setValue('Add');
+        $form->get('submit')->setValue('Adicionar');
 		
         $request = $this->getRequest();
         if ($request->isPost()) {
+            
+            $submit = $request->getPost('submit');
+            if ($submit == 'Cancelar') {
+                return $this->redirect()->toRoute('acidente');
+            }
+
+            echo "funciona";
             $acidente = new Acidente();
             $form->setInputFilter($acidente->getInputFilter());
             $form->setData($request->getPost());
-			
-            if ($form->isValid()) {
+			echo " adiciona";
+
+            if ($submit == 'Adicionar' && $form->isValid()) {
+                echo " entrou";
                 $acidente->exchangeArray($form->getData());
+                date_default_timezone_set("Brazil/East");
+                $dataAtual = date('Y-m-d H:i:s');
+                $acidente->data = $dataAtual;
+                print_r($acidente);
                 $this->getAcidenteTable()->saveAcidente($acidente);
-				 // Redirect to list of acidentes
-                return $this->redirect()->toRoute('add-acidente');
             }
+            // Redirect to list of acidentes
+            //return $this->redirect()->toRoute('acidente');
         }
         return array('form' => $form);
     }
