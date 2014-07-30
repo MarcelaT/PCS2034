@@ -1,0 +1,27 @@
+<?php
+$title = 'Missoes';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title);?></h1>
+
+<table class="table">
+<tr>
+    <th>Nome</th>
+    <th>Tipo de Missao</th>
+    <th>Protocolo</th>
+    <th>Status</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($Missoes as $Missao) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($Missao->nome);?></td>
+    <td><?php echo $this->escapeHtml($Missao->idTipoMissao);?></td>
+    <td><?php echo $this->escapeHtml($Missao->protocolo);?></td>
+    <td><?php echo $this->escapeHtml($Missao->statusNome);?></td>
+    <td>
+        <a href="<?php echo $this->url('missao',
+            array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> | 
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

@@ -7,6 +7,7 @@ use Zend\View\Model\ViewModel;
 
 use TipoMissao\Model\TipoMissao;
 use TipoMissao\Form\TipoMissaoForm;
+use TipoMissao\Form\TipoMissaoFilterForm;
 
 class TipoMissaoController extends AbstractActionController
 {
@@ -17,7 +18,29 @@ class TipoMissaoController extends AbstractActionController
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
-		return new ViewModel(array('tipoMissoes' => $this->getTipoMissaoTable()->fetchAll()));
+		$form = new TipoMissaoFilterForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		$tipoMissoes = $this->getTipoMissaoTable()->fetchAll();
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega os campos do filtro
+				$nome = $request->getPost('nome');
+				$descricao = $request->getPost('descricao');
+				
+				// preenche a lista filtrada de usuários
+				$tipoMissoes = $this->getTipoMissaoTable()->getTipoMissaoFiltered($nome, $descricao);
+			}
+		}
+		
+		return new ViewModel(array(
+			'form' => $form,
+			'tipoMissoes' => $tipoMissoes,
+		));
 	}
 
 	public function addAction()

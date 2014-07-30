@@ -5,9 +5,10 @@ return array(
 		'Application',
 		'Usuario',
 		'SanAuth',
-        'Acidente',
+		'Acidente',
 		'TipoMissao',
-		'TipoRecurso'
+		'TipoRecurso',
+		'Missao'
 	),
 
 	// These are various options for the listeners attached to the ModuleManager

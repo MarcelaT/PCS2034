@@ -1,0 +1,25 @@
+<?php
+$title = 'Atualizar status da missão';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$missao = $this->missao;
+$tipoMissao = $this->tipoMissao;
+?>
+
+<h3>Dados da missão de protocolo <?php echo $missao->protocolo; ?></h3>
+
+<p><b>Nome:</b> <?php echo $missao->nome; ?></p>
+<p><b>Tipo de missão:</b> <?php echo $tipoMissao; ?></p>
+<p><b>Status:</b> <?php echo $missao->statusNome; ?></p>
+
+<br />
+
+<h3>Alterar status:</h3>
+
+<div class="btn-group">
+	<a class="btn btn-success" href="<?php echo $this->url('missao', array('action'=>'statusconcluida', 'id' => $missao->id)); ?>">Concluída</a>
+	<a class="btn btn-warning" href="<?php echo $this->url('missao', array('action'=>'statusabortada', 'id' => $missao->id)); ?>">Abortada</a>
+	<a class="btn btn-danger" href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo')); ?>">Cancelar</a>
+</div>

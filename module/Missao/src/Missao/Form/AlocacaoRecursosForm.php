@@ -1,40 +1,32 @@
 <?php
 
-namespace TipoRecurso\Form;
+namespace Missao\Form;
 
 use Zend\Form\Form;
 
-class TipoRecursoForm extends Form
+class AlocacaoRecursosForm extends Form
 {
 	public function __construct($name = null)
 	{
 		// we want to ignore the name passed
-		parent::__construct('tipoRecurso');
+		parent::__construct('Missao');
 
-		// id
 		$this->add(array(
-			'name' => 'id',
+			'name' => 'idTipoRecurso',
 			'type' => 'text',
 		));
-		
-		// nome
 		$this->add(array(
-			'name' => 'nome',
+			'name' => 'quantidade',
 			'type' => 'Text',
-			'attributes' => array(
-				'class' => 'form-control',
-			),
 			'options' => array(
-				'label' => 'Nome',
+				'label' => 'idTipoMissao',
 			),
 		));
-		
-		// submit
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',
 			'attributes' => array(
-				'value' => 'Enviar',
+				'value' => 'Alocar',
 				'id' => 'submitbutton',
 			),
 		));

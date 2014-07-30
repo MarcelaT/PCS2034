@@ -17,8 +17,28 @@ class TipoRecursoController extends AbstractActionController
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
-		return new ViewModel(array('tipoRecursos' => $this->getTipoRecursoTable()->fetchAll()));
-	}
+		$form = new TipoRecursoForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		$tipoRecursos = $this->getTipoRecursoTable()->fetchAll();
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega os campos do filtro
+				$nome = $request->getPost('nome');
+				
+				// preenche a lista filtrada de usuários
+				$tipoRecursos = $this->getTipoRecursoTable()->getTipoRecursoFiltered($nome);
+			}
+		}
+		
+		return new ViewModel(array(
+			'form' => $form,
+			'tipoRecursos' => $tipoRecursos,
+		));	}
 
 	public function addAction()
 	{

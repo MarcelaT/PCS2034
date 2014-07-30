@@ -50,8 +50,8 @@ class CommonsPlugin extends AbstractPlugin
 		
 		$permissao = $this->setPermissaoLayout();
 		
-		// apenas administradores podem ter acesso!
-		if ($permissao != $permUsuario){
+		// apenas usuários credenciados podem ter acesso!
+		if ($permissao != 'administrador' && $permissao != $permUsuario){
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
 	}

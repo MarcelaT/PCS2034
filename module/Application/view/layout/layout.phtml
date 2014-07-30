@@ -28,9 +28,9 @@
 		<?php
 			$isAutenticado = isset($permissao) && $permissao;
 			$isAdmin = $isAutenticado && $permissao == 'administrador';
-			$isCoordenador = $isAutenticado && $permissao == 'coordenador';
-			$isEspecialista = $isAutenticado && $permissao == 'especialista';
-			$isLider = $isAutenticado && $permissao == 'lider_missao';
+			$isCoordenador = $isAdmin || $permissao == 'coordenador';
+			$isEspecialista = $isAdmin || $permissao == 'especialista';
+			$isLider = $isAdmin || $permissao == 'lider_missao';
 			
 			$uri = $this->serverUrl();
 			$url = $this->serverUrl(true);
@@ -79,13 +79,29 @@
 						<?php endif ?>
 
 						<?php if ($isCoordenador): ?>
-						<li class="active">
+						<li <?php if (strpos($route,'acidente') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
 						</li>
 						<?php endif ?>
-					</ul>
 						
-					<ul class="nav navbar-nav navbar-right">
+						<?php if ($isAdmin): ?>
+						<li <?php if (strpos($route,'recurso') !== false && strpos($route,'tiporecurso') === false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('recurso') ?>"><?php echo $this->translate('Recursos') ?></a>
+						</li>
+						<?php endif ?>
+						
+						<?php if ($isAdmin): ?>
+						<li <?php if (strpos($route,'missao') !== false && strpos($route,'tipomissao') === false && strpos($route,'missaoprotocolo') === false && strpos($route,'status') === false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões');?></a>
+						</li>						
+						<?php endif ?>
+						
+						<?php if ($isLider): ?>
+						<li <?php if (strpos($route,'missaoprotocolo') !== false || strpos($route,'status') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo'));?>"><?php echo $this->translate('Atualizar status da missão') ?></a>
+						</li>						
+						<?php endif ?>
+						
 						<?php if ($isAutenticado): ?>
 						<li <?php if (strpos($route,'logout') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>"><?php echo $this->translate('Logout') ?></a>

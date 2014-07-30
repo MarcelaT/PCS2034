@@ -20,7 +20,7 @@ class UsuarioPassForm extends Form
 		// senha antiga
 		$this->add(array(
 			'name' => 'senha-antiga',
-			'type' => 'text',
+			'type' => 'password',
 			'attributes' => array(
 				'class' => 'form-control',
 			),
@@ -32,7 +32,7 @@ class UsuarioPassForm extends Form
 		// senha nova
 		$this->add(array(
 			'name' => 'senha-nova',
-			'type' => 'text',
+			'type' => 'password',
 			'attributes' => array(
 				'class' => 'form-control',
 			),
@@ -44,7 +44,7 @@ class UsuarioPassForm extends Form
 		// senha nova check
 		$this->add(array(
 			'name' => 'senha-nova-chk',
-			'type' => 'text',
+			'type' => 'password',
 			'attributes' => array(
 				'class' => 'form-control',
 			),

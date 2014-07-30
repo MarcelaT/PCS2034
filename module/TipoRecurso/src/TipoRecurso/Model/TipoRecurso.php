@@ -44,7 +44,7 @@ class TipoRecurso implements InputFilterAwareInterface
 				),
 			));
 			
-			// protocolo
+			// nome
 			$inputFilter->add(array(
 				'name'	 => 'nome',
 				'required' => true,

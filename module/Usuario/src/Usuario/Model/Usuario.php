@@ -26,9 +26,9 @@ class Usuario implements InputFilterAwareInterface
 		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->login = (!empty($data['login'])) ? $data['login'] : null;
 		$this->senha  = (!empty($data['senha'])) ? $data['senha'] : null;
-		$this->permissao  = (!empty($data['permissao'])) ? $data['permissao'] : null;
-		$this->nome  = (!empty($data['nome'])) ? $data['nome'] : null;
-		$this->email  = (!empty($data['email'])) ? $data['email'] : null;
+		$this->permissao = (!empty($data['permissao'])) ? $data['permissao'] : null;
+		$this->nome = (!empty($data['nome'])) ? $data['nome'] : null;
+		$this->email = (!empty($data['email'])) ? $data['email'] : null;
 		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
 		$this->dataEdicao  = (!empty($data['dataEdicao'])) ? $data['dataEdicao'] : null;
 		$this->permissaoNome  = (!empty($data['permissao'])) ? $this->getNomePermissao($data['permissao']) : null;
