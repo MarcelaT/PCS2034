@@ -67,8 +67,9 @@ class MissaoController extends AbstractActionController
 	public function alocarrecursosAction()
 	{
 
-		$this->commonsPlugin()->verificaPermissao('coordenador');
-
+		$usuarios = array();
+		array_push($usuarios, 'coordenador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 		//$form = new AlocacaoRecursosForm();
 		//$form->get('submit')->setValue('Adicionar');
