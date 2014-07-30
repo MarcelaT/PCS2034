@@ -26,7 +26,8 @@ INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, pol
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
 	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '15/07/14', 2, false, true, 2);
 
-		
+/*-------------------------------------------------------------------------*/
+
 -- Tipo de Missão
 CREATE TABLE TipodeMissao (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
@@ -50,26 +51,40 @@ INSERT INTO TipodeMissao (nome, descricao)
 INSERT INTO TipodeMissao (nome, descricao)
 	VALUES ('Policia', 'Envia equipe de policia para o local');
 
+/*-------------------------------------------------------------------------*/
 
--- Missao
+-- Missão
 CREATE TABLE Missao (
-   id INTEGER UNSIGNED NOT NULL auto_increment,
-   idTipoMissao INTEGER UNSIGNED  NOT NULL,
-   protocolo INTEGER UNSIGNED NOT NULL,
-   status varchar(100) NOT NULL,
-   nome varchar(100) NOT NULL,
-   recursosAlocados varchar(100) NOT NULL,
-   PRIMARY KEY (id), 
-   FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id)
+	id INTEGER UNSIGNED NOT NULL auto_increment,
+	idTipoMissao INTEGER UNSIGNED NOT NULL,
+	protocolo INTEGER UNSIGNED NOT NULL,
+	status enum('cadastrada','em_andamento','concluida','abortada') NOT NULL DEFAULT 'cadastrada',
+	nome varchar(100) NOT NULL,
+	recursosAlocados varchar(100) NOT NULL,
+	PRIMARY KEY (id), 
+	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id)
  );
- INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-     VALUES  (1, 1, 'concluida', 'missao1', 'sim');
- INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-     VALUES  (2, 2, 'andamento','missao2', 'sim');
- INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-     VALUES  (3, 3, 'andamento', 'missao3', 'nao');
+ 
+-- Índices (primary key)
+CREATE UNIQUE INDEX PK_missao ON Missao(id);
+CREATE UNIQUE INDEX PK_missao_protocolo ON Missao(protocolo);
 
-	
+-- Valores interessantes
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (1, 111, 'concluida', 'missao1', 'sim');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (2, 222, 'em_andamento','missao2', 'sim');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (3, 333, 'cadastrada', 'missao3', 'nao');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (1, 444, 'abortada', 'missao4', 'sim');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (2, 555, 'em_andamento','missao5', 'sim');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (3, 666, 'em_andamento','missao6', 'sim');
+
+/*-------------------------------------------------------------------------*/
+
 -- Tipo de Recurso
 CREATE TABLE TipodeRecurso (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
@@ -93,28 +108,32 @@ INSERT INTO TipodeRecurso (nome)
 	VALUES('Policial');
 INSERT INTO TipodeRecurso (nome)
 	VALUES('Helicoptero');
-	
+
+/*-------------------------------------------------------------------------*/
+
 -- Recurso
 CREATE TABLE Recurso (
-	idRecurso INTEGER UNSIGNED NOT NULL auto_increment,
-	quant INTEGER UNSIGNED  NOT NULL,
-	idTipoRecurso INTEGER UNSIGNED  NOT NULL,
+	id INTEGER UNSIGNED NOT NULL auto_increment,
+	quantidade INTEGER UNSIGNED  NOT NULL,
+	idTipoRecurso INTEGER UNSIGNED NOT NULL,
 	idMissao INTEGER UNSIGNED NOT NULL,
-	PRIMARY KEY (idRecurso), 
-	FOREIGN KEY (idMissao) REFERENCES Missao(id),
-	FOREIGN KEY (idTipoRecurso) REFERENCES TipodeRecurso(id)
+	PRIMARY KEY (id), 
+	FOREIGN KEY (idTipoRecurso) REFERENCES TipodeRecurso(id),
+	FOREIGN KEY (idMissao) REFERENCES Missao(id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_recurso ON Recurso(idRecurso);
+CREATE UNIQUE INDEX PK_recurso ON Recurso(id);
 
 -- Valores interessantes
-INSERT INTO Recurso (idMissao, quant, idTipoRecurso)
-	VALUES  (1, 2, 2);
-INSERT INTO Recurso (idMissao, quant, idTipoRecurso)
-	VALUES  (2, 1, 4);
-INSERT INTO Recurso (idMissao, quant, idTipoRecurso)
-	VALUES  (2, 3, 2);
+INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+	VALUES  (3, 1, 1);
+INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+	VALUES  (4, 2, 2);
+INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+	VALUES  (5, 3, 3);
+
+/*-------------------------------------------------------------------------*/
 
 -- Usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -140,3 +159,5 @@ INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdi
 	VALUES  ('espec',  md5('espec'), 'especialista', 'Especialista Em Acidentes', 'especialista@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
 INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('lider',  md5('lider'), 'lider_missao', 'Lider da Missao', 'lider@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
+
+/*-------------------------------------------------------------------------*/
