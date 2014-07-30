@@ -13,28 +13,57 @@
 </script>
 
 <?php
-$title = 'Missoes';
+$title = 'Missões';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
 
+        <?php
+            $isAutenticado = isset($permissao) && $permissao;
+            $isCoord = $isAutenticado && $permissao == 'coordenador';
+        ?>
+
 <table class="table">
 <tr>
     <th>Nome</th>
-    <th>Tipo de Missao</th>
-    <th>Protocolo</th>
     <th>Status</th>
+    <?php if ($isCoord){ ?>
+    <th>Recursos</th>
+    <?php } ?>
     <th>&nbsp;</th>
+
 </tr>
 <?php foreach ($Missoes as $Missao) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($Missao->nome);?></td>
-    <td><?php echo $this->escapeHtml($Missao->idTipoMissao);?></td>
-    <td><?php echo $this->escapeHtml($Missao->protocolo);?></td>
-    <td><?php echo $this->escapeHtml($Missao->status);?></td>
+    <td>
+        <?php if ($Missao->status == "andamento"){ ?>
+        <?php echo $this->escapeHtml("Em andamento");?>
+        <?php } ?>
+        <?php if ($Missao->status == "concluida"){ ?>
+        <?php echo $this->escapeHtml("Concluída");?>
+        <?php } ?>
+    </td>
+    
+    <?php if ($isCoord){ 
+
+    if ($Missao->recursosAlocados == "nao"){ ?>
     <td>
         <a href="<?php echo $this->url('missao',
-            array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> | 
+            array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> 
+    </td>
+    <?php }else{ ?>
+
+        <td></td>
+    <?php
+    } 
+    } ?>
+    
+
+
+    <td>
+        <a href="<?php echo $this->url('missao',
+            array('action'=>'detalhes', 'id' => $Missao->id));?>">Detalhes</a> 
     </td>
 </tr>
 <?php endforeach; ?>

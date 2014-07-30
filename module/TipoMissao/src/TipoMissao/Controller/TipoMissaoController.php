@@ -15,16 +15,19 @@ class TipoMissaoController extends AbstractActionController
 	public function indexAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+
 		return new ViewModel(array('tipoMissoes' => $this->getTipoMissaoTable()->fetchAll()));
 	}
 
 	public function addAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);		
 		$form = new TipoMissaoForm();
 		$form->get('submit')->setValue('Adicionar');
 		
@@ -50,8 +53,10 @@ class TipoMissaoController extends AbstractActionController
 	public function editAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tipomissao', array('action' => 'add'));
@@ -91,8 +96,10 @@ class TipoMissaoController extends AbstractActionController
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+				
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tipomissao');

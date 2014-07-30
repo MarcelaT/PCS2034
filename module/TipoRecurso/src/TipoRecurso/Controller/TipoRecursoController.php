@@ -15,15 +15,19 @@ class TipoRecursoController extends AbstractActionController
 	public function indexAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+				$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+
 		return new ViewModel(array('tipoRecursos' => $this->getTipoRecursoTable()->fetchAll()));
 	}
 
 	public function addAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
 		
 		$form = new TipoRecursoForm();
 		$form->get('submit')->setValue('Adicionar');
@@ -50,8 +54,10 @@ class TipoRecursoController extends AbstractActionController
 	public function editAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tiporecurso', array('action' => 'add'));
@@ -93,8 +99,10 @@ class TipoRecursoController extends AbstractActionController
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
+		$usuarios = array();
+		array_push($usuarios, 'administrador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+				
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('tiporecurso');

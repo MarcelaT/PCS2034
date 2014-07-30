@@ -78,12 +78,7 @@
 						</li>
 						<?php endif ?>
 
-						<?php if ($isAdmin): ?>
-						<li <?php if (strpos($route,'recurso') !== false): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->basePath('recurso') ?>"><?php echo $this->translate('Recurso') ?></a>
-						</li>
-						<?php endif ?>
-						<?php if ($isAdmin): ?>
+						<?php if ($isAdmin || $isCoordenador): ?>
 						<li <?php if (strpos($route,'missao') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
 						</li>						

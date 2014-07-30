@@ -11,6 +11,9 @@ namespace Missao;
 
 use Missao\Model\Missao;
 use Missao\Model\MissaoTable;
+use Missao\Model\Recurso;
+use Missao\Model\RecursoTable;
+
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -47,6 +50,17 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Missao());
                     return new TableGateway('missao', $dbAdapter, null, $resultSetPrototype);
+                },
+                'Missao\Model\RecursoTable' =>  function($sm) {
+                    $tableGateway = $sm->get('RecursoTableGateway');
+                    $table = new RecursoTable($tableGateway);
+                    return $table;
+                },
+                'RecursoTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Recurso());
+                    return new TableGateway('recurso', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );

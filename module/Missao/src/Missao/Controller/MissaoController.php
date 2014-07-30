@@ -7,117 +7,53 @@ use Zend\View\Model\ViewModel;
 
 use Missao\Model\Missao;
 use Missao\Form\MissaoForm;
+use Missao\Model\Recurso;
+use Missao\Model\RecursoNome;
+
 use Missao\Form\AlocacaoRecursosForm;
 
 class MissaoController extends AbstractActionController
 {
 	protected $MissaoTable;
 	protected $TipoMissaoTable;
+	protected $storage;
+	protected $authservice;
+
+
+	public function getAuthService() {
+		if (!$this->authservice) {
+			$this->authservice = $this->getServiceLocator()->get('AuthService');
+		}
+		return $this->authservice;
+	}
+	
+	public function getSessionStorage() {
+		if (!$this->storage) {
+			$this->storage = $this->getServiceLocator()->get('SanAuth\Model\MyAuthStorage');
+		}
+		return $this->storage;
+	}
 
 	public function indexAction()
 	{
-		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
+		$permissao = '';
 		
-		return new ViewModel(array('Missoes' => $this->getMissaoTable()->fetchAll()));
+		// recupera o usuário
+		$usuario = $this->getAuthService()->getStorage()->read('usuario');
+		
+		// verifica se existe um usuário para adicionar a permissao
+		if ($usuario) {
+			$permissao = $usuario->permissao;
+		}
+		
+		// verifica a permissão do usuário
+		$usuarios = array();
+		array_push($usuarios, 'administrador', 'coordenador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
+		
+		return new ViewModel(array('Missoes' => $this->getMissaoTable()->fetchAll(),'permissao'=>$permissao));
 	}
 
-	public function addAction()
-	{
-		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
-		$form = new MissaoForm();
-		$form->get('submit')->setValue('Adicionar');
-		
-		$request = $this->getRequest();
-		
-		if ($request->isPost()) {
-			$Missao = new Missao();
-			$form->setInputFilter($Missao->getInputFilter());
-			$form->setData($request->getPost());
-			
-			$submit = $request->getPost('submit');
-			if ($submit == 'Adicionar' && $form->isValid()) {
-				$Missao->exchangeArray($form->getData());
-				$this->getMissaoTable()->saveMissao($Missao);
-			}
-			
-			// Redirect to list of Missao
-			return $this->redirect()->toRoute('missao');
-		}
-		return array('form' => $form);
-	}
-
-	public function editAction()
-	{
-		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id) {
-			return $this->redirect()->toRoute('missao', array('action' => 'add'));
-		}
-
-		// recupera missao pelo id
-		try {
-			$Missao = $this->getMissaoTable()->getMissao($id);
-		} catch (\Exception $ex) {
-			return $this->redirect()->toRoute('missao', array('action' => 'index'));
-		}
-
-		$form  = new MissaoForm();
-		$form->bind($Missao);
-		$form->get('submit')->setAttribute('value', 'Editar');
-
-		$request = $this->getRequest();
-		if ($request->isPost()) {
-			$form->setInputFilter($Missao->getInputFilter());
-			$form->setData($request->getPost());
-
-			$submit = $request->getPost('submit');
-			if ($submit == 'Editar' && $form->isValid()) {
-				$this->getMissaoTable()->saveMissao($Missao);
-			}
-			
-			// Redirect to list of tipomissao
-			return $this->redirect()->toRoute('missao');
-		}
-
-		return array(
-			'id' => $id,
-			'form' => $form,
-		);
-	}
-
-	public function deleteAction()
-	{
-		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id) {
-			return $this->redirect()->toRoute('missao');
-		}
-
-		$request = $this->getRequest();
-		if ($request->isPost()) {
-			$del = $request->getPost('del');
-
-			if ($del == 'Sim') {
-				$id = (int) $request->getPost('id');
-				$this->getMissaoTable()->deleteMissao($id);
-			}
-
-			// Redirect to list of Missao
-			return $this->redirect()->toRoute('missao');
-		}
-
-		return array(
-			'id' => $id,
-			'Missao' => $this->getMissaoTable()->getMissao($id)
-		);
-	}
 	
 	public function getMissaoTable()
 	{
@@ -130,9 +66,84 @@ class MissaoController extends AbstractActionController
 
 	public function alocarrecursosAction()
 	{
-		$form = new AlocacaoRecursosForm();
-		$form->get('submit')->setValue('Adicionar');
-		return new ViewModel(array('tipoRecursos' => $this->getTipoRecursoTable()->fetchAll(), 'form'=> $form));
+
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+
+		$idMissao = (int) $this->params()->fromRoute('id', 0);
+		//$form = new AlocacaoRecursosForm();
+		//$form->get('submit')->setValue('Adicionar');
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			//$form->setInputFilter($Missao->getInputFilter());
+			//$form->setData($request->getPost());
+
+			$total = $request->getPost('total');
+			
+			//if ($submit == 'Editar' && $form->isValid()) {
+			for($i=1;$i<=$total;$i++){
+
+				$Recurso = new Recurso();
+				$quantidade = "quantidade".$i;
+				$idTipoRecurso = "id".$i;
+
+				$Recurso->quantidade = $request->getPost($quantidade);
+				$Recurso->idTipoRecurso = $request->getPost($idTipoRecurso);	
+				$Recurso->idMissao = $idMissao;
+
+				try {
+					$Missao = $this->getMissaoTable()->getMissao($idMissao);
+				} catch (\Exception $ex) {
+					return $this->redirect()->toRoute('missao', array('action' => 'index'));
+				}
+
+				$Missao->recursosAlocados ="sim";
+				$this->getMissaoTable()->saveMissao($Missao);
+				if($Recurso->quantidade!=0){
+					$this->getRecursoTable()->saveRecurso($Recurso);
+				}
+			}
+			//}
+			
+			// Redirect to list of tipomissao
+			return $this->redirect()->toRoute('missao');
+		}
+		
+		$tipoRecursos = $this->getTipoRecursoTable()->fetchAll();
+		$total = count($tipoRecursos);
+
+		return new ViewModel(array('tipoRecursos' => $tipoRecursos, 'idMissao'=> $idMissao, 'total'=> $total));
+	}
+
+	public function detalhesAction(){
+
+
+		$idMissao = (int) $this->params()->fromRoute('id', 0);
+
+		try {
+			$Missao = $this->getMissaoTable()->getMissao($idMissao);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+
+		try {
+			$TipoMissao = $this->getTipoMissaoTable()->getTipoMissao($Missao->idTipoMissao);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+
+		$Recursos = $this->getRecursoTable()->getRecursosidMissao($idMissao);
+		$recursosLista = array();
+		foreach($Recursos as $recurso){
+			$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
+			$RecursoNome  = new RecursoNome();
+			$RecursoNome -> quantidade = $recurso->quantidade;
+			$RecursoNome -> nome = $tipoRecurso -> nome;
+			array_push($recursosLista, $RecursoNome);
+
+		}
+
+		return new ViewModel(array('recursosLista' => $recursosLista, 'Missao' => $Missao, 'TipoMissao' => $TipoMissao));
 	}
 
 	public function getTipoRecursoTable()
@@ -141,6 +152,23 @@ class MissaoController extends AbstractActionController
 			$sm = $this->getServiceLocator();
 			$this->tipoMissaoTable = $sm->get('TipoRecurso\Model\TipoRecursoTable');
 		//}
+		return $this->tipoMissaoTable;
+	}
+
+		public function getRecursoTable()
+	{
+		//if (!$this->tipoMissaoTable) {
+			$sm = $this->getServiceLocator();
+			$this->recursoTable = $sm->get('Missao\Model\RecursoTable');
+		//}
+		return $this->recursoTable;
+	}
+
+	public function getTipoMissaoTable()
+	{
+			$sm = $this->getServiceLocator();
+			$this->tipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
+		
 		return $this->tipoMissaoTable;
 	}
 

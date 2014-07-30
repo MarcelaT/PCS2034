@@ -43,15 +43,24 @@ class CommonsPlugin extends AbstractPlugin
 	}
 	
 	// verifica se o usuário pode ou não acessar a página
-	public function verificaPermissao($permUsuario) {
+	public function verificaPermissao($permUsuarioLista) {
 		if (!$this->isAutenticado()){
 			return $this->getController()->redirect()->toRoute('login');
 		}
 		
 		$permissao = $this->setPermissaoLayout();
-		
+		$a = 0;
 		// apenas administradores podem ter acesso!
-		if ($permissao != $permUsuario){
+		foreach ($permUsuarioLista as $permUsuario){
+			/*if ($permissao != $permUsuario){
+				return $this->getController()->redirect()->toRoute('forbidden');
+			}*/
+			if ($permissao == $permUsuario){
+				$a = 1;
+			}
+		}
+
+		if ($a != 1){
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
 	}
