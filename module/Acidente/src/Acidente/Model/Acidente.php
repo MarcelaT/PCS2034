@@ -24,7 +24,7 @@ class Acidente implements InputFilterAwareInterface
     {
         $this->idAcidente     = (!empty($data['idAcidente'])) ? $data['idAcidente'] : null;
         $this->localizacao = (!empty($data['localizacao'])) ? $data['localizacao'] : null;
-        $this->descricao  = (!empty($data['descricao'])) ? md5($data['descricao']) : null;
+        $this->descricao  = (!empty($data['descricao'])) ? ($data['descricao']) : null;
 		$this->data  = (!empty($data['data'])) ? $data['data'] : null;
 		$this->numeroVitimas  = (!empty($data['numeroVitimas'])) ? $data['numeroVitimas'] : null;
         $this->bombeiro  = (!empty($data['bombeiro'])) ? $data['bombeiro'] : null;
@@ -93,15 +93,6 @@ class Acidente implements InputFilterAwareInterface
                             'max'      => 100,
                         ),
                     ),
-                ),
-            ));
-
-            // data
-            $inputFilter->add(array(
-                'name'     => 'data',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
                 ),
             ));
 

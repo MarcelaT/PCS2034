@@ -21,7 +21,7 @@ class AcidenteTable
 		$rowset = $this->tableGateway->select(array('idAcidente' => $idAcidente));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Acidente de id $idAcidente");
+			throw new \Exception("Não foi localizado Acidente de id ".$idAcidente);
 		}
 		return $row;
 	}
@@ -44,7 +44,7 @@ class AcidenteTable
 			if ($this->getAcidente($idAcidente)) {
 				$this->tableGateway->update($data, array('idAcidente' => $idAcidente));
 			} else {
-				throw new \Exception('Acidente de id $idAcidente não existe!');
+				throw new \Exception('Acidente de id '.$idAcidente.' não existe!');
 			}
 		}
 	}
@@ -53,7 +53,7 @@ class AcidenteTable
 		if ($this->getAcidente($id)) {
 			$this->tableGateway->delete(array('idAcidente' => (int) $idAcidente));
 		} else {
-			throw new \Exception('Acidente de id $idAcidente não existe!');
+			throw new \Exception('Acidente de id '.$idAcidente.' não existe!');
 		}
 	}
 }
