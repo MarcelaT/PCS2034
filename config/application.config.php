@@ -5,6 +5,7 @@ return array(
 		'Application',
 		'Usuario',
 		'SanAuth',
+		'Acidente',
 		'TipoMissao',
 		'TipoRecurso',
 		'Missao'

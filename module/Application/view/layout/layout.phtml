@@ -28,9 +28,9 @@
 		<?php
 			$isAutenticado = isset($permissao) && $permissao;
 			$isAdmin = $isAutenticado && $permissao == 'administrador';
-			$isCoordenador = $isAutenticado && $permissao == 'coordenador';
-			$isEspecialista = $isAutenticado && $permissao == 'especialista';
-			$isLider = $isAutenticado && $permissao == 'lider_missao';
+			$isCoordenador = $isAdmin || $permissao == 'coordenador';
+			$isEspecialista = $isAdmin || $permissao == 'especialista';
+			$isLider = $isAdmin || $permissao == 'lider_missao';
 			
 			$uri = $this->serverUrl();
 			$url = $this->serverUrl(true);
@@ -51,17 +51,17 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li <?php if ($route == '' || strpos($route,'application') !== false || strpos($route,'index') !== false): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->url('home'); ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Home') ?></a>
+							<a href="<?php echo $this->url('home'); ?>"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<?php echo $this->translate('Home') ?></a>
 						</li>
 						
 						<?php if ($isAutenticado): ?>
-						<li <?php if (strpos($route,'success') !== false): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->url('login') ?>"><?php echo $this->translate('Perfil') ?></a>
+						<li <?php if (strpos($route,'success') !== false || strpos($route,'editpassword') !== false || strpos($route,'editdados') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->url('login') ?>"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<?php echo $this->translate('Perfil') ?></a>
 						</li>
 						<?php endif ?>
 						
 						<?php if ($isAdmin): ?>
-						<li <?php if (strpos($route,'usuarios') !== false): ?>class="active"<?php endif ?>>
+						<li <?php if (strpos($route,'usuarios') !== false && strpos($route,'editpassword') === false && strpos($route,'editdados') === false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('usuarios') ?>"><?php echo $this->translate('Usuários') ?></a>
 						</li>
 						<?php endif ?>
@@ -81,11 +81,22 @@
 						<?php if ($isAdmin || $isCoordenador): ?>
 						<li <?php if (strpos($route,'missao') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
+						<?php endif ?>
+
+						<?php if ($isCoordenador): ?>
+						<li <?php if (strpos($route,'acidente') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
+						</li>
+						<?php endif ?>
+						
+						<?php if ($isLider): ?>
+						<li <?php if (strpos($route,'missaoprotocolo') !== false || strpos($route,'status') !== false): ?>class="active"<?php endif ?>>
+							<a href="<?php echo $this->url('missao',array('action'=>'missaoprotocolo'));?>"><?php echo $this->translate('Atualizar status da missão') ?></a>
 						</li>						
 						<?php endif ?>
 						
 						<?php if ($isAutenticado): ?>
-						<li>
+						<li <?php if (strpos($route,'logout') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>"><?php echo $this->translate('Logout') ?></a>
 						</li>
 						<?php else: ?>

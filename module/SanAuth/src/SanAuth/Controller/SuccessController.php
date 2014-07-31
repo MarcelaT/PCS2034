@@ -18,10 +18,10 @@ class SuccessController extends AbstractActionController
 			return $this->redirect()->toRoute('login');
 		}
 		
-		// recupera o nome do usuário
-		$usuario_nome = $this->commonsPlugin()->readStorage('usuario')->nome;
+		// recupera o usuário
+		$usuario = $this->commonsPlugin()->readStorage('usuario');
 		
-		// retorna para a view com o nome do usuário
-		return new ViewModel(array('nome_usuario' => $usuario_nome));
+		// retorna para a view com o usuário
+		return new ViewModel(array('usuario' => $usuario));
 	}
 }

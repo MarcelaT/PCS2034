@@ -63,6 +63,12 @@ class CommonsPlugin extends AbstractPlugin
 		if ($a != 1){
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
+		/*
+		// apenas usuários credenciados podem ter acesso!
+		if ($permissao != 'administrador' && $permissao != $permUsuario){
+			return $this->getController()->redirect()->toRoute('forbidden');
+		}
+		*/
 	}
 	
 	public function isAutenticado() {

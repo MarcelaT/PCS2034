@@ -1,19 +1,7 @@
-<script type="text/javascript">
-    function getNomePermissao(enumPermissao) {
-        if (enumPermissao == 'administrador') {
-            return 'Administrador';
-        } else if (enumPermissao == 'coordenador') {
-            return 'Coordenador';
-        } else if (enumPermissao == 'especialista') {
-            return 'Especialista';
-        } else if (enumPermissao == 'lider_missao') {
-            return 'Líder da Missão';
-        }
-    }
-</script>
+
 
 <?php
-$title = 'Alocacao de tipo de missoes';
+$title = 'Alocar recursos';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
@@ -22,16 +10,18 @@ $this->headTitle($title);
     $idMissao = $this->idMissao;
     $nomeAction = "/PCS2034/public/missao/alocarrecursos/";
     ?>
-<?php echo $this->total; 
+<?php  
     $count = 0 ; ?>
 <form action=<?php echo $nomeAction. $idMissao; ?> method="POST" name="alocarrecursos">
 <input name="total" class="hidden" value=<?php echo $this->total; ?>>
+
 <table class="table">
 <tr>
     <th>Nome</th>
     <th>Quantidade</th>
     <th>&nbsp;</th>
 </tr>
+
 
 <?php 
 /*
@@ -55,22 +45,22 @@ $this->form()->prepare();
 
 <?php foreach ($tipoRecursos as $tipoRecurso) : ?>
 <tr>
-<td>
-<?php echo $this->escapeHtml($tipoRecurso->nome);?>
-</td>
-<?php
-$idtipoRecurso = $tipoRecurso->id;
-?>
-<td>
-    <?php $nome = "quantidade"; 
+    <td>
+        <?php echo $this->escapeHtml($tipoRecurso->nome);?>
+    </td>
+    <?php
+    $idtipoRecurso = $tipoRecurso->id;
     ?>
-    <?php $idtipo = "id";
-        $count = $count + 1; 
-    ?>
-    <input name=<?php echo $idtipo. $count; ?> class="hidden" value=<?php echo $idtipoRecurso; ?>>
-    <input name=<?php echo $nome. $count; ?> type="text" value="0">
+    <td>
+        <?php $nome = "quantidade"; 
+        ?>
+        <?php $idtipo = "id";
+            $count = $count + 1; 
+        ?>
+        <input name=<?php echo $idtipo. $count; ?> class="hidden" value=<?php echo $idtipoRecurso; ?>>
+        <input name=<?php echo $nome. $count; ?> type="text" value="0">
 
-</td>
+    </td>
 </tr>
 <?php 
 endforeach;
@@ -79,18 +69,19 @@ endforeach;
 
 </tr>
 <tr>
-<td>
-<input type="submit" class="btn btn-default" name="submit" value="Alocar recursos">
-</td>
+    <td>
+        <input type="submit" class="btn btn-default" name="submit" value="Alocar recursos">
+    </td>
 
-<td>
-<a href="/PCS2034/public/missao/" class="btn btn-default" >Cancelar</a> 
-</td>
+    <td>
+        <a href="/PCS2034/public/missao/" class="btn btn-default" >Cancelar</a> 
+    </td>
 </tr>
 
 </table>
 
 </form>
+
 
 
 

@@ -22,10 +22,23 @@ class MissaoTable
 		$row = $rowset->current();
 		if (!$row) {
 			throw new \Exception("Não foi localizado Missao de id $id");
+
 		}
 		return $row;
 	}
 
+
+
+	public function getMissaoByProtocolo($protocolo) {
+		$protocolo  = (int) $protocolo;
+		$rowset = $this->tableGateway->select(array('protocolo' => $protocolo));
+		$row = $rowset->current();
+		if (!$row) {
+			throw new \Exception("Não foi localizada Missao de protocolo ".$protocolo);
+		}
+		return $row;
+	}
+	
 	public function saveMissao(Missao $Missao) {
 		$data = array(
 			'nome' => $Missao->nome,
@@ -42,11 +55,24 @@ class MissaoTable
 			if ($this->getMissao($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
+
 				throw new \Exception('Missao de id $id não existe!');
 			}
 		}
 	}
 
+	
+	public function atualizarStatusMissao($id, $status) {
+		if ($this->getMissao($id)) {
+			$data = array(
+				'status'  => $status,
+			);
+			$this->tableGateway->update($data, array('id' => $id));
+		} else {
+			throw new \Exception('Missao de id '.$id.' não existe!');
+		}
+	}
+	
 	public function deleteMissao($id) {
 		if ($this->getMissao($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));

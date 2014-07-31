@@ -46,7 +46,7 @@ class TipoMissao implements InputFilterAwareInterface
 				),
 			));
 			
-			// protocolo
+			// nome
 			$inputFilter->add(array(
 				'name'	 => 'nome',
 				'required' => true,
@@ -56,7 +56,7 @@ class TipoMissao implements InputFilterAwareInterface
 				),
 			));
 			
-			// status
+			// descricao
 			$inputFilter->add(array(
 				'name'	 => 'descricao',
 				'required' => true,

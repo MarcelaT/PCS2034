@@ -1,19 +1,8 @@
-<script type="text/javascript">
-    function getNomePermissao(enumPermissao) {
-        if (enumPermissao == 'administrador') {
-            return 'Administrador';
-        } else if (enumPermissao == 'coordenador') {
-            return 'Coordenador';
-        } else if (enumPermissao == 'especialista') {
-            return 'Especialista';
-        } else if (enumPermissao == 'lider_missao') {
-            return 'Líder da Missão';
-        }
-    }
-</script>
+
 
 <?php
 $title = 'Missões';
+
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
@@ -64,6 +53,7 @@ $this->headTitle($title);
     <td>
         <a href="<?php echo $this->url('missao',
             array('action'=>'detalhes', 'id' => $Missao->id));?>">Detalhes</a> 
+
     </td>
 </tr>
 <?php endforeach; ?>
