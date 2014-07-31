@@ -11,4 +11,4 @@ Olá, <?php echo $usuario->nome; ?>.
 	</li>
 </ul>
 <br />
-Última edição no perfil feita em <?php echo $usuario->dataEdicao; ?>
+Última edição no perfil feita em <?php echo $this->escapeHtml(date('d/m/Y H:i:s', strtotime($usuario->dataEdicao))); ?>

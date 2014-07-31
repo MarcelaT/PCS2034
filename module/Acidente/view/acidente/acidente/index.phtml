@@ -2,34 +2,57 @@
 $title = 'Acidentes cadastrados';
 $this->headTitle($title);
 ?>
+
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
-    <a href="<?php echo $this->url('acidente', array('action'=>'addAcidente'));?>">Adicionar Acidente</a>
+    <a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'add'));?>">Adicionar Acidente</a>
 </p>
+
+<hr class="divider">
+
+<div class="span4 collapse-group">
+	<h3><?php echo $this->escapeHtml('Filtros de busca');?></h3>
+	<div class="collapse" id="viewdetails">
+	TODO
+	</div>
+	<p><a class="btn" data-toggle="collapse" data-target="#viewdetails">Mostrar/Esconder &raquo;</a></p>
+</div>
+
+<hr class="divider">
 
 <table class="table">
 <tr>
     <th>Localização</th>
 	<th>Descrição</th>
 	<th>Data</th>
-    <th>Número de Vítimas</th>
     <th>Bombeiro</th>
     <th>Polícia</th>
-    <th>Obstrução</th>
+	<th>Nº Vítimas</th>
+    <th>Nº Obstruções</th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($acidentes as $acidente) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($acidente->localizacao);?></td>
 	<td><?php echo $this->escapeHtml($acidente->descricao);?></td>
-	<td><?php echo $this->escapeHtml($acidente->data);?></td>
+	<td><?php echo $this->escapeHtml(date('d/m/Y', strtotime($acidente->data)));?></td>
+    <td><?php if ($acidente->bombeiro) : ?>
+		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
+		<?php else : ?>
+		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
+		<?php endif; ?>
+	</td>
+    <td><?php if ($acidente->policia) : ?>
+		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
+		<?php else : ?>
+		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
+		<?php endif; ?>
+	</td>
 	<td><?php echo $this->escapeHtml($acidente->numeroVitimas);?></td>
-    <td><?php echo $this->escapeHtml($acidente->bombeiro);?></td>
-    <td><?php echo $this->escapeHtml($acidente->policia);?></td>
     <td><?php echo $this->escapeHtml($acidente->obstrucao);?></td>
     <td>
         <a href="<?php echo $this->url('acidente',
-            array('action'=>'getAcidenteInfo', 'idAcidente' => $acidente->idAcidente));?>">Mais Informações</a>
+            array('action'=>'getAcidenteInfo', 'id' => $acidente->id));?>">Mais Informações</a>
     </td>
 </tr>
 <?php endforeach; ?>

@@ -13,73 +13,90 @@ class AcidenteForm extends Form
         // we want to ignore the name passed
         parent::__construct('acidente');
 
+		// id
 		$this->add(array(
-            'name' => 'idAcidente',
+            'name' => 'id',
             'type' => 'Hidden',
         ));
+		
+		// localizacao
         $this->add(array(
             'name' => 'localizacao',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
-                'label' => 'Localizacao',
+                'label' => 'Localização',
             )
         ));
+		
+		// descricao
         $this->add(array(
             'name' => 'descricao',
-            'type' => 'Text',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
-                'label' => 'Descricao',
+                'label' => 'Descrição',
             )
         ));
+		
+		// bombeiro
 		$this->add(array(
             'name' => 'bombeiro',
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'checkbox',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
                 'label' => 'Bombeiro',
-                'use_hidden_element' => true,
-                'checked_value' => true,
-                'unchecked_value' => false
             )
         ));
+		
+		// policia
 		$this->add(array(
             'name' => 'policia',
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'checkbox',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
-                'label' => 'Policia',
-                'use_hidden_element' => true,
-                'checked_value' => true,
-                'unchecked_value' => false
+                'label' => 'Polícia',
             )
         ));
+		
+		// numeroVitimas
 		$this->add(array(
             'name' => 'numeroVitimas',
-            'type' => 'Zend\Form\Element\Number',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
-                'label' => 'Numero de Vítimas',
+                'label' => 'Número de vítimas',
             ),
-            'attributes' => array(
-                'min' => '0',
-                'max' => '100',
-                'step' => '1', // default step interval is 1
-            )
         ));
+		
+		// obstrucao
         $this->add(array(
             'name' => 'obstrucao',
-            'type' => 'Zend\Form\Element\Number',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
             'options' => array(
-                'label' => 'Numero de obstruções na via',
+                'label' => 'Número de obstruções na via',
             ),
-            'attributes' => array(
-                'min' => '0',
-                'max' => '100',
-                'step' => '1', // default step interval is 1
-            )
         ));
+		
+		// submit
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Adicionar',
+                'value' => 'Enviar',
                 'id' => 'submitbutton',
             )
         ));
