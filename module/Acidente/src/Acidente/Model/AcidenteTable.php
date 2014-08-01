@@ -16,12 +16,12 @@ class AcidenteTable
 		return $resultSet;
 	}
 
-	public function getAcidente($idAcidente) {
-		$idAcidente  = (int) $idAcidente;
-		$rowset = $this->tableGateway->select(array('idAcidente' => $idAcidente));
+	public function getAcidente($id) {
+		$id  = (int) $id;
+		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Acidente de id ".$idAcidente);
+			throw new \Exception("Não foi localizado Acidente de id ".$id);
 		}
 		return $row;
 	}
@@ -30,30 +30,30 @@ class AcidenteTable
 		$data = array(
 			'localizacao' => $acidente->localizacao,
 			'descricao'  => $acidente->descricao,
-			'data'  => $acidente->data,
+			'data' => $acidente->data,
 			'numeroVitimas'  => $acidente->numeroVitimas,
 			'bombeiro'  => $acidente->bombeiro,
 			'policia'  => $acidente->policia,
 			'obstrucao'  => $acidente->obstrucao,
 		);
 
-		$idAcidente = (int) $acidente->idAcidente;
-		if ($idAcidente == 0) {
+		$id = (int) $acidente->id;
+		if ($id == 0) {
 			$this->tableGateway->insert($data);
 		} else {
-			if ($this->getAcidente($idAcidente)) {
-				$this->tableGateway->update($data, array('idAcidente' => $idAcidente));
+			if ($this->getAcidente($id)) {
+				$this->tableGateway->update($data, array('id' => $id));
 			} else {
-				throw new \Exception('Acidente de id '.$idAcidente.' não existe!');
+				throw new \Exception('Acidente de id '.$id.' não existe!');
 			}
 		}
 	}
 
-	public function deleteAcidente($idAcidente) {
+	public function deleteAcidente($id) {
 		if ($this->getAcidente($id)) {
-			$this->tableGateway->delete(array('idAcidente' => (int) $idAcidente));
+			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Acidente de id '.$idAcidente.' não existe!');
+			throw new \Exception('Acidente de id '.$id.' não existe!');
 		}
 	}
 }
