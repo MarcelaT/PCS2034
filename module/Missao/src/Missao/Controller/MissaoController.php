@@ -111,7 +111,9 @@ class MissaoController extends AbstractActionController
 	}
 
 	public function detalhesAction(){
-
+		$usuarios = array();
+		array_push($usuarios, 'administrador', 'coordenador');
+		$this->commonsPlugin()->verificaPermissao($usuarios);
 
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 
