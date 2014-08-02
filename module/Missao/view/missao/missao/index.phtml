@@ -26,11 +26,17 @@ $this->headTitle($title);
 <tr>
     <td><?php echo $this->escapeHtml($Missao->nome);?></td>
     <td>
-        <?php if ($Missao->status == "andamento"){ ?>
+        <?php if ($Missao->status == "em_andamento"){ ?>
         <?php echo $this->escapeHtml("Em andamento");?>
         <?php } ?>
         <?php if ($Missao->status == "concluida"){ ?>
         <?php echo $this->escapeHtml("Concluída");?>
+        <?php } ?>
+         <?php if ($Missao->status == "cadastrada"){ ?>
+        <?php echo $this->escapeHtml("Cadastrada");?>
+        <?php } ?>
+        <?php if ($Missao->status == "abortada"){ ?>
+        <?php echo $this->escapeHtml("Abortada");?>
         <?php } ?>
     </td>
     
