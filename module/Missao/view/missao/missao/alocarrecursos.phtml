@@ -35,82 +35,54 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
 
-    <?php 
-    $idMissao = $this->idMissao;
-    $nomeAction = "/PCS2034/public/missao/alocarrecursos/";
-    ?>
+<?php 
+	$idMissao = $this->idMissao;
+	$nomeAction = $this->serverUrl(true);
+?>
+
 <?php  
-    $count = 0 ; ?>
-<form action=<?php echo $nomeAction. $idMissao; ?> method="POST" name="alocarrecursos" onsubmit="validate()">
+<
+	$count = 0 ; ?>
+<form action=<?php echo $nomeAction; ?> method="POST" name="alocarrecursos">
 <input name="total" class="hidden" value=<?php echo $this->total; ?>>
 
 <table class="table">
 <tr>
-    <th>Nome</th>
-    <th>Quantidade</th>
-    <th>&nbsp;</th>
+	<th>Nome</th>
+	<th>Quantidade</th>
+	<th>&nbsp;</th>
 </tr>
 
-
-<?php 
-/*
-$this->form()->prepare();
-    $this->form()->setAttribute('action', $this->url(
-        'missao',
-        array(
-            'action' => 'alocarrecursos',
-            'id'     => $this->id,
-        )
-    )); 
-    echo $this->form()->openTag($this->form());
-
-    echo $this->formHidden($this->form()->get('idTipoRecurso'));
-    echo $this->formRow($this->form()->get('quantidade'));
-    echo $this->form()->closeTag();
-*/
-?>
 <tr>
-
-
 <?php foreach ($tipoRecursos as $tipoRecurso) : ?>
 <tr>
-    <td>
-        <?php echo $this->escapeHtml($tipoRecurso->nome);?>
-    </td>
-    <?php
-    $idtipoRecurso = $tipoRecurso->id;
-    ?>
-    <td>
-        <?php $nome = "quantidade"; 
-        ?>
-        <?php $idtipo = "id";
-            $count = $count + 1; 
-        ?>
-        <input name=<?php echo $idtipo. $count; ?> class="hidden" value=<?php echo $idtipoRecurso; ?>>
-        <input name=<?php echo $nome. $count; ?> type="text" value="0">
+	<td>
+		<?php echo $this->escapeHtml($tipoRecurso->nome);?>
+	</td>
+	<?php
+		$idtipoRecurso = $tipoRecurso->id;
+	?>
+	<td>
+		<?php $nome = "quantidade"; ?>
+		<?php $idtipo = "id";
+			$count = $count + 1; 
+		?>
+		<input name=<?php echo $idtipo. $count; ?> class="hidden" value=<?php echo $idtipoRecurso; ?>>
+		<input name=<?php echo $nome. $count; ?> type="text" value="0">
 
-    </td>
+	</td>
 </tr>
-<?php 
-endforeach;
-?>
-
-
+<?php endforeach; ?>
 </tr>
+
 <tr>
-    <td>
-        <input type="submit" class="btn btn-default" name="submit" value="Alocar recursos">
-    </td>
-
-    <td>
-        <a href="/PCS2034/public/missao/" class="btn btn-default" >Cancelar</a> 
-    </td>
+	<td>
+		<input type="submit" class="btn btn-default" name="submit" value="Alocar recursos">
+	</td>
+	<td>
+		<input class='btn' name='submit' type='submit' value='Cancelar'>
+	</td>
 </tr>
 
 </table>
-
 </form>
-
-
-
-

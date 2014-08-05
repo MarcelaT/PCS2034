@@ -21,7 +21,7 @@ class RecursoTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Recurso de id $id");
+			throw new \Exception("Não foi localizado Recurso de id ".$id);
 		}
 		return $row;
 	}
@@ -29,22 +29,19 @@ class RecursoTable
 	public function getRecursosidMissao($idMissao) {
 		$idMissao  = (int) $idMissao;
 		$resultSet = $this->tableGateway->select(array('idMissao' => $idMissao));
-		//$row = $rowset->current();
 		if (!$resultSet) {
-			throw new \Exception("Não foi localizado Recurso de idMissao $idMissao");
+			throw new \Exception("Não foi localizado Recurso de idMissao ".$idMissao);
 		}
 		return $resultSet;
 	}
 
 	public function saveRecurso(Recurso $Recurso) {
 		$data = array(
-
 			'quantidade' => $Recurso->quantidade,
 			'idTipoRecurso'  => $Recurso->idTipoRecurso,
 			'idMissao'  => $Recurso->idMissao,
-
 		);
-
+		
 		$id = (int) $Recurso->id;
 		if ($id == 0) {
 			$this->tableGateway->insert($data);
@@ -52,7 +49,7 @@ class RecursoTable
 			if ($this->getRecurso($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
-				throw new \Exception('Recurso de id $id não existe!');
+				throw new \Exception('Recurso de id '.$id.' não existe!');
 			}
 		}
 	}
@@ -61,7 +58,7 @@ class RecursoTable
 		if ($this->getRecurso($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Recurso de id $id não existe!');
+			throw new \Exception('Recurso de id '.$id.' não existe!');
 		}
 	}
 }

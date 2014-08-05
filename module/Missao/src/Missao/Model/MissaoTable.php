@@ -21,8 +21,7 @@ class MissaoTable
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Não foi localizado Missao de id $id");
-
+			throw new \Exception("Não foi localizado Missao de id ".$id);
 		}
 		return $row;
 	}
@@ -56,7 +55,7 @@ class MissaoTable
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
 
-				throw new \Exception('Missao de id $id não existe!');
+				throw new \Exception('Missao de id '.$id.' não existe!');
 			}
 		}
 	}
@@ -77,7 +76,7 @@ class MissaoTable
 		if ($this->getMissao($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
 		} else {
-			throw new \Exception('Missao de id $id não existe!');
+			throw new \Exception('Missao de id '.$id.' não existe!');
 		}
 	}
 }

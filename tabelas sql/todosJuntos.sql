@@ -60,7 +60,7 @@ CREATE TABLE Missao (
 	protocolo INTEGER UNSIGNED NOT NULL,
 	status enum('cadastrada','em_andamento','concluida','abortada') NOT NULL DEFAULT 'cadastrada',
 	nome varchar(100) NOT NULL,
-	recursosAlocados varchar(100) NOT NULL,
+	recursosAlocados boolean NOT NULL DEFAULT 0,
 	PRIMARY KEY (id), 
 	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id)
  );
@@ -71,17 +71,19 @@ CREATE UNIQUE INDEX PK_missao_protocolo ON Missao(protocolo);
 
 -- Valores interessantes
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (1, 111, 'concluida', 'missao1', 'sim');
+	VALUES  (1, 111, 'concluida', 'missao1', true);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (2, 222, 'em_andamento','missao2', 'sim');
+	VALUES  (2, 222, 'em_andamento','missao2', true);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (3, 333, 'cadastrada', 'missao3', 'nao');
+	VALUES  (3, 333, 'cadastrada', 'missao3', false);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (1, 444, 'abortada', 'missao4', 'sim');
+	VALUES  (1, 444, 'abortada', 'missao4', true);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (2, 555, 'em_andamento','missao5', 'sim');
+	VALUES  (2, 555, 'em_andamento','missao5', true);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (3, 666, 'em_andamento','missao6', 'sim');
+	VALUES  (3, 666, 'em_andamento','missao6', true);
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (3, 777, 'cadastrada', 'missao7', false);
 
 /*-------------------------------------------------------------------------*/
 
@@ -114,7 +116,7 @@ INSERT INTO TipodeRecurso (nome)
 -- Recurso
 CREATE TABLE Recurso (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
-	quantidade INTEGER UNSIGNED  NOT NULL,
+	quantidade INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	idTipoRecurso INTEGER UNSIGNED NOT NULL,
 	idMissao INTEGER UNSIGNED NOT NULL,
 	PRIMARY KEY (id), 
@@ -131,8 +133,12 @@ INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
 INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
 	VALUES  (4, 2, 2);
 INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
-	VALUES  (5, 3, 3);
-
+	VALUES  (5, 3, 4);
+INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+	VALUES  (1, 4, 5);
+INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+	VALUES  (2, 5, 6);
+	
 /*-------------------------------------------------------------------------*/
 
 -- Usuarios

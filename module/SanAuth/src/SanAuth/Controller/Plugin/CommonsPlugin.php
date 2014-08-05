@@ -25,8 +25,7 @@ class CommonsPlugin extends AbstractPlugin
 		return $this->storage;
 	}
 	
-	// seta a permissão do usuário no layout para ser recuperado e gerar os menus
-	public function setPermissaoLayout() {
+	public function getPermissaoUsuario() {
 		$permissao = '';
 		
 		// recupera o usuário
@@ -37,24 +36,26 @@ class CommonsPlugin extends AbstractPlugin
 			$permissao = $usuario->permissao;
 		}
 		
+		return $permissao;
+	}
+	
+	// seta a permissão do usuário no layout para ser recuperado e gerar os menus
+	public function setPermissaoLayout() {
+		$permissao = $this->getPermissaoUsuario();
 		$this->getController()->layout()->setVariable('permissao', $permissao);
-		
 		return $permissao;
 	}
 	
 	// verifica se o usuário pode ou não acessar a página
-	public function verificaPermissao($permUsuarioLista) {
+	public function verificaPermissao($permissao) {
 		if (!$this->isAutenticado()){
 			return $this->getController()->redirect()->toRoute('login');
 		}
 		
 		$permissao = $this->setPermissaoLayout();
-		$a = 0;
-		// apenas administradores podem ter acesso!
+		
+		/*$a = 0;
 		foreach ($permUsuarioLista as $permUsuario){
-			/*if ($permissao != $permUsuario){
-				return $this->getController()->redirect()->toRoute('forbidden');
-			}*/
 			if ($permissao == $permUsuario){
 				$a = 1;
 			}
@@ -63,12 +64,14 @@ class CommonsPlugin extends AbstractPlugin
 		if ($a != 1){
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
-		/*
+		*/
+		
 		// apenas usuários credenciados podem ter acesso!
+		// administradores tem TODAS as funções do sistema!
 		if ($permissao != 'administrador' && $permissao != $permUsuario){
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
-		*/
+		
 	}
 	
 	public function isAutenticado() {

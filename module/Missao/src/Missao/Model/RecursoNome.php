@@ -18,9 +18,9 @@ class RecursoNome implements InputFilterAwareInterface
 
 	public function exchangeArray($data)
 	{
-		$this->id	 = (!empty($data['id'])) ? $data['id'] : null;
-		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : null;
-		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
+		$this->id = (!empty($data['id'])) ? $data['id'] : null;
+		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : 0;
+		$this->nome = (!empty($data['nome'])) ? ($data['nome']) : null;
 
 	}
 
@@ -48,6 +48,7 @@ class RecursoNome implements InputFilterAwareInterface
 				),
 			));
 
+			// quantidade
 			$inputFilter->add(array(
 				'name'	 => 'quantidade',
 				'required' => true,
@@ -57,14 +58,15 @@ class RecursoNome implements InputFilterAwareInterface
 				),
 			));
 
+			// nome
 			$inputFilter->add(array(
 				'name'	 => 'nome',
 				'required' => true,
 				'filters'  => array(
-					array('name' => 'Int'),
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
 				),
 			));
-			
 			
 			$this->inputFilter = $inputFilter;
 		}
