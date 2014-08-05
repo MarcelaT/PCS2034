@@ -106,7 +106,7 @@ class AcidenteFilterForm extends Form
 				'class' => 'form-control',
 			),
             'options' => array(
-                'label' => 'Número de obstruções na via',
+                'label' => 'Quantidade de obstruções na via',
             ),
         ));
 		

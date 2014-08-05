@@ -56,7 +56,7 @@ class AcidenteTable
 		if (null !== $obstrucao && $obstrucao != '') {
 			$select->where->greaterThanOrEqualTo('obstrucao', $obstrucao);
 		}
-		//throw new \Exception($this->tableGateway->getSql()->getSqlstringForSqlObject($select));
+		
 		$resultSet = $this->tableGateway->select($select->where);
 		if (!$resultSet) {
 			throw new \Exception("Não foram localizados Acidentes com os parâmetros passados.");

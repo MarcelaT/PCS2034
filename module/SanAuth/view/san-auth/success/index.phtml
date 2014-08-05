@@ -5,10 +5,9 @@ Olá, <?php echo $usuario->nome; ?>.
 <br />
 
 <ul class="nav nav-pills">
-	<li class="active"><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a>
+	<li class="active"><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>
 	<li><a href="<?php echo $this->url('usuario',array('action'=>'editdados', 'id' => $usuario->id)); ?>">Alterar dados cadastrais</a></li>
 	<li><a href="<?php echo $this->url('usuario',array('action'=>'editpassword', 'id' => $usuario->id));?>">Alterar senha</a></li>
-	</li>
 </ul>
 <br />
 Última edição no perfil feita em <?php echo $this->escapeHtml(date('d/m/Y H:i:s', strtotime($usuario->dataEdicao))); ?>

@@ -47,3 +47,7 @@ if (count($recursosLista) > 0) {
 	echo $this->escapeHtml("Não há recursos alocados para esta missão."); 
 }
 ?>
+
+<ul class="nav nav-pills">
+	<li class="active"><a href="<?php echo $this->url('missao', array('action'=>'index')); ?>">Voltar</a></li>
+</ul>

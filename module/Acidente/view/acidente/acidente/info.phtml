@@ -30,7 +30,11 @@ $this->headTitle($title);
 		<td><?php echo $this->escapeHtml($acidente->numeroVitimas); ?></td>
 	</tr>
 	<tr>
-		<td>Quantidade de obstruções</td>
+		<td>Quantidade de obstruções na via</td>
 		<td><?php echo $this->escapeHtml($acidente->obstrucao); ?></td>
 	</tr>
 </table>
+
+<ul class="nav nav-pills">
+	<li class="active"><a href="<?php echo $this->url('acidente', array('action'=>'index')); ?>">Voltar</a></li>
+</ul>

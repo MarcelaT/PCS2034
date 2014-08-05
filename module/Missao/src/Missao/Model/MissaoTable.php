@@ -2,6 +2,7 @@
 namespace Missao\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class MissaoTable
 {
@@ -25,9 +26,31 @@ class MissaoTable
 		}
 		return $row;
 	}
-
-
-
+	
+	public function getMissoesFiltered($idTipoMissao, $nome, $protocolo, $status) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $idTipoMissao && $idTipoMissao != 0) {
+			$select->where(array('idTipoMissao' => $idTipoMissao));
+		}
+		if (null !== $nome && $nome != '') {
+			$select->where->like('nome', '%'.$nome.'%');
+		}
+		if (null !== $protocolo && $protocolo != 0) {
+			$select->where(array('protocolo' => $protocolo));
+		}
+		if (null !== $status && $status != 'qualquer') {
+			$select->where(array('status' => $status));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foram localizados Missões com os parâmetros passados.");
+		}
+		return $resultSet;
+	}
+	
 	public function getMissaoByProtocolo($protocolo) {
 		$protocolo  = (int) $protocolo;
 		$rowset = $this->tableGateway->select(array('protocolo' => $protocolo));
