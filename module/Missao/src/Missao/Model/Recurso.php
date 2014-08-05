@@ -19,11 +19,10 @@ class Recurso implements InputFilterAwareInterface
 
 	public function exchangeArray($data)
 	{
-		$this->id	 = (!empty($data['id'])) ? $data['id'] : null;
-		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : null;
+		$this->id = (!empty($data['id'])) ? $data['id'] : null;
+		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : 0;
 		$this->idTipoRecurso  = (!empty($data['idTipoRecurso'])) ? ($data['idTipoRecurso']) : null;
 		$this->idMissao  = (!empty($data['idMissao'])) ? ($data['idMissao']) : null;
-
 	}
 
 	public function getArrayCopy()
@@ -74,7 +73,6 @@ class Recurso implements InputFilterAwareInterface
 					array('name' => 'Int'),
 				),
 			));
-			
 			
 			$this->inputFilter = $inputFilter;
 		}

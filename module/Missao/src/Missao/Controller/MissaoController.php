@@ -11,9 +11,7 @@ use Missao\Form\MissaoForm;
 use Missao\Model\Recurso;
 use Missao\Model\RecursoNome;
 
-
 use Missao\Form\MissaoStatusForm;
-use Missao\Form\AlocacaoRecursosForm;
 
 class MissaoController extends AbstractActionController
 {
@@ -29,7 +27,8 @@ class MissaoController extends AbstractActionController
 		
 		return new ViewModel(array(
 			'Missoes' => $this->getMissaoTable()->fetchAll(),
-			'permissao' => $this->commonsPlugin()->getPermissaoUsuario()));
+			'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
+		));
 	}
 
 	public function alocarrecursosAction()
@@ -43,7 +42,6 @@ class MissaoController extends AbstractActionController
 		}
 		
 		$request = $this->getRequest();
-		
 		if ($request->isPost()) {
 			// verifica se o usuário clicou em 'cancelar'
 			$submit = $request->getPost('submit');
@@ -54,7 +52,7 @@ class MissaoController extends AbstractActionController
 			$total = $request->getPost('total');
 			
 			//if ($submit == 'Editar' && $form->isValid()) {
-			for($i=1;$i<=$total;$i++){
+			for ($i = 1; $i <= $total; $i++) {
 
 				$Recurso = new Recurso();
 				$quantidade = "quantidade".$i;
@@ -70,25 +68,25 @@ class MissaoController extends AbstractActionController
 					return $this->redirect()->toRoute('missao', array('action' => 'index'));
 				}
 
-				$Missao->recursosAlocados ="sim";
+				$Missao->recursosAlocados = true;
 				$this->getMissaoTable()->saveMissao($Missao);
-				if($Recurso->quantidade!=0){
+				if ($Recurso->quantidade != 0) {
 					$this->getRecursoTable()->saveRecurso($Recurso);
 				}
 			}
 			//}
 
-			// Redirect to list of tipomissao
+			// Retorna para a lista de missões
 			return $this->redirect()->toRoute('missao');
 		}
 		
 		$tipoRecursos = $this->getTipoRecursoTable()->fetchAll();
 		$total = count($tipoRecursos);
 
-		return new ViewModel(array('tipoRecursos' => $tipoRecursos, 'idMissao'=> $idMissao, 'total'=> $total));
+		return array('tipoRecursos' => $tipoRecursos, 'idMissao'=> $idMissao, 'total'=> $total);
 	}
 
-	public function detalhesAction(){
+	public function detalhesAction() {
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('coordenador');
 		
@@ -110,13 +108,17 @@ class MissaoController extends AbstractActionController
 		$recursosLista = array();
 		foreach($Recursos as $recurso){
 			$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
-			$RecursoNome  = new RecursoNome();
-			$RecursoNome -> quantidade = $recurso->quantidade;
-			$RecursoNome -> nome = $tipoRecurso -> nome;
+			$RecursoNome = new RecursoNome();
+			$RecursoNome->quantidade = $recurso->quantidade;
+			$RecursoNome->nome = $tipoRecurso->nome;
 			array_push($recursosLista, $RecursoNome);
 		}
 
-		return new ViewModel(array('recursosLista' => $recursosLista, 'Missao' => $Missao, 'TipoMissao' => $TipoMissao));
+		return array(
+			'recursosLista' => $recursosLista,
+			'Missao' => $Missao,
+			'TipoMissao' => $TipoMissao,
+		);
 	}
 	
 	public function deleteAction()

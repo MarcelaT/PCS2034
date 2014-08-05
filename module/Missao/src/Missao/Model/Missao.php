@@ -25,7 +25,7 @@ class Missao implements InputFilterAwareInterface
 		$this->idTipoMissao = (!empty($data['idTipoMissao'])) ? $data['idTipoMissao'] : null;
 		$this->protocolo  = (!empty($data['protocolo'])) ? ($data['protocolo']) : null;
 		$this->status  = (!empty($data['status'])) ? ($data['status']) : null;
-		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : null;
+		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : 0;
 		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
 		$this->statusNome  = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 	}
@@ -68,18 +68,10 @@ class Missao implements InputFilterAwareInterface
 					array('name' => 'Int'),
 				),
 			));
-
+			
+			// nome
 			$inputFilter->add(array(
 				'name'	 => 'nome',
-				'required' => true,
-				'filters'  => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			));
-
-			$inputFilter->add(array(
-				'name'	 => 'recursosAlocados',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
