@@ -25,8 +25,7 @@ class CommonsPlugin extends AbstractPlugin
 		return $this->storage;
 	}
 	
-	// seta a permissão do usuário no layout para ser recuperado e gerar os menus
-	public function setPermissaoLayout() {
+	public function getPermissaoUsuario() {
 		$permissao = '';
 		
 		// recupera o usuário
@@ -37,8 +36,13 @@ class CommonsPlugin extends AbstractPlugin
 			$permissao = $usuario->permissao;
 		}
 		
+		return $permissao;
+	}
+	
+	// seta a permissão do usuário no layout para ser recuperado e gerar os menus
+	public function setPermissaoLayout() {
+		$permissao = $this->getPermissaoUsuario();
 		$this->getController()->layout()->setVariable('permissao', $permissao);
-		
 		return $permissao;
 	}
 	

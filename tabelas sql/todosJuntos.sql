@@ -82,6 +82,8 @@ INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
 	VALUES  (2, 555, 'em_andamento','missao5', 'sim');
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
 	VALUES  (3, 666, 'em_andamento','missao6', 'sim');
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
+	VALUES  (3, 777, 'cadastrada', 'missao7', 'nao');
 
 /*-------------------------------------------------------------------------*/
 
@@ -131,7 +133,7 @@ INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
 INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
 	VALUES  (4, 2, 2);
 INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
-	VALUES  (5, 3, 3);
+	VALUES  (5, 3, 4);
 
 /*-------------------------------------------------------------------------*/
 

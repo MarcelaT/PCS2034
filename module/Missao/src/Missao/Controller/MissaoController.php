@@ -27,7 +27,9 @@ class MissaoController extends AbstractActionController
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('coordenador');
 		
-		return new ViewModel(array('Missoes' => $this->getMissaoTable()->fetchAll()));
+		return new ViewModel(array(
+			'Missoes' => $this->getMissaoTable()->fetchAll(),
+			'permissao' => $this->commonsPlugin()->getPermissaoUsuario()));
 	}
 
 	public function alocarrecursosAction()
@@ -36,14 +38,19 @@ class MissaoController extends AbstractActionController
 		$this->commonsPlugin()->verificaPermissao('coordenador');
 		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
-		//$form = new AlocacaoRecursosForm();
-		//$form->get('submit')->setValue('Adicionar');
+		if (!$idMissao) {
+			return $this->redirect()->toRoute('missao');
+		}
 		
 		$request = $this->getRequest();
+		
 		if ($request->isPost()) {
-			//$form->setInputFilter($Missao->getInputFilter());
-			//$form->setData($request->getPost());
-
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('missao');
+			}
+			
 			$total = $request->getPost('total');
 			
 			//if ($submit == 'Editar' && $form->isValid()) {
