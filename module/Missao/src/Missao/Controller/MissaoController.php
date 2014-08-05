@@ -124,9 +124,7 @@ class MissaoController extends AbstractActionController
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -155,9 +153,7 @@ class MissaoController extends AbstractActionController
 	public function missaoprotocoloAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 
 		$form = new MissaoStatusForm();
 		$request = $this->getRequest();
@@ -213,9 +209,7 @@ class MissaoController extends AbstractActionController
 	public function atualizarstatusAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -246,6 +240,9 @@ class MissaoController extends AbstractActionController
 	
 	public function updateStatus($id, $status)
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
+		
 		// recupera a missao pelo id
 		try {
 			$missao = $this->getMissaoTable()->getMissao($id);
@@ -274,9 +271,7 @@ class MissaoController extends AbstractActionController
 	public function statusconcluidaAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -289,9 +284,7 @@ class MissaoController extends AbstractActionController
 	public function statusabortadaAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 				
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {

@@ -47,7 +47,7 @@ class CommonsPlugin extends AbstractPlugin
 	}
 	
 	// verifica se o usuário pode ou não acessar a página
-	public function verificaPermissao($permissao) {
+	public function verificaPermissao($permUsuario) {
 		if (!$this->isAutenticado()){
 			return $this->getController()->redirect()->toRoute('login');
 		}
