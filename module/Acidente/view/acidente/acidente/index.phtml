@@ -1,6 +1,8 @@
 <?php
 $title = 'Acidentes cadastrados';
 $this->headTitle($title);
+$this->headLink()->appendStylesheet('/css/datepicker.css');
+$this->headScript()->prependFile('/js/bootstrap-datepicker.js');
 ?>
 
 <h1><?php echo $this->escapeHtml($title); ?></h1>
@@ -13,8 +15,44 @@ $this->headTitle($title);
 <div class="span4 collapse-group">
 	<h3><?php echo $this->escapeHtml('Filtros de busca');?></h3>
 	<div class="collapse" id="viewdetails">
-	TODO
+	<?php
+		$form = $this->form;
+		$form->setAttribute('action', $this->url('acidente', array('action' => 'index')));
+		$form->setAttribute('role', 'form');
+		$form->prepare();
+
+		echo $this->form()->openTag($form);
+		foreach ($form as $element) :?>
+			<div class="form-group">
+				<?php
+					$type = $element->getAttribute('type');
+					$name = $element->getAttribute('name'); 
+					$id = $element->getAttribute('id'); 
+					$label = $element->getLabel();
+					$value = $element->getValue();
+				?>
+				<?php if ($name == 'id') { ?>
+					<div class="hidden"><?php echo $this->formElement($element); ?></div>
+				<?php } else if ($type == 'select' || $type == 'checkbox') {
+					echo $this->formRow($form->get($name)); ?>
+				<?php } else if ($name == 'submit') { ?>
+					<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
+				<?php } else if ($label != '') { ?>
+					<label class="control-label"><?php echo $label ?></label>
+					<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+				<?php } ?> 
+			</div>
+		<?php 
+		endforeach;
+		echo $this->form()->closeTag();
+		?>
 	</div>
+	<script>
+		$(function() {
+			$('input[name=dataDe]').datepicker();
+			$('input[name=dataAte]').datepicker();
+		});
+	</script>
 	<p><a class="btn" data-toggle="collapse" data-target="#viewdetails">Mostrar/Esconder &raquo;</a></p>
 </div>
 
@@ -22,34 +60,16 @@ $this->headTitle($title);
 
 <table class="table">
 <tr>
+	<th>Data</th>
     <th>Localização</th>
 	<th>Descrição</th>
-	<th>Data</th>
-    <th>Bombeiro</th>
-    <th>Polícia</th>
-	<th>Nº Vítimas</th>
-    <th>Nº Obstruções</th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($acidentes as $acidente) : ?>
 <tr>
+	<td><?php echo $this->escapeHtml(date('d/m/Y', strtotime($acidente->data)));?></td>
     <td><?php echo $this->escapeHtml($acidente->localizacao);?></td>
 	<td><?php echo $this->escapeHtml($acidente->descricao);?></td>
-	<td><?php echo $this->escapeHtml(date('d/m/Y', strtotime($acidente->data)));?></td>
-    <td><?php if ($acidente->bombeiro) : ?>
-		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
-		<?php else : ?>
-		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
-		<?php endif; ?>
-	</td>
-    <td><?php if ($acidente->policia) : ?>
-		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
-		<?php else : ?>
-		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
-		<?php endif; ?>
-	</td>
-	<td><?php echo $this->escapeHtml($acidente->numeroVitimas);?></td>
-    <td><?php echo $this->escapeHtml($acidente->obstrucao);?></td>
     <td>
         <a href="<?php echo $this->url('acidente',
             array('action' => 'info', 'id' => $acidente->id));?>">Mais Informações</a>

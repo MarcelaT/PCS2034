@@ -2,5 +2,35 @@
 $title = 'Informações do Acidente';
 $this->headTitle($title);
 ?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
 
-TODO
+<table class="table">
+	<tr>
+		<td>Data</td>
+		<td><?php echo $this->escapeHtml(date('d/m/Y H:i:s', strtotime($acidente->data))); ?></td>
+	</tr>
+	<tr>
+		<td>Localização</td>
+		<td><?php echo $this->escapeHtml($acidente->localizacao); ?></td>
+	</tr>
+	<tr>
+		<td>Descrição</td>
+		<td><?php echo $this->escapeHtml($acidente->descricao); ?></td>
+	</tr>
+	<tr>
+		<td>Presença de bombeiros?</td>
+		<td><?php if ($acidente->bombeiro) { echo $this->escapeHtml('Sim'); } else { echo $this->escapeHtml('Não'); } ?></td>
+	</tr>
+	<tr>
+		<td>Presença de polícia?</td>
+		<td><?php if ($acidente->policia) { echo $this->escapeHtml('Sim'); } else { echo $this->escapeHtml('Não'); } ?></td>
+	</tr>
+	<tr>
+		<td>Número de vítimas</td>
+		<td><?php echo $this->escapeHtml($acidente->numeroVitimas); ?></td>
+	</tr>
+	<tr>
+		<td>Quantidade de obstruções</td>
+		<td><?php echo $this->escapeHtml($acidente->obstrucao); ?></td>
+	</tr>
+</table>

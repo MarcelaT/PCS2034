@@ -16,15 +16,15 @@ CREATE UNIQUE INDEX PK_acidente ON acidente(id);
 
 -- Valores interessantes
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-07-15 18:45:07', 4, false, true, 3);
+	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-05-14 06:35:53', 4, false, true, 3);
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
 	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-06-23 11:10:59', 1, true, false, 2);
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
 	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-07-01 23:54:11', 2, false, true, 1);
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-05-14 06:35:53', 3, true, false, 1);
+	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-07-15 18:45:07', 3, true, false, 1);
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-14 21:31:18', 2, false, true, 2);
+	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-18 21:31:18', 2, false, true, 2);
 
 /*-------------------------------------------------------------------------*/
 

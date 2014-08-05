@@ -36,7 +36,7 @@ class UsuarioController extends AbstractActionController
 				$nome = $request->getPost('nome');
 				$email = $request->getPost('email');
 				$permissao = $request->getPost('permissao');
-
+				
 				// preenche a lista filtrada de usuários
 				$usuarios = $this->getUsuarioTable()->getUsuariosFiltered($login, $nome, $email, $permissao);
 			}
