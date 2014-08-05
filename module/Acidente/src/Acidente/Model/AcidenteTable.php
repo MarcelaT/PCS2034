@@ -74,7 +74,6 @@ class AcidenteTable
 			'policia'  => $acidente->policia,
 			'obstrucao'  => $acidente->obstrucao,
 			'status'  => $acidente->status,
-
 		);
 
 		$id = (int) $acidente->id;
@@ -106,5 +105,26 @@ class AcidenteTable
 		} else {
 			throw new \Exception('Acidente de id '.$id.' não existe!');
 		}
+	}
+	
+	///////////////////////////////////////
+	// funções para geração de relatório //
+	///////////////////////////////////////
+	public function getAcidentesCadastrados($dataDe, $dataAte) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $dataDe && $dataDe != '' && $dataDe != 'Início') {
+			$select->where->greaterThanOrEqualTo('data', date('Y-m-d H:i:s', strtotime($dataDe.' 00:00:00')));
+		}
+		if (null !== $dataAte && $dataAte != '' && $dataAte != 'Agora') {
+			$select->where->lessThanOrEqualTo('data', date('Y-m-d H:i:s', strtotime($dataAte.' 23:59:59')));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foi possível executar a consulta com os parâmetros passados.");
+		}
+		return $resultSet;
 	}
 }

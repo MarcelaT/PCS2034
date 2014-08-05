@@ -8,7 +8,8 @@ return array(
 		'Acidente',
 		'TipoMissao',
 		'TipoRecurso',
-		'Missao'
+		'Missao',
+		'Relatorio'
 	),
 
 	// These are various options for the listeners attached to the ModuleManager

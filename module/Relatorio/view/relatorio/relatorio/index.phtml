@@ -1,0 +1,19 @@
+<?php
+$title = 'Relatórios';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title);?></h1>
+<hr class="divider">
+
+<?php
+	$isAutenticado = isset($permissao) && $permissao;
+	$isAdmin = $isAutenticado && $permissao == 'administrador';
+?>
+
+<ul class="tooltip-examples nav nav-pills nav-stacked">
+	<li><a href="<?php echo $this->url('relatorio', array('action'=>'acidentes')); ?>">Relatório de acidentes</a></li>
+	<li><a href="<?php echo $this->url('relatorio', array('action'=>'missoes')); ?>">Relatório de missões</a></li>
+	<?php if ($isAdmin) : ?>
+	<li><a href="<?php echo $this->url('relatorio', array('action'=>'sistema'));?>">Relatório do sistema</a></li>
+	<?php endif; ?>
+</ul>

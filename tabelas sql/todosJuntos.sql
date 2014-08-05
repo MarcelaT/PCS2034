@@ -83,7 +83,7 @@ CREATE UNIQUE INDEX PK_missao_protocolo ON `sgcav`.`Missao`(protocolo);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, dataCriacao, idAcidente)
-	VALUES  (1, 111, 'concluida', 'missao1', true, '2014-08-01 06:35:53', );
+	VALUES  (1, 111, 'concluida', 'missao1', true, '2014-08-01 06:35:53', 1);
 INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, dataCriacao, idAcidente)
 	VALUES  (2, 222, 'abortada','missao2', true, '2014-08-01 06:36:15', 1);
 INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, dataCriacao, idAcidente)
