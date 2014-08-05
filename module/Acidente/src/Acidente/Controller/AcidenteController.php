@@ -14,8 +14,8 @@ class AcidenteController extends AbstractActionController
 	
     public function indexAction()
     {
-        // salva a permissão no layout
-        $this->commonsPlugin()->setPermissaoLayout();
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
         
 		return new ViewModel(array(
              'acidentes' => $this->getAcidenteTable()->fetchAll(),
@@ -59,7 +59,7 @@ class AcidenteController extends AbstractActionController
 	public function infoAction()
     {
 		// verifica a permissão do usuário
-        $this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {

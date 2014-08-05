@@ -23,7 +23,7 @@ class MissaoController extends AbstractActionController
 	public function indexAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		return new ViewModel(array(
 			'Missoes' => $this->getMissaoTable()->fetchAll(),
@@ -88,7 +88,7 @@ class MissaoController extends AbstractActionController
 
 	public function detalhesAction() {
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 		
