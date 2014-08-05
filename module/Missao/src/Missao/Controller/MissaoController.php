@@ -165,35 +165,6 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
-	public function deleteAction()
-	{
-		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('administrador');
-		
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id) {
-			return $this->redirect()->toRoute('missao');
-		}
-
-		$request = $this->getRequest();
-		if ($request->isPost()) {
-			$del = $request->getPost('del');
-
-			if ($del == 'Sim') {
-				$id = (int) $request->getPost('id');
-				$this->getMissaoTable()->deleteMissao($id);
-			}
-
-			// Redirect to list of Missao
-			return $this->redirect()->toRoute('missao');
-		}
-
-		return array(
-			'id' => $id,
-			'Missao' => $this->getMissaoTable()->getMissao($id)
-		);
-	}
-	
 	public function missaoprotocoloAction()
 	{
 		// verifica a permissão do usuário
