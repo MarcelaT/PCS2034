@@ -14,6 +14,7 @@ class Missao implements InputFilterAwareInterface
 	public $status;
 	public $recursosAlocados;
 	public $nome;
+	public $statusNome;
 	
 	// Filtro para validações
 	protected $inputFilter;
@@ -26,7 +27,6 @@ class Missao implements InputFilterAwareInterface
 		$this->status  = (!empty($data['status'])) ? ($data['status']) : null;
 		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : null;
 		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
-
 		$this->statusNome  = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 	}
 

@@ -56,12 +56,17 @@ class AcidenteController extends AbstractActionController
         return array('form' => $form);
     }
 	
-	public function getAcidenteInfoAction()
+	public function infoAction()
     {
 		// verifica a permissão do usuário
         $this->commonsPlugin()->verificaPermissao('coordenador');
 		
-        return $this->redirect()->toRoute('info-acidente');
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('acidente', array('action' => 'add'));
+		}
+		
+        return array('acidente' => $this->getAcidenteTable()->getAcidente($id));
     }
 	
 	public function getAcidenteTable()

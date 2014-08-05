@@ -17,53 +17,24 @@ use Missao\Form\AlocacaoRecursosForm;
 
 class MissaoController extends AbstractActionController
 {
-	protected $MissaoTable;
-	protected $TipoMissaoTable;
-	protected $storage;
-	protected $authservice;
-
-
-	public function getAuthService() {
-		if (!$this->authservice) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-		return $this->authservice;
-	}
+	protected $missaoTable;
+	protected $tipoMissaoTable;
+	protected $recursoTable;
+	protected $tipoRecursoTable;
 	
-	public function getSessionStorage() {
-		if (!$this->storage) {
-			$this->storage = $this->getServiceLocator()->get('SanAuth\Model\MyAuthStorage');
-		}
-		return $this->storage;
-	}
-
 	public function indexAction()
 	{
-		$permissao = '';
-		
-		// recupera o usuário
-		$usuario = $this->getAuthService()->getStorage()->read('usuario');
-		
-		// verifica se existe um usuário para adicionar a permissao
-		if ($usuario) {
-			$permissao = $usuario->permissao;
-		}
-		
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador', 'coordenador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('coordenador');
 		
-		return new ViewModel(array('Missoes' => $this->getMissaoTable()->fetchAll(),'permissao'=>$permissao));
+		return new ViewModel(array('Missoes' => $this->getMissaoTable()->fetchAll()));
 	}
-
 
 	public function alocarrecursosAction()
 	{
-
-		$usuarios = array();
-		array_push($usuarios, 'coordenador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 		//$form = new AlocacaoRecursosForm();
 		//$form->get('submit')->setValue('Adicionar');
@@ -111,12 +82,11 @@ class MissaoController extends AbstractActionController
 	}
 
 	public function detalhesAction(){
-		$usuarios = array();
-		array_push($usuarios, 'administrador', 'coordenador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
-
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
-
+		
 		try {
 			$Missao = $this->getMissaoTable()->getMissao($idMissao);
 		} catch (\Exception $ex) {
@@ -137,31 +107,11 @@ class MissaoController extends AbstractActionController
 			$RecursoNome -> quantidade = $recurso->quantidade;
 			$RecursoNome -> nome = $tipoRecurso -> nome;
 			array_push($recursosLista, $RecursoNome);
-
 		}
 
 		return new ViewModel(array('recursosLista' => $recursosLista, 'Missao' => $Missao, 'TipoMissao' => $TipoMissao));
 	}
-
-	public function getTipoRecursoTable()
-	{
-		//if (!$this->tipoMissaoTable) {
-			$sm = $this->getServiceLocator();
-			$this->tipoMissaoTable = $sm->get('TipoRecurso\Model\TipoRecursoTable');
-		//}
-		return $this->tipoMissaoTable;
-	}
-
-		public function getRecursoTable()
-	{
-		//if (!$this->tipoMissaoTable) {
-			$sm = $this->getServiceLocator();
-			$this->recursoTable = $sm->get('Missao\Model\RecursoTable');
-		//}
-		return $this->recursoTable;
-	}
-
-
+	
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
@@ -344,23 +294,38 @@ class MissaoController extends AbstractActionController
 	
 	public function getMissaoTable()
 	{
-		if (!$this->MissaoTable) {
+		if (!$this->missaoTable) {
 			$sm = $this->getServiceLocator();
-			$this->MissaoTable = $sm->get('Missao\Model\MissaoTable');
+			$this->missaoTable = $sm->get('Missao\Model\MissaoTable');
 		}
-		return $this->MissaoTable;
+		return $this->missaoTable;
 	}
 	
 	public function getTipoMissaoTable()
 	{
-		if (!$this->TipoMissaoTable) {
+		if (!$this->tipoMissaoTable) {
 			$sm = $this->getServiceLocator();
-			$this->TipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
+			$this->tipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
 		}
-		return $this->TipoMissaoTable;
+		return $this->tipoMissaoTable;
 	}
 	
-
-
-
+	public function getRecursoTable()
+	{
+		if (!$this->recursoTable) {
+			$sm = $this->getServiceLocator();
+			$this->recursoTable = $sm->get('Missao\Model\RecursoTable');
+		}
+		return $this->recursoTable;
+	}
+	
+	public function getTipoRecursoTable()
+	{
+		if (!$this->tipoRecursoTable) {
+			$sm = $this->getServiceLocator();
+			$this->tipoRecursoTable = $sm->get('TipoRecurso\Model\TipoRecursoTable');
+		}
+		return $this->tipoRecursoTable;
+	}
+	
 }

@@ -19,10 +19,7 @@ class UsuarioController extends AbstractActionController
 	public function indexAction()
 	{
 		// verifica a permissão do usuário
-
-		$usuarios1 = array();
-		array_push($usuarios1, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios1);
+		$this->commonsPlugin()->verificaPermissao('administrador');
 
 		$form = new UsuarioFilterForm();
 		$form->get('submit')->setValue('Filtrar');
@@ -54,9 +51,7 @@ class UsuarioController extends AbstractActionController
 	public function addAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		$form = new UsuarioAddForm();
 		$form->get('submit')->setValue('Adicionar');
@@ -93,9 +88,7 @@ class UsuarioController extends AbstractActionController
 	public function editAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('administrador');
 
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -279,9 +272,7 @@ class UsuarioController extends AbstractActionController
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('administrador');
 				
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {

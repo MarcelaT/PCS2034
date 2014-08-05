@@ -1,66 +1,54 @@
-
-
 <?php
 $title = 'Missões';
-
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
 
-        <?php
-            $isAutenticado = isset($permissao) && $permissao;
-            $isCoord = $isAutenticado && $permissao == 'coordenador';
-        ?>
+<?php
+	$isAutenticado = isset($permissao) && $permissao;
+	$isAdmin = $isAutenticado && $permissao == 'administrador';
+	$isCoordenador = $isAutenticado && ($isAdmin || $permissao == 'coordenador');
+?>
+
+<hr class="divider">
+
+<div class="span4 collapse-group">
+	<h3><?php echo $this->escapeHtml('Filtros de busca');?></h3>
+	<div class="collapse" id="viewdetails">
+	TODO
+	</div>
+	<p><a class="btn" data-toggle="collapse" data-target="#viewdetails">Mostrar/Esconder &raquo;</a></p>
+</div>
+
+<hr class="divider">
 
 <table class="table">
 <tr>
-    <th>Nome</th>
-    <th>Status</th>
-    <?php if ($isCoord){ ?>
-    <th>Recursos</th>
-    <?php } ?>
-    <th>&nbsp;</th>
-
+	<th>Nome</th>
+	<th>Status</th>
+	<?php if ($isCoordenador) : ?><th>Recursos</th><?php endif; ?>
+	<th>&nbsp;</th>
 </tr>
 <?php foreach ($Missoes as $Missao) : ?>
 <tr>
-    <td><?php echo $this->escapeHtml($Missao->nome);?></td>
-    <td>
-        <?php if ($Missao->status == "em_andamento"){ ?>
-        <?php echo $this->escapeHtml("Em andamento");?>
-        <?php } ?>
-        <?php if ($Missao->status == "concluida"){ ?>
-        <?php echo $this->escapeHtml("Concluída");?>
-        <?php } ?>
-         <?php if ($Missao->status == "cadastrada"){ ?>
-        <?php echo $this->escapeHtml("Cadastrada");?>
-        <?php } ?>
-        <?php if ($Missao->status == "abortada"){ ?>
-        <?php echo $this->escapeHtml("Abortada");?>
-        <?php } ?>
-    </td>
-    
-    <?php if ($isCoord){ 
-
-    if ($Missao->recursosAlocados == "nao"){ ?>
-    <td>
-        <a href="<?php echo $this->url('missao',
-            array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> 
-    </td>
-    <?php }else{ ?>
-
-        <td></td>
-    <?php
-    } 
-    } ?>
-    
-
-
-    <td>
-        <a href="<?php echo $this->url('missao',
-            array('action'=>'detalhes', 'id' => $Missao->id));?>">Detalhes</a> 
-
-    </td>
+	<td><?php echo $this->escapeHtml($Missao->nome);?></td>
+	<td><?php echo $this->escapeHtml($Missao->statusNome);?></td>
+	<?php
+	if ($isCoordenador) {
+		if ($Missao->recursosAlocados == "nao") {
+	?>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> 
+	</td>
+	<?php } else { ?>
+		<td></td>
+	<?php
+		} 
+	}
+	?>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'detalhes', 'id' => $Missao->id));?>">Detalhes</a> 
+	</td>
 </tr>
 <?php endforeach; ?>
 </table>
