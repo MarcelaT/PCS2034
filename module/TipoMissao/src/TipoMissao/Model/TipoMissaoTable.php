@@ -49,6 +49,7 @@ class TipoMissaoTable
 		$data = array(
 			'nome' => $tipoMissao->nome,
 			'descricao'  => $tipoMissao->descricao,
+			'dataCriacao'  => $tipoMissao->dataCriacao,
 		);
 
 		$id = (int) $tipoMissao->id;

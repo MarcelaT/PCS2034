@@ -11,8 +11,8 @@ class RecursoNome implements InputFilterAwareInterface
 	public $id;
 	public $nome;
 	public $quantidade;
+	public $dataCriacao;
 
-	
 	// Filtro para validações
 	protected $inputFilter;
 
@@ -21,7 +21,7 @@ class RecursoNome implements InputFilterAwareInterface
 		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : 0;
 		$this->nome = (!empty($data['nome'])) ? ($data['nome']) : null;
-
+		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
 	}
 
 	public function getArrayCopy()

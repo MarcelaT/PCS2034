@@ -71,7 +71,7 @@ class UsuarioEditForm extends Form
 			),
 		));
 		
-		//submit
+		// submit
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',

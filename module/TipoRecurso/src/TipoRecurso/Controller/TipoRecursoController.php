@@ -38,7 +38,8 @@ class TipoRecursoController extends AbstractActionController
 		return new ViewModel(array(
 			'form' => $form,
 			'tipoRecursos' => $tipoRecursos,
-		));	}
+		));
+	}
 
 	public function addAction()
 	{
@@ -58,6 +59,9 @@ class TipoRecursoController extends AbstractActionController
 			$submit = $request->getPost('submit');
 			if ($submit == 'Adicionar' && $form->isValid()) {
 				$tipoRecurso->exchangeArray($form->getData());
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$tipoRecurso->dataCriacao = $dataAtual;
 				$this->getTipoRecursoTable()->saveTipoRecurso($tipoRecurso);
 			}
 			

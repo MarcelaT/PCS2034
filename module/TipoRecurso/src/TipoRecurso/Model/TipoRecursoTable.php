@@ -45,6 +45,7 @@ class TipoRecursoTable
 	public function saveTipoRecurso(TipoRecurso $tipoRecurso) {
 		$data = array(
 			'nome' => $tipoRecurso->nome,
+			'dataCriacao' => $tipoRecurso->dataCriacao,
 		);
 
 		$id = (int) $tipoRecurso->id;

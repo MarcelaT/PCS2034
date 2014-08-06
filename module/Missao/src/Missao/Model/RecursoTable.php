@@ -38,8 +38,9 @@ class RecursoTable
 	public function saveRecurso(Recurso $Recurso) {
 		$data = array(
 			'quantidade' => $Recurso->quantidade,
-			'idTipoRecurso'  => $Recurso->idTipoRecurso,
-			'idMissao'  => $Recurso->idMissao,
+			'idTipoRecurso' => $Recurso->idTipoRecurso,
+			'idMissao' => $Recurso->idMissao,
+			'dataCriacao' => $Recurso->dataCriacao,
 		);
 		
 		$id = (int) $Recurso->id;

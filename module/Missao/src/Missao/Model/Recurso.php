@@ -12,7 +12,7 @@ class Recurso implements InputFilterAwareInterface
 	public $quantidade;
 	public $idTipoRecurso;
 	public $idMissao;
-
+	public $dataCriacao;
 	
 	// Filtro para validações
 	protected $inputFilter;
@@ -23,6 +23,7 @@ class Recurso implements InputFilterAwareInterface
 		$this->quantidade = (!empty($data['quantidade'])) ? $data['quantidade'] : 0;
 		$this->idTipoRecurso  = (!empty($data['idTipoRecurso'])) ? ($data['idTipoRecurso']) : null;
 		$this->idMissao  = (!empty($data['idMissao'])) ? ($data['idMissao']) : null;
+		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
 	}
 
 	public function getArrayCopy()

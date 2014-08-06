@@ -11,6 +11,7 @@ class TipoMissao implements InputFilterAwareInterface
 	public $id;
 	public $nome;
 	public $descricao;
+	public $dataCriacao;
 	
 	// Filtro para validações
 	protected $inputFilter;
@@ -20,6 +21,7 @@ class TipoMissao implements InputFilterAwareInterface
 		$this->id	 = (!empty($data['id'])) ? $data['id'] : null;
 		$this->nome = (!empty($data['nome'])) ? $data['nome'] : null;
 		$this->descricao  = (!empty($data['descricao'])) ? ($data['descricao']) : null;
+		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
 	}
 
 	public function getArrayCopy()

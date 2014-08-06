@@ -29,7 +29,7 @@ class UsuarioAddForm extends Form
 			),
 		));
 		
-		// nome
+		// senha
 		$this->add(array(
 			'name' => 'senha',
 			'type' => 'text',
@@ -83,7 +83,7 @@ class UsuarioAddForm extends Form
 			),
 		));
 		
-		//submit
+		// submit
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',

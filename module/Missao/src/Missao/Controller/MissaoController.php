@@ -118,6 +118,9 @@ class MissaoController extends AbstractActionController
 				$Missao->recursosAlocados = true;
 				$this->getMissaoTable()->saveMissao($Missao);
 				if ($Recurso->quantidade != 0) {
+					date_default_timezone_set("Brazil/East");
+					$dataAtual = date('Y-m-d H:i:s');
+					$Recurso->dataCriacao = $dataAtual;
 					$this->getRecursoTable()->saveRecurso($Recurso);
 				}
 			}

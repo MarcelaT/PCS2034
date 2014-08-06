@@ -68,8 +68,8 @@ class MissaoTable
 			'protocolo'  => $Missao->protocolo,
 			'status'  => $Missao->status,
 			'recursosAlocados' => $Missao->recursosAlocados,
+			'dataCriacao' => $Missao->dataCriacao,
 			'idAcidente'  => $Missao->idAcidente,
-
 		);
 
 		$id = (int) $Missao->id;

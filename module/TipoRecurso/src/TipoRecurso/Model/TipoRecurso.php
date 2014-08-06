@@ -10,14 +10,16 @@ class TipoRecurso implements InputFilterAwareInterface
 	// Atributos
 	public $id;
 	public $nome;
+	public $dataCriacao;
 
 	// Filtro para validações
 	protected $inputFilter;
 
 	public function exchangeArray($data)
 	{
-		$this->id	 = (!empty($data['id'])) ? $data['id'] : null;
+		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->nome = (!empty($data['nome'])) ? $data['nome'] : null;
+		$this->dataCriacao = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
 	}
 
 	public function getArrayCopy()

@@ -61,6 +61,9 @@ class TipoMissaoController extends AbstractActionController
 			$submit = $request->getPost('submit');
 			if ($submit == 'Adicionar' && $form->isValid()) {
 				$tipoMissao->exchangeArray($form->getData());
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$tipoMissao->dataCriacao = $dataAtual;
 				$this->getTipoMissaoTable()->saveTipoMissao($tipoMissao);
 			}
 			
