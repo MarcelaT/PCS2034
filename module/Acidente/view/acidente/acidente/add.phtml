@@ -27,8 +27,14 @@ foreach ($form as $element) :?>
 			<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
 			<input class='btn' name='submit' type='submit' value='Cancelar'>
 		<?php } else if ($label != '') { ?>
+			<?php if($label == 'Status'){ ?>
+			<input class='hidden' value='cadastrado' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+
+			<?php } else{ ?>
 			<label class="control-label"><?php echo $label ?></label>
 			<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+			<?php } ?>
+			
 		<?php } ?> 
 	</div>
 <?php 

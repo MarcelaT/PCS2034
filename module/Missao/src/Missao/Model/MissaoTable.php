@@ -29,7 +29,7 @@ class MissaoTable
 
 
 	public function getMissaoByProtocolo($protocolo) {
-		$protocolo  = (int) $protocolo;
+		//$protocolo  = (int) $protocolo;
 		$rowset = $this->tableGateway->select(array('protocolo' => $protocolo));
 		$row = $rowset->current();
 		if (!$row) {
@@ -45,6 +45,8 @@ class MissaoTable
 			'protocolo'  => $Missao->protocolo,
 			'status'  => $Missao->status,
 			'recursosAlocados' => $Missao->recursosAlocados,
+			'idAcidente'  => $Missao->idAcidente,
+
 		);
 
 		$id = (int) $Missao->id;
@@ -79,4 +81,14 @@ class MissaoTable
 			throw new \Exception('Missao de id '.$id.' não existe!');
 		}
 	}
+
+	public function getMissaoByIdAcidente($idAcidente){
+		$idAcidente  = (int) $idAcidente;
+		$rowset = $this->tableGateway->select(array('idAcidente' => $idAcidente));
+		if (!$rowset) {
+			throw new \Exception("Não foi localizado Missao de idAcidente ".$idAcidente);
+		}
+		return $rowset;		
+	}
+
 }

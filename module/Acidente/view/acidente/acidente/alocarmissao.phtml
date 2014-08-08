@@ -1,0 +1,29 @@
+<?php
+$title = 'Alocar missões';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<table class="table">
+<tr>
+    <th>Missões alocadas para esse acidente</th>
+</tr>
+<?php foreach ($missoes as $missao) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($missao->nome);?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+
+<table>
+	<tr>
+		<td>
+    		<a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'salvarmissao', 'id' =>
+            $idacidente));?>">Alocar nova missão</a>
+    	</td>
+		<td>
+    		<a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'info', 'id'=>$idacidente));?>">Finalizar alocação</a>
+    	</td>
+     
+	</tr>
+</table>

@@ -3,4 +3,152 @@ $title = 'Informações do Acidente';
 $this->headTitle($title);
 ?>
 
-TODO
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<div></div>
+
+<table class="table" >
+	<tr>
+		<td>
+			Localização
+		</td>
+		<td>
+			<?php 
+				echo $this->escapeHtml($acidente->localizacao);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Descrição
+		</td>
+		<td>
+			<?php 
+				echo $this->escapeHtml($acidente->descricao);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Data 
+		</td>
+		<td>
+			<?php 
+				echo $this->escapeHtml($acidente->data);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Número de vítimas
+		</td>
+		<td>
+			<?php 
+				echo $this->escapeHtml($acidente->numeroVitimas);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Bombeiros
+		</td>
+		<td>
+			<?php 
+				if($acidente->numeroVitimas=0)
+					echo $this->escapeHtml("Nao");
+				else
+					echo $this->escapeHtml("Sim");
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Polícia
+		</td>
+		<td>
+			<?php 
+				if($acidente->policia=0)
+					echo $this->escapeHtml("Nao");
+				else
+					echo $this->escapeHtml("Sim");
+			?>
+		</td>
+
+
+	</tr>
+	<tr>
+		<td>
+			Número de obstruções
+		</td>
+		<td>
+			<?php 
+				echo $this->escapeHtml($acidente->obstrucao);
+			?>
+
+		</td>
+
+		
+	</tr>
+
+		<tr>
+		<td>
+			Status
+		</td>
+		<td>
+			<?php 
+				if($acidente->status=="cadastrado")
+					echo $this->escapeHtml("Cadastrado");
+				if($acidente->status=="finalizado")
+					echo $this->escapeHtml("Finalizado");
+			?>
+
+		</td>
+
+		
+	</tr>
+
+</table>
+
+<?php
+	$isAutenticado = isset($permissao) && $permissao;
+	$isAdmin = $isAutenticado && $permissao == 'administrador';
+	$isCoordenador = $isAutenticado && ($isAdmin || $permissao == 'coordenador');
+?>
+
+<table class="table">
+<tr>
+    <th>Missões alocadas para esse acidente</th>
+	<?php if ($isCoordenador) : ?><th>Recursos</th><?php endif; ?>
+	<th>&nbsp;</th></tr>
+
+<?php foreach ($missoes as $missao) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($missao->nome);?></td>
+    <?php
+	if ($isCoordenador) {
+		if (!$missao->recursosAlocados) {
+	?>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $missao->id));?>">Alocar recursos</a> 
+	</td>
+	<?php } else { ?>
+		<td></td>
+	<?php
+		} 
+	}
+	?>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'detalhes', 'id' => $missao->id));?>">Detalhes</a> 
+	</td>
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+<?php if ($acidente->status=='cadastrado'){ ?>
+	<a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'alocarmissao', 
+			'id'=>$acidente->id));?>">Alocar missões</a>
+<?php
+}
+?>

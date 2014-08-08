@@ -90,6 +90,19 @@ class AcidenteForm extends Form
                 'label' => 'Número de obstruções na via',
             ),
         ));
+
+                // status
+        $this->add(array(
+            'name' => 'status',
+            'type' => 'text',
+            'attributes' => array(
+                'class' => 'hidden',
+                'value' => 'cadastrado',
+            ),
+            'options' => array(
+                'label' => 'Status',
+            ),
+        ));
 		
 		// submit
         $this->add(array(

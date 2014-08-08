@@ -28,6 +28,8 @@ class Missao implements InputFilterAwareInterface
 		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : 0;
 		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
 		$this->statusNome  = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
+		$this->idAcidente = (!empty($data['idAcidente'])) ? $data['idAcidente'] : null;
+
 	}
 
 	public function getArrayCopy()
@@ -93,8 +95,8 @@ class Missao implements InputFilterAwareInterface
 				'name'	 => 'protocolo',
 				'required' => true,
 				'filters'  => array(
-					array('name' => 'Int'),
-				),
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),				),
 			));
 
 			// status
@@ -107,6 +109,15 @@ class Missao implements InputFilterAwareInterface
 				),
 			));
 			
+			//idAcidente
+			$inputFilter->add(array(
+				'name'	 => 'idAcidente',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'Int'),
+				),
+			));
+
 			$this->inputFilter = $inputFilter;
 		}
 		

@@ -30,6 +30,8 @@ class Acidente implements InputFilterAwareInterface
 		$this->bombeiro = (!empty($data['bombeiro'])) ? $data['bombeiro'] : 0;
 		$this->policia = (!empty($data['policia'])) ? $data['policia'] : 0;
 		$this->obstrucao  = (!empty($data['obstrucao'])) ? $data['obstrucao'] : 0;
+		$this->status  = (!empty($data['status'])) ? $data['status'] : 0;
+
 	}
 
 	public function getArrayCopy()
@@ -129,6 +131,15 @@ class Acidente implements InputFilterAwareInterface
 							'max' => 100,
 						),
 					),
+				),
+			));
+
+			$inputFilter->add(array(
+				'name'	 => 'status',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
 				),
 			));
 			

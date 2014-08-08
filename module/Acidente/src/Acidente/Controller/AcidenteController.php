@@ -6,6 +6,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use Acidente\Model\Acidente;
+use Missao\Model\Missao;
+
 use Acidente\Form\AcidenteForm;
 
 class AcidenteController extends AbstractActionController
@@ -14,11 +16,13 @@ class AcidenteController extends AbstractActionController
 	
     public function indexAction()
     {
+        //$missoes = $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente)
         // salva a permissão no layout
         $this->commonsPlugin()->setPermissaoLayout();
         
 		return new ViewModel(array(
              'acidentes' => $this->getAcidenteTable()->fetchAll(),
+
          ));
     }
 
@@ -41,6 +45,7 @@ class AcidenteController extends AbstractActionController
             $acidente = new Acidente();
             $form->setInputFilter($acidente->getInputFilter());
             $form->setData($request->getPost());
+            //$acidente->status = "cadastrado";
 
             if ($submit == 'Adicionar' && $form->isValid()) {
                 $acidente->exchangeArray($form->getData());
@@ -61,13 +66,17 @@ class AcidenteController extends AbstractActionController
 		// verifica a permissão do usuário
         $this->commonsPlugin()->verificaPermissao('coordenador');
 		
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id) {
-			return $this->redirect()->toRoute('acidente', array('action' => 'add'));
-		}
 		
-        return array('acidente' => $this->getAcidenteTable()->getAcidente($id));
-    }
+        $idAcidente = (int) $this->params()->fromRoute('id', 0);
+
+         return new ViewModel(array(
+            'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
+            'idacidente' => $idAcidente,
+            'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
+            'acidente' => $this->getAcidenteTable()->getAcidente($idAcidente),
+
+        ));    
+     }
 	
 	public function getAcidenteTable()
     {
@@ -77,5 +86,75 @@ class AcidenteController extends AbstractActionController
          }
          return $this->acidenteTable;
     }
+
+    public function alocarmissaoAction(){
+        $this->commonsPlugin()->verificaPermissao('especialista');
+
+        $idAcidente = (int) $this->params()->fromRoute('id', 0);
+
+         return new ViewModel(array(
+            'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
+            'idacidente' => $idAcidente,
+
+        ));
+
+
+    }
+
+    public function salvarmissaoAction(){
+
+        $this->commonsPlugin()->verificaPermissao('especialista');
+
+        $idAcidente = (int) $this->params()->fromRoute('id', 0);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+
+            $idAcidente = $request->getPost('idAcidente');
+
+            $Missao = new Missao();
+            $Missao->nome = $request->getPost('nome');
+            $Missao->idTipoMissao = $request->getPost('tipodemissao');
+            $Missao->status = "cadastrada";
+            $Missao->idAcidente = $idAcidente;
+
+            $now = date('YmdHis');
+
+            $Missao->protocolo = $now;
+            $Missao->recursosAlocados = false;
+
+            $this->getMissaoTable()->saveMissao($Missao);
+            return $this->redirect()->toRoute('acidente', array('action' => 'alocarmissao', 'id' => $idAcidente));
+
+        }
+
+        
+        return new ViewModel(array(
+            'tipoMissoes' => $this->getTipoMissaoTable()->fetchAll(),
+            'idacidente' => $idAcidente,
+        ));
+
+
+    }
+
+
 	
+    public function getMissaoTable()
+    {
+       // if (!$this->missaoTable) {
+            $sm = $this->getServiceLocator();
+            $this->missaoTable = $sm->get('Missao\Model\MissaoTable');
+       // }
+        return $this->missaoTable;
+    }
+
+    public function getTipoMissaoTable()
+    {
+       // if (!$this->tipoMissaoTable) {
+            $sm = $this->getServiceLocator();
+            $this->tipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
+        //}
+        return $this->tipoMissaoTable;
+    }
+
 }

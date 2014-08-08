@@ -26,26 +26,13 @@ $this->headTitle($title);
 <tr>
 	<th>Nome</th>
 	<th>Status</th>
-	<?php if ($isCoordenador) : ?><th>Recursos</th><?php endif; ?>
 	<th>&nbsp;</th>
 </tr>
 <?php foreach ($Missoes as $Missao) : ?>
 <tr>
 	<td><?php echo $this->escapeHtml($Missao->nome);?></td>
 	<td><?php echo $this->escapeHtml($Missao->statusNome);?></td>
-	<?php
-	if ($isCoordenador) {
-		if (!$Missao->recursosAlocados) {
-	?>
-	<td>
-		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $Missao->id));?>">Alocar recursos</a> 
-	</td>
-	<?php } else { ?>
-		<td></td>
-	<?php
-		} 
-	}
-	?>
+
 	<td>
 		<a href="<?php echo $this->url('missao', array('action'=>'detalhes', 'id' => $Missao->id));?>">Detalhes</a> 
 	</td>

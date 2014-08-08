@@ -20,15 +20,18 @@ $this->headTitle($title);
 
 <hr class="divider">
 
+
+<?php
+	$isAutenticado = isset($permissao) && $permissao;
+	$isAdmin = $isAutenticado && $permissao == 'administrador';
+	$isEspecialista = $isAutenticado && ($isAdmin || $permissao == 'especialista');
+?>
+
 <table class="table">
 <tr>
     <th>Localização</th>
 	<th>Descrição</th>
 	<th>Data</th>
-    <th>Bombeiro</th>
-    <th>Polícia</th>
-	<th>Nº Vítimas</th>
-    <th>Nº Obstruções</th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($acidentes as $acidente) : ?>
@@ -36,20 +39,19 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($acidente->localizacao);?></td>
 	<td><?php echo $this->escapeHtml($acidente->descricao);?></td>
 	<td><?php echo $this->escapeHtml(date('d/m/Y', strtotime($acidente->data)));?></td>
-    <td><?php if ($acidente->bombeiro) : ?>
-		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
-		<?php else : ?>
-		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
-		<?php endif; ?>
+     <?php
+	if ($isEspecialista) {
+		if (!$missao->recursosAlocados) {
+	?>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $missao->id));?>">Alocar recursos</a> 
 	</td>
-    <td><?php if ($acidente->policia) : ?>
-		<img src="<?php echo $this->basePath('img/ok.png') ?>" />
-		<?php else : ?>
-		<img src="<?php echo $this->basePath('img/nok.png') ?>" />
-		<?php endif; ?>
-	</td>
-	<td><?php echo $this->escapeHtml($acidente->numeroVitimas);?></td>
-    <td><?php echo $this->escapeHtml($acidente->obstrucao);?></td>
+	<?php } else { ?>
+		<td></td>
+	<?php
+		} 
+	}
+	?>
     <td>
         <a href="<?php echo $this->url('acidente',
             array('action' => 'info', 'id' => $acidente->id));?>">Mais Informações</a>

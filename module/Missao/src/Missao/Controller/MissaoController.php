@@ -11,6 +11,9 @@ use Missao\Form\MissaoForm;
 use Missao\Model\Recurso;
 use Missao\Model\RecursoNome;
 
+
+use Acidente\Model\Acidente;
+
 use Missao\Form\MissaoStatusForm;
 
 class MissaoController extends AbstractActionController
@@ -67,7 +70,7 @@ class MissaoController extends AbstractActionController
 				} catch (\Exception $ex) {
 					return $this->redirect()->toRoute('missao', array('action' => 'index'));
 				}
-
+				$Missao->status = "em_andamento";
 				$Missao->recursosAlocados = true;
 				$this->getMissaoTable()->saveMissao($Missao);
 				if ($Recurso->quantidade != 0) {
@@ -77,7 +80,7 @@ class MissaoController extends AbstractActionController
 			//}
 
 			// Retorna para a lista de missões
-			return $this->redirect()->toRoute('missao');
+			return $this->redirect()->toRoute('acidente', array('action' => 'info', 'id' => $Missao->idAcidente));
 		}
 		
 		$tipoRecursos = $this->getTipoRecursoTable()->fetchAll();
@@ -124,9 +127,8 @@ class MissaoController extends AbstractActionController
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'administrador');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+
+		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -154,10 +156,8 @@ class MissaoController extends AbstractActionController
 	
 	public function missaoprotocoloAction()
 	{
-		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 
 		$form = new MissaoStatusForm();
 		$request = $this->getRequest();
@@ -213,9 +213,9 @@ class MissaoController extends AbstractActionController
 	public function atualizarstatusAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		//$usuarios = array();
+		//array_push($usuarios, 'lider_missao');
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -261,9 +261,19 @@ class MissaoController extends AbstractActionController
 		
 		// muda o status
 		try {
-			$missao = $this->getMissaoTable()->atualizarStatusMissao($id, $status);
+			$this->getMissaoTable()->atualizarStatusMissao($id, $status);
 		} catch (\Exception $ex) {
 			return $this->redirect()->toRoute('missao', array('action'=>'missaoprotocolo'));
+		}
+
+		$acidenteFinalizado = 1;
+		$missoes = $this->getMissaoTable()->getMissaoByIdAcidente($missao->idAcidente);
+		foreach ($missoes as $missao){
+			if($missao->status == 'em_andamento')
+				$acidenteFinalizado = 0;
+		}
+		if($acidenteFinalizado == 1){
+			$this->getAcidenteTable()->atualizarStatusAcidente($missao->idAcidente, "finalizado");
 		}
 		
 		return array(
@@ -271,12 +281,18 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
+	public function getAcidenteTable()
+    {
+             $sm = $this->getServiceLocator();
+             $this->acidenteTable = $sm->get('Acidente\Model\AcidenteTable');
+         return $this->acidenteTable;
+    }
+
 	public function statusconcluidaAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
@@ -289,9 +305,7 @@ class MissaoController extends AbstractActionController
 	public function statusabortadaAction()
 	{
 		// verifica a permissão do usuário
-		$usuarios = array();
-		array_push($usuarios, 'lider_missao');
-		$this->commonsPlugin()->verificaPermissao($usuarios);
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
 				
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {

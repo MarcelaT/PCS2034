@@ -8,6 +8,7 @@ CREATE TABLE acidente (
 	bombeiro boolean NOT NULL DEFAULT 0,
 	policia boolean NOT NULL DEFAULT 0,
 	obstrucao INTEGER NOT NULL DEFAULT 0,
+	status enum('cadastrado','finalizado') NOT NULL DEFAULT 'cadastrado',
 	PRIMARY KEY (id)
 );
  
@@ -15,16 +16,16 @@ CREATE TABLE acidente (
 CREATE UNIQUE INDEX PK_acidente ON acidente(id);
 
 -- Valores interessantes
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-07-15 18:45:07', 4, false, true, 3);
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-06-23 11:10:59', 1, true, false, 2);
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-07-01 23:54:11', 2, false, true, 1);
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-05-14 06:35:53', 3, true, false, 1);
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
-	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-14 21:31:18', 2, false, true, 2);
+INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-07-15 18:45:07', 4, false, true, 3,'cadastrado');
+INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-06-23 11:10:59', 1, true, false, 2, 'cadastrado');
+INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-07-01 23:54:11', 2, false, true, 1, 'cadastrado');
+INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-05-14 06:35:53', 3, true, false, 1, 'finalizado');
+INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-14 21:31:18', 2, false, true, 2, 'finalizado');
 
 /*-------------------------------------------------------------------------*/
 
@@ -57,12 +58,16 @@ INSERT INTO TipodeMissao (nome, descricao)
 CREATE TABLE Missao (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
 	idTipoMissao INTEGER UNSIGNED NOT NULL,
-	protocolo INTEGER UNSIGNED NOT NULL,
+	protocolo varchar(100) NOT NULL,
 	status enum('cadastrada','em_andamento','concluida','abortada') NOT NULL DEFAULT 'cadastrada',
 	nome varchar(100) NOT NULL,
 	recursosAlocados boolean NOT NULL DEFAULT 0,
+	idAcidente INTEGER UNSIGNED NOT NULL,
+
 	PRIMARY KEY (id), 
-	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id)
+	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id),
+	FOREIGN KEY (idAcidente) REFERENCES Acidente(id)
+
  );
  
 -- Índices (primary key)
@@ -70,20 +75,11 @@ CREATE UNIQUE INDEX PK_missao ON Missao(id);
 CREATE UNIQUE INDEX PK_missao_protocolo ON Missao(protocolo);
 
 -- Valores interessantes
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (1, 111, 'concluida', 'missao1', true);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (2, 222, 'em_andamento','missao2', true);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (3, 333, 'cadastrada', 'missao3', false);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (1, 444, 'abortada', 'missao4', true);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (2, 555, 'em_andamento','missao5', true);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (3, 666, 'em_andamento','missao6', true);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados)
-	VALUES  (3, 777, 'cadastrada', 'missao7', false);
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (1, '111', 'concluida', 'missao1', true, 1);
+INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (2, '222', 'em_andamento','missao2', true, 2);
+
 
 /*-------------------------------------------------------------------------*/
 

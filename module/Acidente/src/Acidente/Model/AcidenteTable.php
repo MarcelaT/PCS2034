@@ -35,6 +35,8 @@ class AcidenteTable
 			'bombeiro'  => $acidente->bombeiro,
 			'policia'  => $acidente->policia,
 			'obstrucao'  => $acidente->obstrucao,
+			'status'  => $acidente->status,
+
 		);
 
 		$id = (int) $acidente->id;
@@ -52,6 +54,17 @@ class AcidenteTable
 	public function deleteAcidente($id) {
 		if ($this->getAcidente($id)) {
 			$this->tableGateway->delete(array('id' => (int) $id));
+		} else {
+			throw new \Exception('Acidente de id '.$id.' não existe!');
+		}
+	}
+
+	public function atualizarStatusAcidente($id, $status) {
+		if ($this->getAcidente($id)) {
+			$data = array(
+				'status'  => $status,
+			);
+			$this->tableGateway->update($data, array('id' => $id));
 		} else {
 			throw new \Exception('Acidente de id '.$id.' não existe!');
 		}

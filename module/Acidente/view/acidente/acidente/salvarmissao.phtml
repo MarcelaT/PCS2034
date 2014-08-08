@@ -1,0 +1,47 @@
+
+	<?php 
+	$nomeAction = $this->serverUrl(true);
+?>
+
+	<form action=<?php echo $nomeAction; ?> method="POST" name="salvarmissao">
+		<table class="table">
+		<tr>
+			<th>Nome</th>
+			<th>Tipo de missao</th>
+		</tr>
+		<tr>
+			<td>
+				<input name="nome" >
+			</td>
+			<td>
+				<select name="tipodemissao">
+				<option value="0">Tipo de missao</option>
+				<?php 
+				    #                             !vCHANGEv!
+				    foreach($tipoMissoes as $tipoMissao) 
+				    {
+				      // $category = htmlspecialchars($category); 
+				       echo '<option value="'. $tipoMissao->id .'">'. $tipoMissao->nome .'</option>';
+				    }
+				?>
+				</select>
+			</td>
+
+		</tr>
+		<tr>
+			<td>
+				<input type="submit" class="btn btn-default" name="submit" value="Alocar missao">
+
+			</td>
+			<td>
+
+            <a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'index'));?>">Cancelar</a>
+ 
+			</td>
+		</tr>
+
+		</table>
+
+		<input type="text" class="hidden" name="idAcidente" value=<?php echo $idacidente; ?>>
+
+	</form>
