@@ -22,15 +22,15 @@ CREATE TABLE `sgcav`.`acidente` (
 CREATE UNIQUE INDEX PK_acidente ON `sgcav`.`acidente`(id);
 
 -- Valores interessantes
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-07-15 18:45:07', 4, false, true, 3,'cadastrado');
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-06-23 11:10:59', 1, true, false, 2, 'cadastrado');
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-07-01 23:54:11', 2, false, true, 1, 'cadastrado');
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-05-14 06:35:53', 3, true, false, 1, 'finalizado');
-INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-14 21:31:18', 2, false, true, 2, 'finalizado');
 
 
@@ -82,11 +82,18 @@ CREATE UNIQUE INDEX PK_missao_protocolo ON `sgcav`.`Missao`(protocolo);
 
 -- Valores interessantes
 
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
 	VALUES  (1, '111', 'concluida', 'missao1', true, 1);
-INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
 	VALUES  (2, '222', 'em_andamento','missao2', true, 2);
-
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (1, '113', 'concluida', 'missao3', true, 1);
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (2, '224', 'em_andamento','missao4', true, 2);
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (2, '223', 'em_andamento','missao5', true, 2);
+INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
+	VALUES  (2, '225', 'em_andamento','missao6', true, 2);
 
 /*-------------------------------------------------------------------------*/
 
@@ -139,8 +146,7 @@ INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (5, 3, 4);
 INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (1, 4, 5);
-INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
-	VALUES  (2, 5, 6);
+
 	
 /*-------------------------------------------------------------------------*/
 
