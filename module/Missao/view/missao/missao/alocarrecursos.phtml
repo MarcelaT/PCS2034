@@ -30,6 +30,7 @@ function validate(){
 
 
 
+
 <?php
 $title = 'Alocar recursos';
 $this->headTitle($title);
@@ -43,8 +44,10 @@ $this->headTitle($title);
 
 <?php  
 
+
 	$count = 0 ; ?>
 <form action=<?php echo $nomeAction; ?> method="POST" name="alocarrecursos">
+
 <input name="total" class="hidden" value=<?php echo $this->total; ?>>
 
 <table class="table">
@@ -87,3 +90,33 @@ $this->headTitle($title);
 
 </table>
 </form>
+
+
+
+
+<script type="text/javascript">
+    alert( "ready!" );
+
+$(document).ready(function() {
+    alert( "ready!" );
+});
+
+function validate(){
+    int total = document.getElementByName("total").val();
+    alert(total);
+    int i;
+    String nameQ;
+
+    for(i=1; i<=total;i++){
+        nameQ = "quantidade" + i;
+
+        if(!preg_match("/[^0-9\.\-\Ä\ä\Ö\ö\Ü\ü\ ]+$/s",document.getElementByName(nameQ).val())) {
+            return TRUE; 
+        }else{
+            alert("Esta erradi!");
+            return FALSE;
+        } 
+    }
+}
+
+</script>
