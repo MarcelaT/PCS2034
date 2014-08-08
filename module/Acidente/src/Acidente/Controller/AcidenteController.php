@@ -9,6 +9,7 @@ use Acidente\Model\Acidente;
 use Missao\Model\Missao;
 
 use Acidente\Form\AcidenteForm;
+use Acidente\Form\AcidenteFilterForm;
 
 class AcidenteController extends AbstractActionController
 {
@@ -19,10 +20,39 @@ class AcidenteController extends AbstractActionController
         //$missoes = $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente)
         // salva a permissão no layout
         $this->commonsPlugin()->setPermissaoLayout();
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
         
+		$form = new AcidenteFilterForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		$acidentes = $this->getAcidenteTable()->fetchAll();
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega os campos do filtro
+				$localizacao = $request->getPost('localizacao');
+				$descricao = $request->getPost('descricao');
+				$dataDe = $request->getPost('dataDe');
+				$dataAte = $request->getPost('dataAte');
+				$bombeiro = $request->getPost('bombeiro');
+				$policia = $request->getPost('policia');
+				$numeroVitimas = $request->getPost('numeroVitimas');
+				$obstrucao = $request->getPost('obstrucao');
+				
+				// preenche a lista filtrada de acidentes
+				$acidentes = $this->getAcidenteTable()->getAcidentesFiltered($localizacao, $descricao,
+						$dataDe, $dataAte, $bombeiro, $policia, $numeroVitimas, $obstrucao);
+			}
+		}
+		
 		return new ViewModel(array(
-             'acidentes' => $this->getAcidenteTable()->fetchAll(),
 
+			'form' => $form,
+			'acidentes' => $acidentes,
          ));
     }
 
@@ -64,7 +94,7 @@ class AcidenteController extends AbstractActionController
 	public function infoAction()
     {
 		// verifica a permissão do usuário
-        $this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		
         $idAcidente = (int) $this->params()->fromRoute('id', 0);

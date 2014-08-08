@@ -1,5 +1,11 @@
+-- Limpeza da tabela antiga
+DROP DATABASE sgcav;
+CREATE DATABASE sgcav;
+
+/*-------------------------------------------------------------------------*/
+
 -- Acidente
-CREATE TABLE acidente (
+CREATE TABLE `sgcav`.`acidente` (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
 	localizacao varchar(100) NOT NULL,
 	descricao varchar(100) NOT NULL,
@@ -13,9 +19,10 @@ CREATE TABLE acidente (
 );
  
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_acidente ON acidente(id);
+CREATE UNIQUE INDEX PK_acidente ON `sgcav`.`acidente`(id);
 
 -- Valores interessantes
+<<<<<<< HEAD
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-07-15 18:45:07', 4, false, true, 3,'cadastrado');
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
@@ -26,36 +33,48 @@ INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, pol
 	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-05-14 06:35:53', 3, true, false, 1, 'finalizado');
 INSERT INTO acidente (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
 	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-14 21:31:18', 2, false, true, 2, 'finalizado');
+=======
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
+	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-05-14 06:35:53', 4, false, true, 3);
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
+	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-06-23 11:10:59', 1, true, false, 2);
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
+	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-07-01 23:54:11', 2, false, true, 1);
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
+	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-07-15 18:45:07', 3, true, false, 1);
+INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao)
+	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-07-18 21:31:18', 2, false, true, 2);
+>>>>>>> 1ec3636a7e538ec3f36c9f4b5a2d866502f3cde4
 
 /*-------------------------------------------------------------------------*/
 
 -- Tipo de Missão
-CREATE TABLE TipodeMissao (
+CREATE TABLE `sgcav`.`TipodeMissao` (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
-	nome varchar(100) NOT NULL,
+	nome varchar(100) NOT NULL UNIQUE,
 	descricao varchar(100) NOT NULL,
 	PRIMARY KEY (id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_tipomissao ON TipodeMissao(id);
+CREATE UNIQUE INDEX PK_tipomissao ON `sgcav`.`TipodeMissao`(id);
 
 -- Valores interessantes
-INSERT INTO TipodeMissao (nome, descricao)
+INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao)
 	VALUES ('Resgate Ambulancia', 'Envia ambulancia para resgate de feridos');
-INSERT INTO TipodeMissao (nome, descricao)
+INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao)
 	VALUES ('Guincho', 'Envio de guincho para retirada de carros e liberacao da via');
-INSERT INTO TipodeMissao (nome, descricao)
+INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao)
 	VALUES ('Resgate Helicoptero', 'Envio de helicoptero para resgates de dificil acesso');
-INSERT INTO TipodeMissao (nome, descricao)
+INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao)
 	VALUES ('Bombeiros', 'Envia equipe de bombeiros para o local do acidente');
-INSERT INTO TipodeMissao (nome, descricao)
+INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao)
 	VALUES ('Policia', 'Envia equipe de policia para o local');
 
 /*-------------------------------------------------------------------------*/
 
 -- Missão
-CREATE TABLE Missao (
+CREATE TABLE `sgcav`.`Missao` (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
 	idTipoMissao INTEGER UNSIGNED NOT NULL,
 	protocolo varchar(100) NOT NULL,
@@ -67,14 +86,14 @@ CREATE TABLE Missao (
 	PRIMARY KEY (id), 
 	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id),
 	FOREIGN KEY (idAcidente) REFERENCES Acidente(id)
-
  );
  
 -- Índices (primary key)
-CREATE UNIQUE INDEX PK_missao ON Missao(id);
-CREATE UNIQUE INDEX PK_missao_protocolo ON Missao(protocolo);
+CREATE UNIQUE INDEX PK_missao ON `sgcav`.`Missao`(id);
+CREATE UNIQUE INDEX PK_missao_protocolo ON `sgcav`.`Missao`(protocolo);
 
 -- Valores interessantes
+
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
 	VALUES  (1, '111', 'concluida', 'missao1', true, 1);
 INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idAcidente)
@@ -84,61 +103,61 @@ INSERT INTO Missao (idTipoMissao, protocolo, status, nome, recursosAlocados, idA
 /*-------------------------------------------------------------------------*/
 
 -- Tipo de Recurso
-CREATE TABLE TipodeRecurso (
+CREATE TABLE `sgcav`.`TipodeRecurso` (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
-	nome varchar(100) NOT NULL,
+	nome varchar(100) NOT NULL UNIQUE,
 	PRIMARY KEY (id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_tiporecurso ON TipodeRecurso(id);
+CREATE UNIQUE INDEX PK_tiporecurso ON `sgcav`.`TipodeRecurso`(id);
 
 -- Valores interessantes
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Carro de Guincho');
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Ambulancia');
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Paramedico');
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Bombeiros');
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Policial');
-INSERT INTO TipodeRecurso (nome)
+INSERT INTO `sgcav`.`TipodeRecurso` (nome)
 	VALUES('Helicoptero');
 
 /*-------------------------------------------------------------------------*/
 
 -- Recurso
-CREATE TABLE Recurso (
+CREATE TABLE `sgcav`.`Recurso` (
 	id INTEGER UNSIGNED NOT NULL auto_increment,
 	quantidade INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	idTipoRecurso INTEGER UNSIGNED NOT NULL,
 	idMissao INTEGER UNSIGNED NOT NULL,
 	PRIMARY KEY (id), 
-	FOREIGN KEY (idTipoRecurso) REFERENCES TipodeRecurso(id),
-	FOREIGN KEY (idMissao) REFERENCES Missao(id)
+	FOREIGN KEY (idTipoRecurso) REFERENCES `sgcav`.`TipodeRecurso`(id),
+	FOREIGN KEY (idMissao) REFERENCES `sgcav`.`Missao`(id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_recurso ON Recurso(id);
+CREATE UNIQUE INDEX PK_recurso ON `sgcav`.`Recurso`(id);
 
 -- Valores interessantes
-INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (3, 1, 1);
-INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (4, 2, 2);
-INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (5, 3, 4);
-INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (1, 4, 5);
-INSERT INTO Recurso (quantidade, idTipoRecurso, idMissao)
+INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao)
 	VALUES  (2, 5, 6);
 	
 /*-------------------------------------------------------------------------*/
 
 -- Usuarios
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE IF NOT EXISTS `sgcav`.`usuarios` (
 	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	login varchar(100) NOT NULL UNIQUE,
 	senha varchar(100) NOT NULL,
@@ -150,16 +169,16 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_usuario ON usuarios(id);
+CREATE UNIQUE INDEX PK_usuario ON `sgcav`.`usuarios`(id);
 
 -- Valores interessantes
-INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
+INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('admin',  md5('admin'), 'administrador', 'Administrador Do Sistema', 'admin@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
-INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
+INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('coord',  md5('coord'), 'coordenador', 'Coordenador Do Sistema', 'coordenador@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
-INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
+INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('espec',  md5('espec'), 'especialista', 'Especialista Em Acidentes', 'especialista@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
-INSERT INTO usuarios (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
-	VALUES  ('lider',  md5('lider'), 'lider_missao', 'Lider da Missao', 'lider@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
+INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
+	VALUES  ('lider',  md5('lider'), 'lider_missao', 'Lider da `sgcav`.`Missao`', 'lider@sgcav.com', '2014-07-08 10:00:00', '2014-07-08 10:00:00');
 
 /*-------------------------------------------------------------------------*/

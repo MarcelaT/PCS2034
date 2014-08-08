@@ -60,13 +60,13 @@
 						</li>
 						<?php endif ?>
 						
-						<?php if ($isCoordenador): ?>
+						<?php if ($isCoordenador || $isEspecialista): ?>
 						<li <?php if (strpos($route,'acidente') !== false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('acidente') ?>"><?php echo $this->translate('Acidentes') ?></a>
 						</li>
 						<?php endif ?>
 						
-						<?php if ($isAdmin || $isCoordenador): ?>
+						<?php if ($isCoordenador || $isEspecialista): ?>
 						<li <?php if (strpos($route,'missao') !== false && strpos($route,'protocolo') === false && strpos($route,'status') === false && strpos($route,'tipo') === false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
 						<?php endif ?>

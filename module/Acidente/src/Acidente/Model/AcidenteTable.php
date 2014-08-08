@@ -2,6 +2,7 @@
 namespace Acidente\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class AcidenteTable
 {
@@ -26,10 +27,47 @@ class AcidenteTable
 		return $row;
 	}
 
+	public function getAcidentesFiltered($localizacao, $descricao, $dataDe, $dataAte, $bombeiro,
+			$policia, $numeroVitimas, $obstrucao) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $localizacao && $localizacao != '') {
+			$select->where->like('localizacao', '%'.$localizacao.'%');
+		}
+		if (null !== $descricao && $descricao != '') {
+			$select->where->like('descricao', '%'.$descricao.'%');
+		}
+		if (null !== $dataDe && $dataDe != 0) {
+			$select->where->greaterThanOrEqualTo('data', date('Y-m-d H:i:s', strtotime($dataDe.' 00:00:00')));
+		}
+		if (null !== $dataAte && $dataAte != 0) {
+			$select->where->lessThanOrEqualTo('data', date('Y-m-d H:i:s', strtotime($dataAte.' 23:59:59')));
+		}
+		if (null !== $bombeiro && $bombeiro != 0) {
+			$select->where(array('bombeiro' => $bombeiro));
+		}
+		if (null !== $policia && $policia != 0) {
+			$select->where(array('policia' => $policia));
+		}
+		if (null !== $numeroVitimas && $numeroVitimas != '') {
+			$select->where->greaterThanOrEqualTo('numeroVitimas', $numeroVitimas);
+		}
+		if (null !== $obstrucao && $obstrucao != '') {
+			$select->where->greaterThanOrEqualTo('obstrucao', $obstrucao);
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foram localizados Acidentes com os parâmetros passados.");
+		}
+		return $resultSet;
+	}
+	
 	public function saveAcidente(Acidente $acidente) {
 		$data = array(
 			'localizacao' => $acidente->localizacao,
-			'descricao'  => $acidente->descricao,
+			'descricao' => $acidente->descricao,
 			'data' => $acidente->data,
 			'numeroVitimas'  => $acidente->numeroVitimas,
 			'bombeiro'  => $acidente->bombeiro,

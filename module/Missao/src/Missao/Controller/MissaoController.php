@@ -1,5 +1,4 @@
 <?php
-
 namespace Missao\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -7,6 +6,7 @@ use Zend\View\Model\ViewModel;
 
 use Missao\Model\Missao;
 use Missao\Form\MissaoForm;
+use Missao\Form\MissaoFilterForm;
 
 use Missao\Model\Recurso;
 use Missao\Model\RecursoNome;
@@ -26,10 +26,54 @@ class MissaoController extends AbstractActionController
 	public function indexAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
+		
+		$form = new MissaoFilterForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		try {
+			$Missoes = $this->getMissaoTable()->fetchAll();
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+		
+		// recupera todos os tipos de missão, para popular o select
+		try {
+			$tiposDeMissao = $this->getTipoMissaoTable()->fetchAll();
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+		
+		// popula o array relacionando nome com id do tipo de missão
+		$arrayTiposMissao[0] = 'Qualquer';
+		foreach($tiposDeMissao as $tipoMissao){
+			$arrayTiposMissao[$tipoMissao->id] = $tipoMissao->nome;
+		}
+		
+		$form->get('idTipoMissao')->setOptions(array(
+			'value_options' => $arrayTiposMissao
+		));
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega os campos do filtro
+				$idTipoMissao = $request->getPost('idTipoMissao');
+				$nome = $request->getPost('nome');
+				$protocolo = $request->getPost('protocolo');
+				$status = $request->getPost('status');
+				
+				// preenche a lista filtrada de acidentes
+				$Missoes = $this->getMissaoTable()->getMissoesFiltered($idTipoMissao, $nome,
+						$protocolo, $status);
+			}
+		}
 		
 		return new ViewModel(array(
-			'Missoes' => $this->getMissaoTable()->fetchAll(),
+			'form' => $form,
+			'Missoes' => $Missoes,
 			'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
 		));
 	}
@@ -91,7 +135,7 @@ class MissaoController extends AbstractActionController
 
 	public function detalhesAction() {
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissao('coordenador');
+		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 		
@@ -124,6 +168,7 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
+
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
@@ -154,9 +199,10 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
+
 	public function missaoprotocoloAction()
 	{
-
+		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
 
 		$form = new MissaoStatusForm();
@@ -213,8 +259,7 @@ class MissaoController extends AbstractActionController
 	public function atualizarstatusAction()
 	{
 		// verifica a permissão do usuário
-		//$usuarios = array();
-		//array_push($usuarios, 'lider_missao');
+
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
@@ -246,6 +291,9 @@ class MissaoController extends AbstractActionController
 	
 	public function updateStatus($id, $status)
 	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('lider_missao');
+		
 		// recupera a missao pelo id
 		try {
 			$missao = $this->getMissaoTable()->getMissao($id);

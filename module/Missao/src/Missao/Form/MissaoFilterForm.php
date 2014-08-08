@@ -4,25 +4,25 @@ namespace Missao\Form;
 
 use Zend\Form\Form;
 
-class MissaoForm extends Form
+class MissaoFilterForm extends Form
 {
 	public function __construct($name = null)
 	{
 		// we want to ignore the name passed
 		parent::__construct('Missao');
-
-		// id
-		$this->add(array(
-			'name' => 'id',
-			'type' => 'Hidden',
-		));
 		
-		// idTipoMissao
+		// tipoDeMissao
 		$this->add(array(
 			'name' => 'idTipoMissao',
-			'type' => 'text',
+			'type' => 'select',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
 			'options' => array(
-				'label' => 'idTipoMissao',
+				'label' => 'Tipo de missão',
+				'value_options' => array(
+					'qualquer' => 'Qualquer',
+				),
 			),
 		));
 		
@@ -54,6 +54,7 @@ class MissaoForm extends Form
 			'options' => array(
 				'label' => 'Status',
 				'value_options' => array(
+					'qualquer' => 'Qualquer',
 					'cadastrada' => 'Cadastrada',
 					'em_andamento' => 'Em Andamento',
 					'abortada' => 'Abortada',
@@ -67,7 +68,7 @@ class MissaoForm extends Form
 			'name' => 'submit',
 			'type' => 'Submit',
 			'attributes' => array(
-				'value' => 'Enviar',
+				'value' => 'Filtrar',
 				'id' => 'submitbutton',
 			),
 		));

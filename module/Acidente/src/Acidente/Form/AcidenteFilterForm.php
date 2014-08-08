@@ -5,18 +5,12 @@ namespace Acidente\Form;
 use Zend\Form\Form;
 use Zend\Form\Form\Element\Checkbox;
 
-class AcidenteForm extends Form
+class AcidenteFilterForm extends Form
 {
     public function __construct($name = null)
     {
         // we want to ignore the name passed
         parent::__construct('acidente');
-
-		// id
-		$this->add(array(
-            'name' => 'id',
-            'type' => 'Hidden',
-        ));
 		
 		// localizacao
         $this->add(array(
@@ -39,6 +33,32 @@ class AcidenteForm extends Form
 			),
             'options' => array(
                 'label' => 'Descrição',
+            )
+        ));
+		
+		// dataDe
+        $this->add(array(
+            'name' => 'dataDe',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+				'id' => 'dataAte',
+			),
+            'options' => array(
+                'label' => 'De (Data)',
+            )
+        ));
+		
+		// dataAte
+        $this->add(array(
+            'name' => 'dataAte',
+            'type' => 'text',
+			'attributes' => array(
+				'class' => 'form-control',
+				'id' => 'dataAte',
+			),
+            'options' => array(
+                'label' => 'Até (Data)',
             )
         ));
 		
@@ -86,20 +106,7 @@ class AcidenteForm extends Form
 				'class' => 'form-control',
 			),
             'options' => array(
-                'label' => 'Número de obstruções na via',
-            ),
-        ));
-
-                // status
-        $this->add(array(
-            'name' => 'status',
-            'type' => 'text',
-            'attributes' => array(
-                'class' => 'hidden',
-                'value' => 'cadastrado',
-            ),
-            'options' => array(
-                'label' => 'Status',
+                'label' => 'Quantidade de obstruções na via',
             ),
         ));
 		
@@ -108,7 +115,7 @@ class AcidenteForm extends Form
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Enviar',
+                'value' => 'Filtrar',
                 'id' => 'submitbutton',
             )
         ));

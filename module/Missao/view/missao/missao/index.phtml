@@ -15,7 +15,36 @@ $this->headTitle($title);
 <div class="span4 collapse-group">
 	<h3><?php echo $this->escapeHtml('Filtros de busca');?></h3>
 	<div class="collapse" id="viewdetails">
-	TODO
+	<?php
+		$form = $this->form;
+		$form->setAttribute('action', $this->url('missao', array('action' => 'index')));
+		$form->setAttribute('role', 'form');
+		$form->prepare();
+
+		echo $this->form()->openTag($form);
+		foreach ($form as $element) :?>
+			<div class="form-group">
+				<?php
+					$type = $element->getAttribute('type');
+					$name = $element->getAttribute('name'); 
+					$label = $element->getLabel();
+					$value = $element->getValue();
+				?>
+				<?php if ($name == 'id') { ?>
+					<div class="hidden"><?php echo $this->formElement($element); ?></div>
+				<?php } else if ($type == 'select' || $type == 'checkbox') {
+					echo $this->formRow($form->get($name)); ?>
+				<?php } else if ($name == 'submit') { ?>
+					<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
+				<?php } else if ($label != '') { ?>
+					<label class="control-label"><?php echo $label ?></label>
+					<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+				<?php } ?> 
+			</div>
+		<?php 
+		endforeach;
+		echo $this->form()->closeTag();
+		?>
 	</div>
 	<p><a class="btn" data-toggle="collapse" data-target="#viewdetails">Mostrar/Esconder &raquo;</a></p>
 </div>
