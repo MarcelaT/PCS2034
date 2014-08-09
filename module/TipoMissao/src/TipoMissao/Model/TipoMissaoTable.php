@@ -71,4 +71,12 @@ class TipoMissaoTable
 			throw new \Exception('TipoMissao de id '.$id.' não existe!');
 		}
 	}
+	
+	public function getArrayNomes() {
+		$tiposMissao = $this->fetchAll();
+		foreach($tiposMissao as $tipoMissao) {
+			$nome[$tipoMissao->id] = $tipoMissao->nome;
+		}		
+		return $nome;		
+	}
 }

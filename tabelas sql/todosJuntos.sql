@@ -122,7 +122,7 @@ INSERT INTO `sgcav`.`TipodeRecurso` (nome, dataCriacao)
 INSERT INTO `sgcav`.`TipodeRecurso` (nome, dataCriacao)
 	VALUES('Policial', '2014-07-31 08:20:00');
 INSERT INTO `sgcav`.`TipodeRecurso` (nome, dataCriacao)
-	VALUES('Helicótero', '2014-07-31 12:00:00');
+	VALUES('Helicóptero', '2014-07-31 12:00:00');
 
 /*-------------------------------------------------------------------------*/
 

@@ -22,16 +22,15 @@ class Missao implements InputFilterAwareInterface
 
 	public function exchangeArray($data)
 	{
-		$this->id	 = (!empty($data['id'])) ? $data['id'] : null;
+		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->idTipoMissao = (!empty($data['idTipoMissao'])) ? $data['idTipoMissao'] : null;
-		$this->protocolo  = (!empty($data['protocolo'])) ? ($data['protocolo']) : null;
-		$this->status  = (!empty($data['status'])) ? ($data['status']) : null;
-		$this->recursosAlocados  = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : 0;
-		$this->nome  = (!empty($data['nome'])) ? ($data['nome']) : null;
-		$this->dataCriacao  = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
-		$this->statusNome  = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
+		$this->protocolo = (!empty($data['protocolo'])) ? ($data['protocolo']) : null;
+		$this->status = (!empty($data['status'])) ? ($data['status']) : null;
+		$this->recursosAlocados = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : 0;
+		$this->nome = (!empty($data['nome'])) ? ($data['nome']) : null;
+		$this->dataCriacao = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
+		$this->statusNome = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 		$this->idAcidente = (!empty($data['idAcidente'])) ? $data['idAcidente'] : null;
-
 	}
 
 	public function getArrayCopy()

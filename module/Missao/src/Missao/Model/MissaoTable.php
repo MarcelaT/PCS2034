@@ -61,6 +61,15 @@ class MissaoTable
 		return $row;
 	}
 	
+	public function getMissaoByIdAcidente($idAcidente){
+		$idAcidente  = (int) $idAcidente;
+		$rowset = $this->tableGateway->select(array('idAcidente' => $idAcidente));
+		if (!$rowset) {
+			throw new \Exception("Não foi localizado Missao de idAcidente ".$idAcidente);
+		}
+		return $rowset;		
+	}
+	
 	public function saveMissao(Missao $Missao) {
 		$data = array(
 			'nome' => $Missao->nome,
@@ -71,7 +80,7 @@ class MissaoTable
 			'dataCriacao' => $Missao->dataCriacao,
 			'idAcidente'  => $Missao->idAcidente,
 		);
-
+		
 		$id = (int) $Missao->id;
 		if ($id == 0) {
 			$this->tableGateway->insert($data);
@@ -84,7 +93,6 @@ class MissaoTable
 			}
 		}
 	}
-
 	
 	public function atualizarStatusMissao($id, $status) {
 		if ($this->getMissao($id)) {
@@ -104,14 +112,26 @@ class MissaoTable
 			throw new \Exception('Missao de id '.$id.' não existe!');
 		}
 	}
-
-	public function getMissaoByIdAcidente($idAcidente){
-		$idAcidente  = (int) $idAcidente;
-		$rowset = $this->tableGateway->select(array('idAcidente' => $idAcidente));
-		if (!$rowset) {
-			throw new \Exception("Não foi localizado Missao de idAcidente ".$idAcidente);
+	
+	///////////////////////////////////////
+	// funções para geração de relatório //
+	///////////////////////////////////////
+	public function getMissoesCadastradas($dataDe, $dataAte) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $dataDe && $dataDe != '' && $dataDe != 'Início') {
+			$select->where->greaterThanOrEqualTo('dataCriacao', date('Y-m-d H:i:s', strtotime($dataDe.' 00:00:00')));
 		}
-		return $rowset;		
+		if (null !== $dataAte && $dataAte != '' && $dataAte != 'Agora') {
+			$select->where->lessThanOrEqualTo('dataCriacao', date('Y-m-d H:i:s', strtotime($dataAte.' 23:59:59')));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foi possível executar a consulta com os parâmetros passados.");
+		}
+		return $resultSet;
 	}
-
+	
 }

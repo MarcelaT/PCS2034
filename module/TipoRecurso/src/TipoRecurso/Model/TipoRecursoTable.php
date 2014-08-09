@@ -67,4 +67,12 @@ class TipoRecursoTable
 			throw new \Exception('TipoRecurso de id '.$id.' não existe!');
 		}
 	}
+	
+	public function getArrayNomes() {
+		$tiposRecurso = $this->fetchAll();
+		foreach($tiposRecurso as $tipoRecurso) {
+			$nome[$tipoRecurso->id] = $tipoRecurso->nome;
+		}		
+		return $nome;		
+	}
 }

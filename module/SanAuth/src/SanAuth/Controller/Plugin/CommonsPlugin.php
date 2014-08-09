@@ -110,4 +110,11 @@ class CommonsPlugin extends AbstractPlugin
 		return $this->getAuthService()->getStorage()->write($data);
 	}
 
+	public function calculaPorcentagem($numero, $total) {
+		return number_format((($numero/$total) * 100), 2);
+	}
+	
+	public function calculaMedia($numero, $total) {
+		return number_format($numero/$total, 2);
+	}
 }
