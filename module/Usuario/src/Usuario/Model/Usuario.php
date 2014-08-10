@@ -45,6 +45,8 @@ class Usuario implements InputFilterAwareInterface
 			return 'Especialista';
 		} else if ($permissao == 'lider_missao') {
 			return 'Líder da Missão';
+		} else {
+			return '';
 		}
 	}
 	

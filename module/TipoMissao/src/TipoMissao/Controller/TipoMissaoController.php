@@ -143,6 +143,9 @@ class TipoMissaoController extends AbstractActionController
 		);
 	}
 	
+	////////////
+	// Tables //
+	////////////
 	public function getTipoMissaoTable()
 	{
 		if (!$this->tipoMissaoTable) {

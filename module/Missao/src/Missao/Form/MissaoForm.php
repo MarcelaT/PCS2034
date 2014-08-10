@@ -17,21 +17,21 @@ class MissaoForm extends Form
 			'type' => 'Hidden',
 		));
 		
-		// idTipoMissao
-		$this->add(array(
-			'name' => 'idTipoMissao',
-			'type' => 'text',
-			'options' => array(
-				'label' => 'idTipoMissao',
-			),
-		));
-		
 		// nome
 		$this->add(array(
 			'name' => 'nome',
 			'type' => 'text',
 			'options' => array(
 				'label' => 'Nome',
+			),
+		));
+		
+		// idTipoMissao
+		$this->add(array(
+			'name' => 'idTipoMissao',
+			'type' => 'text',
+			'options' => array(
+				'label' => 'idTipoMissao',
 			),
 		));
 		

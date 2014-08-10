@@ -10,19 +10,19 @@ use Missao\Model\Missao;
 
 use Acidente\Form\AcidenteForm;
 use Acidente\Form\AcidenteFilterForm;
+use Acidente\Form\AlocarMissaoForm;
 
 class AcidenteController extends AbstractActionController
 {
 	protected $acidenteTable;
+	protected $missaoTable;
+	protected $tipoMissaoTable;
 	
-    public function indexAction()
-    {
-        //$missoes = $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente)
-        // salva a permissão no layout
-        $this->commonsPlugin()->setPermissaoLayout();
+	public function indexAction()
+	{
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
-        
+		
 		$form = new AcidenteFilterForm();
 		$form->get('submit')->setValue('Filtrar');
 		
@@ -50,141 +50,183 @@ class AcidenteController extends AbstractActionController
 		}
 		
 		return new ViewModel(array(
-
 			'form' => $form,
 			'acidentes' => $acidentes,
-         ));
-    }
-
-    public function addAction()
-    {
-        // verifica a permissão do usuário
-        $this->commonsPlugin()->verificaPermissao('coordenador');
+		 ));
+	}
+	
+	public function addAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('coordenador');
 		
 		$form = new AcidenteForm();
-        $form->get('submit')->setValue('Adicionar');
+		$form->get('submit')->setValue('Adicionar');
 		
-        $request = $this->getRequest();
-        if ($request->isPost()) {
+		$request = $this->getRequest();
+		if ($request->isPost()) {
 			// verifica se o usuário clicou em 'cancelar'
-            $submit = $request->getPost('submit');
-            if ($submit == 'Cancelar') {
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
 				return $this->redirect()->toRoute('acidente');
-            }
+			}
 
-            $acidente = new Acidente();
-            $form->setInputFilter($acidente->getInputFilter());
-            $form->setData($request->getPost());
-            //$acidente->status = "cadastrado";
+			$acidente = new Acidente();
+			$form->setInputFilter($acidente->getInputFilter());
+			$form->setData($request->getPost());
 
-            if ($submit == 'Adicionar' && $form->isValid()) {
-                $acidente->exchangeArray($form->getData());
-                date_default_timezone_set("Brazil/East");
-                $dataAtual = date('Y-m-d H:i:s');
-                $acidente->data = $dataAtual;
-                $this->getAcidenteTable()->saveAcidente($acidente);
-            }
+			if ($submit == 'Adicionar') {
+				$acidente->localizacao = $request->getPost('localizacao');
+				$acidente->descricao = $request->getPost('descricao');
+				$acidente->bombeiro = $request->getPost('bombeiro');
+				$acidente->policia = $request->getPost('policia');
+				$acidente->numeroVitimas = $request->getPost('numeroVitimas');
+				$acidente->obstrucao = $request->getPost('obstrucao');
+				$acidente->status = 'cadastrado';
+				
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$acidente->data = $dataAtual;
+				
+				$this->getAcidenteTable()->saveAcidente($acidente);
+			}
 			
-            // Redirect to list of acidentes
-            return $this->redirect()->toRoute('acidente');
-        }
-        return array('form' => $form);
-    }
+			// Redirect to list of acidentes
+			return $this->redirect()->toRoute('acidente');
+		}
+					
+		return array(
+			'form' => $form
+		);
+	}
 	
 	public function infoAction()
-    {
+	{
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
+		$idAcidente = (int) $this->params()->fromRoute('id', 0);
+		if (!$idAcidente) {
+			return $this->redirect()->toRoute('acidente');
+		}
 		
-        $idAcidente = (int) $this->params()->fromRoute('id', 0);
-
-         return new ViewModel(array(
-            'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
-            'idacidente' => $idAcidente,
-            'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
-            'acidente' => $this->getAcidenteTable()->getAcidente($idAcidente),
-
-        ));    
-     }
+		return array(
+			'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
+			'idacidente' => $idAcidente,
+			'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
+			'acidente' => $this->getAcidenteTable()->getAcidente($idAcidente),
+		);
+	}
 	
+	public function alocarmissaoAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('especialista');
+		
+		$idAcidente = (int) $this->params()->fromRoute('id', 0);
+		if (!$idAcidente) {
+			return $this->redirect()->toRoute('acidente');
+		}
+		
+		return array(
+			'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
+			'idacidente' => $idAcidente,
+			'nomesTiposMissao' => $this->getTipoMissaoTable()->getArrayNomes(),
+		);
+	}
+	
+	public function salvarmissaoAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('especialista');
+		
+		$idAcidente = (int) $this->params()->fromRoute('id', 0);
+		if (!$idAcidente) {
+			return $this->redirect()->toRoute('acidente');
+		}
+		
+		$form = new AlocarMissaoForm();
+		$form->get('submit')->setValue('Alocar missão');
+		
+		// popula o select do tipo de missão
+		$arrayTiposMissao = $this->getTipoMissaoTable()->getArrayNomes();
+		$form->get('idTipoMissao')->setOptions(array(
+			'value_options' => $arrayTiposMissao
+		));
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('acidente', array(
+					'action' => 'alocarmissao',
+					'id' => $idAcidente,
+				));
+			}
+			
+			$Missao = new Missao();
+			$form->setInputFilter($Missao->getInputFilter());
+			$form->setData($request->getPost());
+			
+			if ($submit == 'Alocar missão') {
+				$Missao->nome = $request->getPost('nome');
+				$Missao->idTipoMissao = $request->getPost('idTipoMissao');
+				$Missao->idAcidente = $idAcidente;
+				$Missao->status = 'cadastrada';
+				$Missao->recursosAlocados = false;
+				
+				date_default_timezone_set("Brazil/East");
+				
+				// gera um protocolo a partir do momento atual
+				$Missao->protocolo = date('YmdHis').$idAcidente;
+				
+				$dataAtual = date('Y-m-d H:i:s');
+				$Missao->dataCriacao = $dataAtual;
+				
+				$this->getMissaoTable()->saveMissao($Missao);
+			}
+			
+			return $this->redirect()->toRoute('acidente', array(
+				'action' => 'alocarmissao',
+				'id' => $idAcidente,
+			));
+		}
+		
+		return array(
+			'form' => $form,
+			'idacidente' => $idAcidente,
+		);
+	}
+	
+	////////////
+	// Tables //
+	////////////
 	public function getAcidenteTable()
-    {
-         if (!$this->acidenteTable) {
-             $sm = $this->getServiceLocator();
-             $this->acidenteTable = $sm->get('Acidente\Model\AcidenteTable');
-         }
-         return $this->acidenteTable;
-    }
-
-    public function alocarmissaoAction(){
-        $this->commonsPlugin()->verificaPermissao('especialista');
-
-        $idAcidente = (int) $this->params()->fromRoute('id', 0);
-
-         return new ViewModel(array(
-            'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
-            'idacidente' => $idAcidente,
-
-        ));
-
-
-    }
-
-    public function salvarmissaoAction(){
-
-        $this->commonsPlugin()->verificaPermissao('especialista');
-
-        $idAcidente = (int) $this->params()->fromRoute('id', 0);
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-
-            $idAcidente = $request->getPost('idAcidente');
-
-            $Missao = new Missao();
-            $Missao->nome = $request->getPost('nome');
-            $Missao->idTipoMissao = $request->getPost('tipodemissao');
-            $Missao->status = "cadastrada";
-            $Missao->idAcidente = $idAcidente;
-
-            $now = date('YmdHis');
-
-            $Missao->protocolo = $now;
-            $Missao->recursosAlocados = false;
-
-            $this->getMissaoTable()->saveMissao($Missao);
-            return $this->redirect()->toRoute('acidente', array('action' => 'alocarmissao', 'id' => $idAcidente));
-
-        }
-
-        
-        return new ViewModel(array(
-            'tipoMissoes' => $this->getTipoMissaoTable()->fetchAll(),
-            'idacidente' => $idAcidente,
-        ));
-
-
-    }
-
-
+	{
+		 if (!$this->acidenteTable) {
+			 $sm = $this->getServiceLocator();
+			 $this->acidenteTable = $sm->get('Acidente\Model\AcidenteTable');
+		 }
+		 return $this->acidenteTable;
+	}
 	
-    public function getMissaoTable()
-    {
-       // if (!$this->missaoTable) {
-            $sm = $this->getServiceLocator();
-            $this->missaoTable = $sm->get('Missao\Model\MissaoTable');
-       // }
-        return $this->missaoTable;
-    }
-
-    public function getTipoMissaoTable()
-    {
-       // if (!$this->tipoMissaoTable) {
-            $sm = $this->getServiceLocator();
-            $this->tipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
-        //}
-        return $this->tipoMissaoTable;
-    }
-
+	public function getMissaoTable()
+	{
+		if (!$this->missaoTable) {
+			$sm = $this->getServiceLocator();
+			$this->missaoTable = $sm->get('Missao\Model\MissaoTable');
+		}
+		return $this->missaoTable;
+	}
+	
+	public function getTipoMissaoTable()
+	{
+		if (!$this->tipoMissaoTable) {
+			$sm = $this->getServiceLocator();
+			$this->tipoMissaoTable = $sm->get('TipoMissao\Model\TipoMissaoTable');
+		}
+		return $this->tipoMissaoTable;
+	}
+	
 }

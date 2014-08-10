@@ -321,7 +321,7 @@ class RelatorioController extends AbstractActionController
 	}
 	
 	////////////////////////////////
-	// tables - todas do sistema! //
+	// Tables - todas do sistema! //
 	////////////////////////////////
 	public function getAcidenteTable()
     {

@@ -127,6 +127,9 @@ class AuthController extends AbstractActionController
 		return $this->redirect()->toRoute('login');
 	}
 	
+	////////////
+	// Tables //
+	////////////
 	public function getUsuarioTable() {
 		if (!$this->usuarioTable) {
 			$sm = $this->getServiceLocator();

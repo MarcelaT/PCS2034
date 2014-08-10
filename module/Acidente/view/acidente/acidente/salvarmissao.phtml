@@ -1,47 +1,38 @@
-
-	<?php 
-	$nomeAction = $this->serverUrl(true);
+<?php
+$title = 'Alocar nova missão';
+$this->headTitle($title);
 ?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
 
-	<form action=<?php echo $nomeAction; ?> method="POST" name="salvarmissao">
-		<table class="table">
-		<tr>
-			<th>Nome</th>
-			<th>Tipo de missao</th>
-		</tr>
-		<tr>
-			<td>
-				<input name="nome" >
-			</td>
-			<td>
-				<select name="tipodemissao">
-				<option value="0">Tipo de missao</option>
-				<?php 
-				    #                             !vCHANGEv!
-				    foreach($tipoMissoes as $tipoMissao) 
-				    {
-				      // $category = htmlspecialchars($category); 
-				       echo '<option value="'. $tipoMissao->id .'">'. $tipoMissao->nome .'</option>';
-				    }
-				?>
-				</select>
-			</td>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('acidente', array('action' => 'salvarmissao', 'id' => $idacidente)));
+$form->setAttribute('role', 'form');
+$form->prepare();
 
-		</tr>
-		<tr>
-			<td>
-				<input type="submit" class="btn btn-default" name="submit" value="Alocar missao">
-
-			</td>
-			<td>
-
-            <a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'index'));?>">Cancelar</a>
- 
-			</td>
-		</tr>
-
-		</table>
-
-		<input type="text" class="hidden" name="idAcidente" value=<?php echo $idacidente; ?>>
-
-	</form>
+echo $this->form()->openTag($form);
+foreach ($form as $element) :?>
+	<div class="form-group">
+		<?php 
+			if ($element->getOption('required')) { $req = 'required'; }
+			$type = $element->getAttribute('type');
+			$name = $element->getAttribute('name'); 
+			$label = $element->getLabel();
+			$value = $element->getValue();
+		?>
+		<?php if ($name == 'id') { ?>
+			<div class="hidden"><?php echo $this->formElement($element); ?></div>
+		<?php } else if ($type == 'select' || $type == 'checkbox') {
+			echo $this->formRow($form->get($name)); ?>
+		<?php } else if ($name == 'submit') { ?>
+			<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
+			<input class='btn' name='submit' type='submit' value='Cancelar'>
+		<?php } else if ($label != '') { ?>
+			<label class="control-label"><?php echo $label ?></label>
+			<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+		<?php } ?> 
+	</div>
+<?php 
+endforeach;
+echo $this->form()->closeTag();
+?>

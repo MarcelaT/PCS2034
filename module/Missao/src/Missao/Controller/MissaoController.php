@@ -7,17 +7,16 @@ use Zend\View\Model\ViewModel;
 use Missao\Model\Missao;
 use Missao\Form\MissaoForm;
 use Missao\Form\MissaoFilterForm;
+use Missao\Form\MissaoStatusForm;
 
 use Missao\Model\Recurso;
 use Missao\Model\RecursoNome;
 
-
 use Acidente\Model\Acidente;
-
-use Missao\Form\MissaoStatusForm;
 
 class MissaoController extends AbstractActionController
 {
+	protected $acidenteTable;
 	protected $missaoTable;
 	protected $tipoMissaoTable;
 	protected $recursoTable;
@@ -37,19 +36,9 @@ class MissaoController extends AbstractActionController
 			return $this->redirect()->toRoute('missao', array('action' => 'index'));
 		}
 		
-		// recupera todos os tipos de missão, para popular o select
-		try {
-			$tiposDeMissao = $this->getTipoMissaoTable()->fetchAll();
-		} catch (\Exception $ex) {
-			return $this->redirect()->toRoute('missao', array('action' => 'index'));
-		}
-		
-		// popula o array relacionando nome com id do tipo de missão
-		$arrayTiposMissao[0] = 'Qualquer';
-		foreach($tiposDeMissao as $tipoMissao){
-			$arrayTiposMissao[$tipoMissao->id] = $tipoMissao->nome;
-		}
-		
+		// popula o select do tipo de missão
+		$arrayTiposMissao = $this->getTipoMissaoTable()->getArrayNomes();
+		array_unshift($arrayTiposMissao, 'Qualquer');
 		$form->get('idTipoMissao')->setOptions(array(
 			'value_options' => $arrayTiposMissao
 		));
@@ -88,54 +77,61 @@ class MissaoController extends AbstractActionController
 			return $this->redirect()->toRoute('missao');
 		}
 		
+		$tiposRecurso = $this->getTipoRecursoTable()->fetchAll();
+		$total = count($tiposRecurso);
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
-			// verifica se o usuário clicou em 'cancelar'
 			$submit = $request->getPost('submit');
-			if ($submit == 'Cancelar') {
-				return $this->redirect()->toRoute('missao');
+			if ($submit == 'Alocar recursos') {
+				$tiposRecursoNomes = $this->getTipoRecursoTable()->getArrayNomes();
+				$existeRecurso = false;
+				
+				// persiste os recursos com qtd > 0
+				foreach ($tiposRecursoNomes as $idTipoRecurso => $nome) {
+					$Recurso = new Recurso();
+					$quantidade = 'qtd'.$idTipoRecurso;
+					$Recurso->quantidade = (int) $request->getPost($quantidade);
+					$Recurso->idTipoRecurso = $idTipoRecurso;
+					$Recurso->idMissao = $idMissao;
+					
+					if ($Recurso->quantidade != 0) {
+						$existeRecurso = true;
+						date_default_timezone_set("Brazil/East");
+						$dataAtual = date('Y-m-d H:i:s');
+						$Recurso->dataCriacao = $dataAtual;
+						$this->getRecursoTable()->saveRecurso($Recurso);
+					}
+				}
+				
+				// atualiza a missão (apenas se houve algum recurso persistido)
+				if ($existeRecurso) {
+					try {
+						$Missao = $this->getMissaoTable()->getMissao($idMissao);
+					} catch (\Exception $ex) {
+						return $this->redirect()->toRoute('missao', array('action' => 'index'));
+					}
+					
+					$Missao->status = "em_andamento";
+					$Missao->recursosAlocados = true;
+					$this->getMissaoTable()->saveMissao($Missao);
+				}
 			}
 			
-			$total = $request->getPost('total');
-			
-			//if ($submit == 'Editar' && $form->isValid()) {
-			for ($i = 1; $i <= $total; $i++) {
-
-				$Recurso = new Recurso();
-				$quantidade = "quantidade".$i;
-				$idTipoRecurso = "id".$i;
-
-				$Recurso->quantidade = $request->getPost($quantidade);
-				$Recurso->idTipoRecurso = $request->getPost($idTipoRecurso);	
-				$Recurso->idMissao = $idMissao;
-
-				try {
-					$Missao = $this->getMissaoTable()->getMissao($idMissao);
-				} catch (\Exception $ex) {
-					return $this->redirect()->toRoute('missao', array('action' => 'index'));
-				}
-				$Missao->status = "em_andamento";
-				$Missao->recursosAlocados = true;
-				$this->getMissaoTable()->saveMissao($Missao);
-				if ($Recurso->quantidade != 0) {
-					date_default_timezone_set("Brazil/East");
-					$dataAtual = date('Y-m-d H:i:s');
-					$Recurso->dataCriacao = $dataAtual;
-					$this->getRecursoTable()->saveRecurso($Recurso);
-				}
-			}
-			//}
-
 			// Retorna para a lista de missões
-			return $this->redirect()->toRoute('acidente', array('action' => 'info', 'id' => $Missao->idAcidente));
+			return $this->redirect()->toRoute('acidente', array(
+				'action' => 'info',
+				'id' => $Missao->idAcidente,
+			));
 		}
 		
-		$tipoRecursos = $this->getTipoRecursoTable()->fetchAll();
-		$total = count($tipoRecursos);
-
-		return array('tipoRecursos' => $tipoRecursos, 'idMissao'=> $idMissao, 'total'=> $total);
+		return array(
+			'tiposRecurso' => $tiposRecurso,
+			'idMissao'=> $idMissao,
+			'total'=> $total
+		);
 	}
-
+	
 	public function detalhesAction() {
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
@@ -171,11 +167,12 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
-
+	/*
+	 * Não utilizamos (ainda?) a ação de deletar missões
+	 *
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
-
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
@@ -201,16 +198,15 @@ class MissaoController extends AbstractActionController
 			'Missao' => $this->getMissaoTable()->getMissao($id)
 		);
 	}
+	*/
 	
-
 	public function missaoprotocoloAction()
 	{
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
-
+		
 		$form = new MissaoStatusForm();
 		$request = $this->getRequest();
-		$id = 0;
 		
 		if ($request->isPost()) {
 			// verifica se o usuário clicou em 'cancelar'
@@ -242,8 +238,6 @@ class MissaoController extends AbstractActionController
 					return $this->redirect()->toRoute('missao', array('action'=>'missaoprotocolo'));
 				}
 				
-				$id = $missao->id;
-				
 				// Redirect para a página de seleção do status
 				return $this->redirect()->toRoute('missao', array(
 					'action' => 'atualizarstatus',
@@ -255,14 +249,12 @@ class MissaoController extends AbstractActionController
 		return array(
 			'form' => $form,
 			'messages' => $this->flashmessenger()->getMessages(),
-			'id' => $id,
 		);
 	}
 	
 	public function atualizarstatusAction()
 	{
 		// verifica a permissão do usuário
-
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
@@ -317,13 +309,17 @@ class MissaoController extends AbstractActionController
 			return $this->redirect()->toRoute('missao', array('action'=>'missaoprotocolo'));
 		}
 
-		$acidenteFinalizado = 1;
+		// verifica se todas as missões de determinado acidente foram finalizadas
+		$acidenteFinalizado = true;
 		$missoes = $this->getMissaoTable()->getMissaoByIdAcidente($missao->idAcidente);
-		foreach ($missoes as $missao){
-			if($missao->status == 'em_andamento')
-				$acidenteFinalizado = 0;
+		foreach ($missoes as $missao) {
+			if ($missao->status == 'em_andamento') {
+				$acidenteFinalizado = false;
+				break;
+			}
 		}
-		if($acidenteFinalizado == 1){
+		// se não há mais missões em andamento para o acidente, ele finaliza
+		if ($acidenteFinalizado) {
 			$this->getAcidenteTable()->atualizarStatusAcidente($missao->idAcidente, "finalizado");
 		}
 		
@@ -332,17 +328,9 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
-	public function getAcidenteTable()
-    {
-             $sm = $this->getServiceLocator();
-             $this->acidenteTable = $sm->get('Acidente\Model\AcidenteTable');
-         return $this->acidenteTable;
-    }
-
 	public function statusconcluidaAction()
 	{
 		// verifica a permissão do usuário
-
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
 		
 		$id = (int) $this->params()->fromRoute('id', 0);
@@ -357,7 +345,7 @@ class MissaoController extends AbstractActionController
 	{
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('lider_missao');
-				
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('missao', array('action'=>'missaoprotocolo'));
@@ -365,6 +353,18 @@ class MissaoController extends AbstractActionController
 		
 		return $this->updateStatus($id, 'abortada');
 	}
+	
+	////////////
+	// Tables //
+	////////////
+	public function getAcidenteTable()
+    {
+		if (!$this->acidenteTable) {
+			$sm = $this->getServiceLocator();
+			$this->acidenteTable = $sm->get('Acidente\Model\AcidenteTable');
+		}
+		return $this->acidenteTable;
+    }
 	
 	public function getMissaoTable()
 	{

@@ -15,6 +15,7 @@ class Missao implements InputFilterAwareInterface
 	public $recursosAlocados;
 	public $nome;
 	public $dataCriacao;
+	public $idAcidente;
 	public $statusNome;
 	
 	// Filtro para validações
@@ -25,12 +26,12 @@ class Missao implements InputFilterAwareInterface
 		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->idTipoMissao = (!empty($data['idTipoMissao'])) ? $data['idTipoMissao'] : null;
 		$this->protocolo = (!empty($data['protocolo'])) ? ($data['protocolo']) : null;
-		$this->status = (!empty($data['status'])) ? ($data['status']) : null;
-		$this->recursosAlocados = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : 0;
+		$this->status = (!empty($data['status'])) ? ($data['status']) : 0;
+		$this->recursosAlocados = (!empty($data['recursosAlocados'])) ? ($data['recursosAlocados']) : false;
 		$this->nome = (!empty($data['nome'])) ? ($data['nome']) : null;
-		$this->dataCriacao = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : null;
-		$this->statusNome = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
+		$this->dataCriacao = (!empty($data['dataCriacao'])) ? $data['dataCriacao'] : $this->getDataAtual();
 		$this->idAcidente = (!empty($data['idAcidente'])) ? $data['idAcidente'] : null;
+		$this->statusNome = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 	}
 
 	public function getArrayCopy()
@@ -43,7 +44,6 @@ class Missao implements InputFilterAwareInterface
 		throw new \Exception("Not used");
 	}
 	
-
 	// atribui um nome user-friendly ao enum de status
 	public function getNomeStatus($status)
 	{
@@ -55,7 +55,16 @@ class Missao implements InputFilterAwareInterface
 			return 'Concluida';
 		} else if ($status == 'abortada') {
 			return 'Abortada';
+		} else {
+			return '';
 		}
+	}
+	
+	// retorna a data atual
+	public function getDataAtual() {
+		date_default_timezone_set("Brazil/East");
+		$dataAtual = date('Y-m-d H:i:s');
+		return $dataAtual;
 	}
 	
 	public function getInputFilter()
@@ -97,7 +106,8 @@ class Missao implements InputFilterAwareInterface
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),				),
+					array('name' => 'StringTrim'),
+				),
 			));
 
 			// status

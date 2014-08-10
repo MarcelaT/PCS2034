@@ -52,7 +52,6 @@ class MissaoTable
 	}
 	
 	public function getMissaoByProtocolo($protocolo) {
-		//$protocolo  = (int) $protocolo;
 		$rowset = $this->tableGateway->select(array('protocolo' => $protocolo));
 		$row = $rowset->current();
 		if (!$row) {

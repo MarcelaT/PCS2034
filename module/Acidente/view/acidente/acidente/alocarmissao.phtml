@@ -4,26 +4,25 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
+<br />
+
 <table class="table">
 <tr>
-    <th>Missões alocadas para esse acidente</th>
+    <th>Nome</th>
+	<th>Tipo de missão</th>
 </tr>
-<?php foreach ($missoes as $missao) : ?>
+<?php if (count($missoes) == 0) { ?>
+<tr>
+	<td>Não existem missões alocadas para este acidente</td>
+	<td></td>
+</tr>
+<?php } else { foreach ($missoes as $missao) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($missao->nome);?></td>
+	<td><?php echo $this->escapeHtml($nomesTiposMissao[$missao->idTipoMissao]);?></td>
 </tr>
-<?php endforeach; ?>
+<?php endforeach; } ?>
 </table>
 
-<table>
-	<tr>
-		<td>
-    		<a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'salvarmissao', 'id' =>
-            $idacidente));?>">Alocar nova missão</a>
-    	</td>
-		<td>
-    		<a class='btn btn-default' href="<?php echo $this->url('acidente', array('action'=>'info', 'id'=>$idacidente));?>">Finalizar alocação</a>
-    	</td>
-     
-	</tr>
-</table>
+<a class="btn btn-primary" href="<?php echo $this->url('acidente', array('action'=>'salvarmissao', 'id'=>$idacidente)); ?>">Alocar nova missão</a>
+<a class="btn btn-default" href="<?php echo $this->url('acidente', array('action'=>'info', 'id'=>$idacidente)); ?>">Finalizar alocação</a>

@@ -3,6 +3,7 @@ $title = 'Criar novo tipo de Recurso';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+
 <?php
 $form = $this->form;
 $form->setAttribute('action', $this->url('tiporecurso', array('action' => 'add')));
@@ -34,17 +35,4 @@ foreach ($form as $element) :?>
 <?php 
 endforeach;
 echo $this->form()->closeTag();
-
-/*
- echo $this->form()->openTag($form);
- echo $this->formHidden($form->get('id'));
- echo $this->formRow($form->get('name'));
- echo $this->formRow($form->get('brand'));
- echo $this->formRow($form->get('serving'));
- echo $this->formRow($form->get('servings'));
- echo $this->formRow($form->get('ingredients'));
- echo $this->formRow($form->get('description'));
- echo $this->formSubmit($form->get('submit'));
- echo $this->form()->closeTag();
- */
 ?>

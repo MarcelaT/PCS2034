@@ -75,9 +75,8 @@ class AcidenteTable
 			'obstrucao'  => $acidente->obstrucao,
 			'status'  => $acidente->status,
 		);
-
-		$id = (int) $acidente->id;
-		if ($id == 0) {
+		
+		if (!$acidente->id) {
 			$this->tableGateway->insert($data);
 		} else {
 			if ($this->getAcidente($id)) {

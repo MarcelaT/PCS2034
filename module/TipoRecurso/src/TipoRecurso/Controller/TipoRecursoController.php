@@ -143,6 +143,9 @@ class TipoRecursoController extends AbstractActionController
 		);
 	}
 	
+	////////////
+	// Tables //
+	////////////
 	public function getTipoRecursoTable()
 	{
 		if (!$this->tipoRecursoTable) {

@@ -16,6 +16,8 @@ class Acidente implements InputFilterAwareInterface
 	public $bombeiro;
 	public $policia;
 	public $obstrucao;
+	public $status;
+	public $statusNome;
 	
 	// Filtro para validações
 	protected $inputFilter;
@@ -25,13 +27,13 @@ class Acidente implements InputFilterAwareInterface
 		$this->id = (!empty($data['id'])) ? $data['id'] : null;
 		$this->localizacao = (!empty($data['localizacao'])) ? $data['localizacao'] : null;
 		$this->descricao = (!empty($data['descricao'])) ? ($data['descricao']) : null;
-		$this->data = (!empty($data['data'])) ? $data['data'] : null;
+		$this->data = (!empty($data['data'])) ? $data['data'] : $this->getDataAtual();
 		$this->numeroVitimas  = (!empty($data['numeroVitimas'])) ? $data['numeroVitimas'] : 0;
 		$this->bombeiro = (!empty($data['bombeiro'])) ? $data['bombeiro'] : 0;
 		$this->policia = (!empty($data['policia'])) ? $data['policia'] : 0;
 		$this->obstrucao  = (!empty($data['obstrucao'])) ? $data['obstrucao'] : 0;
 		$this->status  = (!empty($data['status'])) ? $data['status'] : 0;
-
+		$this->statusNome = (!empty($data['status'])) ? $this->getNomeStatus($data['status']) : null;
 	}
 
 	public function getArrayCopy()
@@ -42,6 +44,25 @@ class Acidente implements InputFilterAwareInterface
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
+	}
+	
+	// atribui um nome user-friendly ao enum de status
+	public function getNomeStatus($status)
+	{
+		if ($status == 'cadastrado') {
+			return 'Cadastrado';
+		} else if ($status == 'finalizado') {
+			return 'Finalizado';
+		} else {
+			return '';
+		}
+	}
+	
+	// retorna a data atual
+	public function getDataAtual() {
+		date_default_timezone_set("Brazil/East");
+		$dataAtual = date('Y-m-d H:i:s');
+		return $dataAtual;
 	}
 	
 	public function getInputFilter()

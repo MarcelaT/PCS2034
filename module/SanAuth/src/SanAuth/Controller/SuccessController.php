@@ -7,7 +7,6 @@ use Zend\View\Model\ViewModel;
 
 class SuccessController extends AbstractActionController
 {
-	
 	public function indexAction()
 	{
 		// salva a permissão no layout

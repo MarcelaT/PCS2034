@@ -67,7 +67,7 @@
 						<?php endif ?>
 						
 						<?php if ($isCoordenador || $isEspecialista): ?>
-						<li <?php if (strpos($route,'missao') !== false && strpos($route,'protocolo') === false && strpos($route,'status') === false && strpos($route,'tipo') === false && strpos($route,'relatorio') === false): ?>class="active"<?php endif ?>>
+						<li <?php if (strpos($route,'missao') !== false && strpos($route,'acidente') === false && strpos($route,'protocolo') === false && strpos($route,'status') === false && strpos($route,'tipo') === false && strpos($route,'relatorio') === false): ?>class="active"<?php endif ?>>
 							<a href="<?php echo $this->basePath('missao') ?>"><?php echo $this->translate('Missões') ?></a>
 						<?php endif ?>
 						

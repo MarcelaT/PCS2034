@@ -298,6 +298,9 @@ class UsuarioController extends AbstractActionController
 		);
 	}
 	
+	////////////
+	// Tables //
+	////////////
 	public function getUsuarioTable()
 	{
 		if (!$this->usuarioTable) {
