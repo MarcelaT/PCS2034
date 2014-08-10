@@ -237,8 +237,87 @@ class RelatorioController extends AbstractActionController
 		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('administrador');
 		
+		$form = new RelatorioPeriodoForm();
+		$form->get('submit')->setValue('Filtrar');
+		
+		$dataDe = 'Início';
+		$dataAte = 'Agora';
+		
+		$dados = $this->gerarEstatisticasSistema($dataDe, $dataAte);
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				// pega as datas do período
+				$postDataDe = $request->getPost('dataDe');
+				if (null != $postDataDe && $postDataDe != '' && $postDataDe != 0) {
+					$dataDe = $postDataDe;
+				}
+				
+				$postDataAte = $request->getPost('dataAte');
+				if (null != $postDataAte && $postDataAte != '' && $postDataAte != 0) {
+					date_default_timezone_set("Brazil/East");
+					$dataAtual = date('d-m-Y');
+					// verifica se o usuário não pegou uma dataAte maior que a atual
+					$dateDiff = date_diff(date_create($postDataAte), date_create($dataAtual));
+					if ($dateDiff->invert == 0 && $dateDiff->d > 0) {
+						$dataAte = $postDataAte;
+					}
+				}
+				
+				// só recalcula valores caso haja modificação do período
+				if ($dataDe != 'Início' || $dataAte != 'Agora') {
+					$dados = $this->gerarEstatisticasSistema($dataDe, $dataAte);
+				}
+			}
+		}
+		
 		return array(
+			'form' => $form,
+			'dataDe' => $dataDe,
+			'dataAte' => $dataAte,
+			'dados' => $dados,
 		);
+	}
+	
+	private function gerarEstatisticasSistema($dataDe, $dataAte) {
+		// recuperando todos os tipos de missão
+		$tiposMissao = $this->getTipoMissaoTable()->getTiposMissaoCadastrados($dataDe, $dataAte);
+		// recuperando todos os tipos de recurso
+		$tiposRecurso = $this->getTipoRecursoTable()->getTiposRecursoCadastrados($dataDe, $dataAte);
+		// recuperando todos os usuários
+		$usuarios = $this->getUsuarioTable()->getUsuariosCadastrados($dataDe, $dataAte);
+		$usuariosEditados = $this->getUsuarioTable()->getUsuariosEditados($dataDe, $dataAte);
+		
+		// gerando estatísticas
+		$totalTiposMissao = count($tiposMissao);
+		$totalTiposRecurso = count($tiposRecurso);
+		$totalUsuarios = count($usuarios);
+		$totalUsuariosEditados = count($usuariosEditados);
+		$permissaoAdmin = 0;
+		$permissaoCoord = 0;
+		$permissaoEspec = 0;
+		$permissaoLider = 0;
+		
+		foreach($usuarios as $usuario) {
+			if ($usuario->permissao == 'administrador') $permissaoAdmin++;
+			else if ($usuario->permissao == 'coordenador') $permissaoCoord++;
+			else if ($usuario->permissao == 'especialista') $permissaoEspec++;
+			else if ($usuario->permissao == 'lider_missao') $permissaoLider++;
+		}
+		
+		$dados['Total de tipos de missão'] = $totalTiposMissao;
+		$dados['Total de tipos de recurso'] = $totalTiposRecurso;
+		$dados['Total de usuários'] = $totalUsuarios;
+		$dados['Distribuição de permissões do usuário'] = 'Administrador: '.$permissaoAdmin.' ('.$this->commonsPlugin()->calculaPorcentagem($permissaoAdmin,$totalUsuarios).' %)'.
+			' | Coordenador: '.$permissaoCoord.' ('.$this->commonsPlugin()->calculaPorcentagem($permissaoCoord,$totalUsuarios).' %)'.
+			' | Especialista: '.$permissaoEspec.' ('.$this->commonsPlugin()->calculaPorcentagem($permissaoEspec,$totalUsuarios).' %)'.
+			' | Líder da Missão: '.$permissaoLider.' ('.$this->commonsPlugin()->calculaPorcentagem($permissaoLider,$totalUsuarios).' %)';
+		$dados['Usuários com perfil editado no período'] = $totalUsuariosEditados;
+		
+		return $dados;
 	}
 	
 	////////////////////////////////

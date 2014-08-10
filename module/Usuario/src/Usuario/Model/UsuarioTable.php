@@ -90,4 +90,43 @@ class UsuarioTable
 			throw new \Exception('Usuário de id '.$id.' não existe!');
 		}
 	}
+	
+	///////////////////////////////////////
+	// funções para geração de relatório //
+	///////////////////////////////////////
+	public function getUsuariosCadastrados($dataDe, $dataAte) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $dataDe && $dataDe != '' && $dataDe != 'Início') {
+			$select->where->greaterThanOrEqualTo('dataCriacao', date('Y-m-d H:i:s', strtotime($dataDe.' 00:00:00')));
+		}
+		if (null !== $dataAte && $dataAte != '' && $dataAte != 'Agora') {
+			$select->where->lessThanOrEqualTo('dataCriacao', date('Y-m-d H:i:s', strtotime($dataAte.' 23:59:59')));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foi possível executar a consulta com os parâmetros passados.");
+		}
+		return $resultSet;
+	}
+	
+	public function getUsuariosEditados($dataDe, $dataAte) {
+		$select = new Select();
+		
+		// verifica quais estão sendo realmente utilizados
+		if (null !== $dataDe && $dataDe != '' && $dataDe != 'Início') {
+			$select->where->greaterThanOrEqualTo('dataEdicao', date('Y-m-d H:i:s', strtotime($dataDe.' 00:00:00')));
+		}
+		if (null !== $dataAte && $dataAte != '' && $dataAte != 'Agora') {
+			$select->where->lessThanOrEqualTo('dataEdicao', date('Y-m-d H:i:s', strtotime($dataAte.' 23:59:59')));
+		}
+		
+		$resultSet = $this->tableGateway->select($select->where);
+		if (!$resultSet) {
+			throw new \Exception("Não foi possível executar a consulta com os parâmetros passados.");
+		}
+		return $resultSet;
+	}
 }

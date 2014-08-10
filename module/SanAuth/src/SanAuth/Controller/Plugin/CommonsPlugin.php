@@ -111,10 +111,12 @@ class CommonsPlugin extends AbstractPlugin
 	}
 
 	public function calculaPorcentagem($numero, $total) {
+		if ($total == 0) return '0.00';
 		return number_format((($numero/$total) * 100), 2);
 	}
 	
 	public function calculaMedia($numero, $total) {
+		if ($total == 0) return '0.00';
 		return number_format($numero/$total, 2);
 	}
 }
