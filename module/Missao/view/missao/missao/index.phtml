@@ -53,12 +53,14 @@ $this->headTitle($title);
 
 <table class="table">
 <tr>
+	<th>Data</th>
 	<th>Nome</th>
 	<th>Status</th>
 	<th>&nbsp;</th>
 </tr>
 <?php foreach ($Missoes as $Missao) : ?>
 <tr>
+	<td><?php echo $this->escapeHtml(date('d/m/Y', strtotime($Missao->dataCriacao)));?></td>
 	<td><?php echo $this->escapeHtml($Missao->nome);?></td>
 	<td><?php echo $this->escapeHtml($Missao->statusNome);?></td>
 

@@ -6,6 +6,10 @@ $this->headTitle($title);
 
 <table class="table">
 	<tr>
+		<td>Data</td>
+		<td><?php echo $this->escapeHtml(date('d/m/Y H:i:s', strtotime($Missao->dataCriacao))); ?></td>
+	</tr>
+	<tr>
 		<td>Nome</td>
 		<td><?php echo $this->escapeHtml($Missao->nome); ?></td>
 	</tr>
