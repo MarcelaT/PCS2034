@@ -60,6 +60,13 @@ $this->headTitle($title);
 	</tr>
 </table>
 
+<hr class="divider">
+<div class="collapse" id="viewsvc" style="overflow: hidden;">
+	<img style="display: inline; margin: 0 10px;" src="http://maps.googleapis.com/maps/api/staticmap?center=<?php echo $this->escapeHtml($lat); ?>,<?php echo $this->escapeHtml($lng); ?>&zoom=16&size=300x300&sensor=false">
+	<img style="display: inline; margin: 0 10px;" src="http://maps.googleapis.com/maps/api/streetview?size=300x300&location=<?php echo $this->escapeHtml($lat); ?>,<?php echo $this->escapeHtml($lng); ?>&heading=235&fov=120&sensor=false">
+</div>
+<p><a class="btn" data-toggle="collapse" data-target="#viewsvc">Verificar SVC &raquo;</a></p>
+<hr class="divider">
 <br />
 
 <table class="table">

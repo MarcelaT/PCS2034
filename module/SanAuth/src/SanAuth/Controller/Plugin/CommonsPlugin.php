@@ -61,6 +61,7 @@ class CommonsPlugin extends AbstractPlugin
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
 		
+		return $permissao;
 	}
 	
 	// verifica se o usuário pode ou não acessar a página
@@ -83,6 +84,8 @@ class CommonsPlugin extends AbstractPlugin
 		if (!$validou) {
 			return $this->getController()->redirect()->toRoute('forbidden');
 		}
+		
+		return $permissao;
 	}
 	
 	public function isAutenticado() {
@@ -119,4 +122,23 @@ class CommonsPlugin extends AbstractPlugin
 		if ($total == 0) return '0.00';
 		return number_format($numero/$total, 2);
 	}
+	
+	// traz a lagitude/longitude do endereço via google maps
+	public function getLatLng($address) {
+		try{
+			$address = urlencode($address);
+			$geocode=file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+
+			$output= json_decode($geocode);
+
+			$lat = $output->results[0]->geometry->location->lat;
+			$lng = $output->results[0]->geometry->location->lng;
+			if(is_numeric($lat) && is_numeric($lng)){
+				return array("lat" => $lat, "lng" => $lng);
+			}
+		} catch(Exception $e) {	
+			return false;
+		}
+	}
+	
 }

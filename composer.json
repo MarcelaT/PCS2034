@@ -20,4 +20,5 @@
         "doctrine/common" : ">=2.1",
         "zendframework/zftool": "dev-master"
     }
+	
 }

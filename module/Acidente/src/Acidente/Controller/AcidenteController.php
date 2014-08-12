@@ -103,18 +103,23 @@ class AcidenteController extends AbstractActionController
 	public function infoAction()
 	{
 		// verifica a permissão do usuário
-		$this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
+		$permissao = $this->commonsPlugin()->verificaPermissoes(array('especialista', 'coordenador'));
 		
 		$idAcidente = (int) $this->params()->fromRoute('id', 0);
 		if (!$idAcidente) {
 			return $this->redirect()->toRoute('acidente');
 		}
 		
+		$acidente = $this->getAcidenteTable()->getAcidente($idAcidente);
+		$latLgn = $this->commonsPlugin()->getLatLng($acidente->localizacao);
+		
 		return array(
 			'missoes' => $this->getMissaoTable()->getMissaoByIdAcidente($idAcidente),
 			'idacidente' => $idAcidente,
-			'permissao' => $this->commonsPlugin()->getPermissaoUsuario(),
-			'acidente' => $this->getAcidenteTable()->getAcidente($idAcidente),
+			'permissao' => $permissao,
+			'acidente' => $acidente,
+			'lat' => $latLgn['lat'],
+			'lng' => $latLgn['lng'],
 		);
 	}
 	

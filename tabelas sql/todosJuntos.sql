@@ -23,15 +23,15 @@ CREATE UNIQUE INDEX PK_acidente ON `sgcav`.`acidente`(id);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
-	VALUES ('Av Vergueiro 300, Sao Paulo', 'Engavetamento', '2014-08-01 06:35:53', 4, false, true, 3, 'finalizado');
+	VALUES ('R. Vergueiro, 300 - Liberdade, São Paulo - SP', 'Engavetamento', '2014-08-01 06:35:53', 4, false, true, 3, 'finalizado');
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
-	VALUES ('Rua Lins de Vasconcelos 589, Sao Paulo', 'Atropelamento de moto', '2014-08-02 11:10:59', 1, true, false, 2, 'finalizado');
+	VALUES ('Av. Lins de Vasconcelos, 589 - Cambuci, São Paulo - SP', 'Atropelamento de moto', '2014-08-02 11:10:59', 1, true, false, 2, 'finalizado');
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
-	VALUES ('Rua Ricardo Jaffet 1700, Sao Paulo', 'Batida de carro no poste', '2014-08-03 23:54:11', 2, false, true, 1, 'cadastrado');
+	VALUES ('Av. Dr. Ricardo Jafet, 1700 - Vila Mariana, São Paulo - SP', 'Batida de carro no poste', '2014-08-03 23:54:11', 2, false, true, 1, 'cadastrado');
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
-	VALUES ('Av Politecnica 730, Sao Paulo', 'Atropelamento de pedestres', '2014-08-04 18:45:07', 3, true, false, 1, 'cadastrado');
+	VALUES ('Av. Escola Politécnica, 730 - Rio Pequeno, São Paulo - SP', 'Atropelamento de pedestres', '2014-08-04 18:45:07', 3, true, false, 1, 'cadastrado');
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
-	VALUES ('Av 9 de Julho 400, Sao Paulo', 'Batida de carro', '2014-08-05 21:31:18', 2, false, true, 2, 'cadastrado');
+	VALUES ('Av. Nove de Julho, 400 - Bela Vista, São Paulo - SP', 'Batida de carro', '2014-08-05 21:31:18', 2, false, true, 2, 'cadastrado');
 
 
 /*-------------------------------------------------------------------------*/
