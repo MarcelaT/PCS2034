@@ -69,14 +69,14 @@ class AcidenteTable
 			'localizacao' => $acidente->localizacao,
 			'descricao' => $acidente->descricao,
 			'data' => $acidente->data,
-			'numeroVitimas'  => $acidente->numeroVitimas,
-			'bombeiro'  => $acidente->bombeiro,
-			'policia'  => $acidente->policia,
-			'obstrucao'  => $acidente->obstrucao,
-			'status'  => $acidente->status,
+			'numeroVitimas' => $acidente->numeroVitimas,
+			'bombeiro' => $acidente->bombeiro,
+			'policia' => $acidente->policia,
+			'obstrucao' => $acidente->obstrucao,
+			'status' => $acidente->status,
 		);
-		
-		if (!$acidente->id) {
+		$id = $acidente->id;
+		if (!$id) {
 			$this->tableGateway->insert($data);
 		} else {
 			if ($this->getAcidente($id)) {
