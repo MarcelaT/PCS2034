@@ -91,7 +91,9 @@ $this->headTitle($title);
 		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $missao->id));?>">Alocar recursos</a> 
 	</td>
 	<?php } else { ?>
-		<td></td>
+	<td>
+		<a href="<?php echo $this->url('missao', array('action'=>'editarrecursos', 'id' => $missao->id));?>">Editar recursos alocados</a> 
+	</td>
 	<?php } ?>
 	<td>
 		<a href="<?php echo $this->url('missao', array('action'=>'detalhes', 'id' => $missao->id));?>">Detalhes</a> 

@@ -1,0 +1,39 @@
+<?php
+$title = 'Alocar novo recurso';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+//$form->setAttribute('action', $this->url('missao', array('action' => 'novorecurso', 'id' => $idMissao)));
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+foreach ($form as $element) :?>
+	<div class="form-group">
+		<?php 
+			if ($element->getOption('required')) { $req = 'required'; }
+			$type = $element->getAttribute('type');
+			$name = $element->getAttribute('name'); 
+			$label = $element->getLabel();
+			$value = $element->getValue();
+		?>
+		<?php if ($name == 'id'|| $name=='idMissao' ) { ?>
+			<div class="hidden"><?php echo $this->formElement($element); ?></div>
+		<?php } else if ($type == 'select' || $type == 'checkbox') {
+			echo $this->formRow($form->get($name)); ?>
+		<?php } else if ($name == 'submit') { ?>
+			<input class='btn btn-default' name='submit' type='submit' value='<?php echo $value ?>'>
+			<input class='btn' name='submit' type='submit' value='Cancelar'>
+		<?php } else if ($label != '') { ?>
+			<label class="control-label"><?php echo $label ?></label>
+			<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'>
+		<?php } ?> 
+	</div>
+<?php 
+endforeach;
+echo $this->form()->closeTag();
+?>
+

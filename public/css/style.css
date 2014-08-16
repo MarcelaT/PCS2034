@@ -30,6 +30,20 @@ body {
   background-color: #57a900;
 }
 
+.paginaInicial {
+    color: #68b604;
+    font-size: 4em;
+    text-align: center;
+
+}
+
+.subtitulo {
+    color: #000000;
+    font-size: 3em;
+    text-align: center;
+
+}
+
 div.container a.brand {
     background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
     margin-left: 0;

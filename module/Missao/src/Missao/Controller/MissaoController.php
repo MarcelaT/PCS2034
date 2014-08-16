@@ -8,9 +8,11 @@ use Missao\Model\Missao;
 use Missao\Form\MissaoForm;
 use Missao\Form\MissaoFilterForm;
 use Missao\Form\MissaoStatusForm;
+use Missao\Form\NovoRecursoForm;
 
 use Missao\Model\Recurso;
 use Missao\Model\RecursoNome;
+use Missao\Model\EditarRecurso;
 
 use Acidente\Model\Acidente;
 
@@ -352,6 +354,131 @@ class MissaoController extends AbstractActionController
 		}
 		
 		return $this->updateStatus($id, 'abortada');
+	}
+
+	public function editarrecursosAction(){
+
+		$idMissao = (int) $this->params()->fromRoute('id', 0);
+		if (!$idMissao) {
+			return $this->redirect()->toRoute('missao');
+		}
+
+		$Recursos = $this->getRecursoTable()->getRecursosidMissao($idMissao);
+
+
+
+		
+			$editarRecursoLista = array();
+
+
+			foreach($Recursos as $recurso){
+
+			$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
+
+			$editarRecurso = new EditarRecurso();
+
+				$editarRecurso->idRecurso = $recurso->id;
+				$editarRecurso->nome = $tipoRecurso->nome;
+				$editarRecurso->quantidade = $recurso->quantidade;
+				$editarRecurso->idTipoRecurso = $tipoRecurso->id;
+
+			array_push($editarRecursoLista, $editarRecurso);
+
+			}
+
+		return array(
+			'editarRecursoLista' => $editarRecursoLista,
+			'idMissao' => $idMissao,
+		);		
+	}
+
+
+	public function editarrecurso1Action(){
+
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$recurso= new Recurso();
+			$recurso->id = $request->getPost('idRecurso');
+			$recurso->quantidade = $request->getPost('quantidade');	
+			$recurso->idMissao = $request->getPost('idMissao');	
+			$recurso->idTipoRecurso = $request->getPost('idTipoRecurso');	
+			$this->getRecursoTable()->saveRecurso($recurso);
+			return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $recurso->idMissao));
+
+		}
+
+		$id = (int) $this->params()->fromRoute('id', 0);
+		$recurso = $this->getRecursoTable()->getRecurso($id);
+		$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
+		$editarRecurso = new EditarRecurso();
+
+		$editarRecurso->idRecurso = $recurso->id;
+		$editarRecurso->nome = $tipoRecurso->nome;
+		$editarRecurso->quantidade = $recurso->quantidade;
+		$editarRecurso->idTipoRecurso = $tipoRecurso->id;
+		$editarRecurso->idMissao = $recurso->idMissao;
+
+
+		return array(
+			'editarRecurso' => $editarRecurso,
+		);
+
+	}
+
+		public function novoRecursoAction(){
+
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$Recurso = new Recurso();
+			$Recurso->quantidade = (int) $request->getPost('quantidade');
+			$Recurso->idTipoRecurso = $request->getPost('idTipoRecurso');	
+			$Recurso->idMissao =  $request->getPost('idMissao');
+			
+			if ($Recurso->quantidade != 0) {
+				$existeRecurso = true;
+				date_default_timezone_set("Brazil/East");
+				$dataAtual = date('Y-m-d H:i:s');
+				$Recurso->dataCriacao = $dataAtual;
+				$this->getRecursoTable()->saveRecurso($Recurso);
+			}
+			return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $Recurso->idMissao));
+	
+		}	
+		
+		$idMissao = (int) $this->params()->fromRoute('id', 0);
+		
+		$form = new novoRecursoForm();
+		$form->get('submit')->setValue('Alocar Recurso');
+		$form->get('idMissao')->setValue($idMissao);
+
+		$arrayTiposMissao = $this->getTipoRecursoTable()->getArrayNomes();
+		$form->get('idTipoRecurso')->setOptions(array(
+			'value_options' => $arrayTiposMissao
+		));
+
+		return array(
+			'form' => $form,
+			'idMissao' => $idMissao,
+		);
+	}
+
+	public function removerrecursoAction(){
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+
+		$id = (int) $this->params()->fromRoute('id', 0);
+		$recurso = $this->getRecursoTable()->getRecurso($id);
+
+		if($id!=0){
+			$this->getRecursoTable()->deleteRecurso($id);
+
+		}
+		return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $recurso->idMissao));
+
+
 	}
 	
 	////////////

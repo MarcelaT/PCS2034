@@ -786,43 +786,59 @@ pre code {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+   text-align: center;
+
 }
 
 .container:before,
 .container:after {
   display: table;
   content: " ";
+   text-align: center;
+
 }
 
 .container:after {
   clear: both;
+   text-align: center;
+
 }
 
 .container:before,
 .container:after {
   display: table;
   content: " ";
+   text-align: center;
+
 }
 
 .container:after {
   clear: both;
+   text-align: center;
+
 }
 
 @media (min-width: 768px) {
   .container {
     width: 750px;
+     text-align: center;
+
   }
 }
 
 @media (min-width: 992px) {
   .container {
     width: 970px;
+     text-align: center;
+
   }
 }
 
 @media (min-width: 1200px) {
   .container {
     width: 1170px;
+     text-align: center;
+
   }
 }
 
@@ -5228,38 +5244,54 @@ a.list-group-item.active > .badge,
   line-height: 2.1428571435;
   color: inherit;
   background-color: #eeeeee;
+  text-align: center;
 }
+
 
 .jumbotron h1,
 .jumbotron .h1 {
   line-height: 1;
   color: inherit;
+  text-align: center;
+
 }
 
 .jumbotron p {
   line-height: 1.4;
+  text-align: center;
+
 }
 
 .container .jumbotron {
   border-radius: 6px;
+ text-align: center;
+
 }
 
 .jumbotron .container {
   max-width: 100%;
+    text-align: center;
+
 }
 
 @media screen and (min-width: 768px) {
   .jumbotron {
     padding-top: 48px;
     padding-bottom: 48px;
+      text-align: center;
+
   }
   .container .jumbotron {
     padding-right: 60px;
     padding-left: 60px;
+      text-align: center;
+
   }
   .jumbotron h1,
   .jumbotron .h1 {
     font-size: 63px;
+      text-align: center;
+
   }
 }
 
