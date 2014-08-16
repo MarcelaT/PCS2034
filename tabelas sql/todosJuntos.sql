@@ -6,7 +6,7 @@ CREATE DATABASE sgcav;
 
 -- Acidente
 CREATE TABLE `sgcav`.`acidente` (
-	id INTEGER UNSIGNED NOT NULL auto_increment,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	localizacao varchar(100) NOT NULL,
 	descricao varchar(100) NOT NULL,
 	data TIMESTAMP NOT NULL,
@@ -15,11 +15,11 @@ CREATE TABLE `sgcav`.`acidente` (
 	policia boolean NOT NULL DEFAULT 0,
 	obstrucao INTEGER NOT NULL DEFAULT 0,
 	status enum('cadastrado','finalizado') NOT NULL DEFAULT 'cadastrado',
-	PRIMARY KEY (id)
+	CONSTRAINT pk_acidente PRIMARY KEY (id)
 );
  
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_acidente ON `sgcav`.`acidente`(id);
+CREATE UNIQUE INDEX idx_acidente ON `sgcav`.`acidente`(id);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bombeiro, policia, obstrucao, status)
@@ -38,15 +38,15 @@ INSERT INTO `sgcav`.`acidente` (localizacao, descricao, data, numeroVitimas, bom
 
 -- Tipo de Missão
 CREATE TABLE `sgcav`.`TipodeMissao` (
-	id INTEGER UNSIGNED NOT NULL auto_increment,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	nome varchar(100) NOT NULL UNIQUE,
 	descricao varchar(100) NOT NULL,
 	dataCriacao TIMESTAMP NOT NULL,
-	PRIMARY KEY (id)
+	CONSTRAINT pk_tipomissao PRIMARY KEY (id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_tipomissao ON `sgcav`.`TipodeMissao`(id);
+CREATE UNIQUE INDEX idx_tipomissao ON `sgcav`.`TipodeMissao`(id);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao, dataCriacao)
@@ -64,7 +64,7 @@ INSERT INTO `sgcav`.`TipodeMissao` (nome, descricao, dataCriacao)
 
 -- Missão
 CREATE TABLE `sgcav`.`Missao` (
-	id INTEGER UNSIGNED NOT NULL auto_increment,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	idTipoMissao INTEGER UNSIGNED NOT NULL,
 	protocolo varchar(100) NOT NULL,
 	status enum('cadastrada','em_andamento','concluida','abortada') NOT NULL DEFAULT 'cadastrada',
@@ -72,14 +72,14 @@ CREATE TABLE `sgcav`.`Missao` (
 	recursosAlocados boolean NOT NULL DEFAULT 0,
 	dataCriacao TIMESTAMP NOT NULL,
 	idAcidente INTEGER UNSIGNED NOT NULL,
-	PRIMARY KEY (id), 
-	FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id),
-	FOREIGN KEY (idAcidente) REFERENCES Acidente(id)
+	CONSTRAINT pk_missao PRIMARY KEY (id), 
+	CONSTRAINT fk_missao_tipomissao FOREIGN KEY (idTipoMissao) REFERENCES TipodeMissao(id),
+	CONSTRAINT fk_missao_acidente FOREIGN KEY (idAcidente) REFERENCES Acidente(id) ON DELETE CASCADE
  );
  
 -- Índices (primary key)
-CREATE UNIQUE INDEX PK_missao ON `sgcav`.`Missao`(id);
-CREATE UNIQUE INDEX PK_missao_protocolo ON `sgcav`.`Missao`(protocolo);
+CREATE UNIQUE INDEX idx_missao ON `sgcav`.`Missao`(id);
+CREATE UNIQUE INDEX idx_missao_protocolo ON `sgcav`.`Missao`(protocolo);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlocados, dataCriacao, idAcidente)
@@ -101,14 +101,14 @@ INSERT INTO `sgcav`.`Missao` (idTipoMissao, protocolo, status, nome, recursosAlo
 
 -- Tipo de Recurso
 CREATE TABLE `sgcav`.`TipodeRecurso` (
-	id INTEGER UNSIGNED NOT NULL auto_increment,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	nome varchar(100) NOT NULL UNIQUE,
 	dataCriacao TIMESTAMP NOT NULL,
-	PRIMARY KEY (id)
+	CONSTRAINT pk_tiporecurso PRIMARY KEY (id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_tiporecurso ON `sgcav`.`TipodeRecurso`(id);
+CREATE UNIQUE INDEX idx_tiporecurso ON `sgcav`.`TipodeRecurso`(id);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`TipodeRecurso` (nome, dataCriacao)
@@ -128,14 +128,14 @@ INSERT INTO `sgcav`.`TipodeRecurso` (nome, dataCriacao)
 
 -- Recurso
 CREATE TABLE `sgcav`.`Recurso` (
-	id INTEGER UNSIGNED NOT NULL auto_increment,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	quantidade INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	idTipoRecurso INTEGER UNSIGNED NOT NULL,
 	idMissao INTEGER UNSIGNED NOT NULL,
 	dataCriacao TIMESTAMP NOT NULL,
-	PRIMARY KEY (id), 
-	FOREIGN KEY (idTipoRecurso) REFERENCES `sgcav`.`TipodeRecurso`(id),
-	FOREIGN KEY (idMissao) REFERENCES `sgcav`.`Missao`(id)
+	CONSTRAINT pk_recurso PRIMARY KEY (id), 
+	CONSTRAINT fk_recurso_tiporecurso FOREIGN KEY (idTipoRecurso) REFERENCES `sgcav`.`TipodeRecurso`(id),
+	CONSTRAINT fk_recurso_missao FOREIGN KEY (idMissao) REFERENCES `sgcav`.`Missao`(id) ON DELETE CASCADE
 );
 
 -- Índice (primary key)
@@ -159,18 +159,19 @@ INSERT INTO `sgcav`.`Recurso` (quantidade, idTipoRecurso, idMissao, dataCriacao)
 
 -- Usuarios
 CREATE TABLE IF NOT EXISTS `sgcav`.`usuarios` (
-	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	login varchar(100) NOT NULL UNIQUE,
 	senha varchar(100) NOT NULL,
 	nome varchar(100) DEFAULT NULL,
 	permissao enum('administrador','coordenador','especialista','lider_missao') NOT NULL DEFAULT 'administrador',
 	email varchar(100) DEFAULT NULL,
 	dataCriacao TIMESTAMP NOT NULL,
-	dataEdicao TIMESTAMP NOT NULL
+	dataEdicao TIMESTAMP NOT NULL,
+	CONSTRAINT pk_usuario PRIMARY KEY (id)
 );
 
 -- Índice (primary key)
-CREATE UNIQUE INDEX PK_usuario ON `sgcav`.`usuarios`(id);
+CREATE UNIQUE INDEX idx_usuario ON `sgcav`.`usuarios`(id);
 
 -- Valores interessantes
 INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
