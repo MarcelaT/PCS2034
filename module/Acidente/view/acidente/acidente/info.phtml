@@ -75,23 +75,23 @@ $this->headTitle($title);
 	<th id="recursos-th"></th>
 	<th>&nbsp;</th>
 </tr>
+
+<?php if ($isCoordenador) { ?>
+<script type="text/javascript">
+	$('#recursos-th').html("Recursos");
+</script>
+<?php } ?>
+
 <?php if (count($missoes) == 0) { ?>
 <tr>
 	<td>Não existem missões alocadas para este acidente.</td>
 	<td></td>
 	<td></td>
 </tr>
-<?php } else { ?>
-<script type="text/javascript">
-	$('#recursos-th').html("Recursos");
-</script>
-<?php foreach ($missoes as $missao) : ?>
+<?php } else { foreach ($missoes as $missao) : ?>
 <tr>
 	<td><?php echo $this->escapeHtml($missao->nome);?></td>
-	<?php if ($isCoordenador && !$missao->recursosAlocados) { ?>
-	<script type="text/javascript">
-		$('#recursos-th').html("Recursos");
-	</script>
+	<?php if ($isCoordenador) { if (!$missao->recursosAlocados) { ?>
 	<td>
 		<a href="<?php echo $this->url('missao', array('action'=>'alocarrecursos', 'id' => $missao->id));?>">Alocar recursos</a> 
 	</td>
@@ -99,7 +99,7 @@ $this->headTitle($title);
 	<td>
 		<a href="<?php echo $this->url('missao', array('action'=>'editarrecursos', 'id' => $missao->id));?>">Editar recursos alocados</a> 
 	</td>
-	<?php } ?>
+	<?php }} ?>
 	<td>
 		<a href="<?php echo $this->url('missao',
 			array('action'=>'detalhes', 'id' => $missao->id));?>">Detalhes</a>
@@ -115,7 +115,6 @@ $this->headTitle($title);
 </tr>
 <?php endforeach; } ?>
 </table>
-
 
 <?php if ($isEspecialista && $acidente->status == 'cadastrado') { ?>
 <a class='btn btn-primary' href="<?php echo $this->url('acidente', array('action'=>'alocarmissao', 
