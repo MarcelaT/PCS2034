@@ -443,47 +443,42 @@ class MissaoController extends AbstractActionController
 		return $this->updateStatus($id, 'abortada');
 	}
 
-	public function editarrecursosAction(){
-
+	public function editarrecursosAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
 		if (!$idMissao) {
 			return $this->redirect()->toRoute('missao');
 		}
-
-		$Recursos = $this->getRecursoTable()->getRecursosidMissao($idMissao);
-
-
-
 		
-			$editarRecursoLista = array();
-
-
-			foreach($Recursos as $recurso){
-
+		$Recursos = $this->getRecursoTable()->getRecursosidMissao($idMissao);
+		
+		$editarRecursoLista = array();
+		
+		foreach ($Recursos as $recurso) {
 			$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
-
 			$editarRecurso = new EditarRecurso();
-
-				$editarRecurso->idRecurso = $recurso->id;
-				$editarRecurso->nome = $tipoRecurso->nome;
-				$editarRecurso->quantidade = $recurso->quantidade;
-				$editarRecurso->idTipoRecurso = $tipoRecurso->id;
-
+			$editarRecurso->idRecurso = $recurso->id;
+			$editarRecurso->nome = $tipoRecurso->nome;
+			$editarRecurso->quantidade = $recurso->quantidade;
+			$editarRecurso->idTipoRecurso = $tipoRecurso->id;
 			array_push($editarRecursoLista, $editarRecurso);
-
-			}
+		}
 
 		return array(
 			'editarRecursoLista' => $editarRecursoLista,
 			'idMissao' => $idMissao,
-		);		
+			'idAcidente' => $this->getMissaoTable()->getMissao($idMissao)->idAcidente,
+		);
 	}
-
-
-	public function editarrecurso1Action(){
-
+	
+	public function editarrecurso1Action()
+	{
+		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('coordenador');
-
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$recurso= new Recurso();
@@ -493,31 +488,29 @@ class MissaoController extends AbstractActionController
 			$recurso->idTipoRecurso = $request->getPost('idTipoRecurso');	
 			$this->getRecursoTable()->saveRecurso($recurso);
 			return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $recurso->idMissao));
-
 		}
-
+		
 		$id = (int) $this->params()->fromRoute('id', 0);
 		$recurso = $this->getRecursoTable()->getRecurso($id);
 		$tipoRecurso = $this->getTipoRecursoTable()->getTipoRecurso($recurso->idTipoRecurso);
+		
 		$editarRecurso = new EditarRecurso();
-
 		$editarRecurso->idRecurso = $recurso->id;
 		$editarRecurso->nome = $tipoRecurso->nome;
 		$editarRecurso->quantidade = $recurso->quantidade;
 		$editarRecurso->idTipoRecurso = $tipoRecurso->id;
 		$editarRecurso->idMissao = $recurso->idMissao;
-
-
+		
 		return array(
 			'editarRecurso' => $editarRecurso,
 		);
-
 	}
-
-		public function novoRecursoAction(){
-
+	
+	public function novoRecursoAction()
+	{
+		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('coordenador');
-
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$Recurso = new Recurso();
@@ -533,7 +526,6 @@ class MissaoController extends AbstractActionController
 				$this->getRecursoTable()->saveRecurso($Recurso);
 			}
 			return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $Recurso->idMissao));
-	
 		}	
 		
 		$idMissao = (int) $this->params()->fromRoute('id', 0);
@@ -553,19 +545,18 @@ class MissaoController extends AbstractActionController
 		);
 	}
 
-	public function removerrecursoAction(){
+	public function removerrecursoAction()
+	{
+		// verifica a permissão do usuário
 		$this->commonsPlugin()->verificaPermissao('coordenador');
 
 		$id = (int) $this->params()->fromRoute('id', 0);
 		$recurso = $this->getRecursoTable()->getRecurso($id);
 
-		if($id!=0){
+		if ($id != 0) {
 			$this->getRecursoTable()->deleteRecurso($id);
-
 		}
 		return $this->redirect()->toRoute('missao', array('action' => 'editarrecursos', 'id' => $recurso->idMissao));
-
-
 	}
 	
 	////////////

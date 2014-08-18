@@ -9,14 +9,18 @@ $this->headTitle($title);
 <table class="table">
 <tr>
     <th>Nome</th>
-	<th>Tipo de missão</th>
+	<th id="tipomissao-th"></th>
 </tr>
 <?php if (count($missoes) == 0) { ?>
 <tr>
-	<td>Não existem missões alocadas para este acidente</td>
+	<td>Não existem missões alocadas para este acidente.</td>
 	<td></td>
 </tr>
-<?php } else { foreach ($missoes as $missao) : ?>
+<?php } else { ?>
+<script type="text/javascript">
+	$('#tipomissao-th').html("Tipo de missão");
+</script>
+<?php foreach ($missoes as $missao) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($missao->nome);?></td>
 	<td><?php echo $this->escapeHtml($nomesTiposMissao[$missao->idTipoMissao]);?></td>

@@ -19,8 +19,8 @@ $this->headTitle($title);
 	<th>&nbsp;</th>
 </tr>
 <tr>
-	<?php foreach ($editarRecursoLista as $recurso) : ?>
-	<div class="form-group">
+<?php foreach ($editarRecursoLista as $recurso) : ?>
+<div class="form-group">
 	<tr>
 	<td>
 		<?php echo $this->escapeHtml($recurso->nome);?></td>
@@ -34,21 +34,11 @@ $this->headTitle($title);
 	<td>
 		<a href="<?php echo $this->url('missao', array('action'=>'removerrecurso', 'id' => $recurso->idRecurso));?>">Remover
 	</td>
-
-
 	</tr>
-	<?php endforeach; ?>
-	</div>
+<?php endforeach; ?>
+</div>
 </tr>
 </table>
 
-<a id="btn-novorecurso" class="btn btn-default" href="<?php echo $this->url('missao', array('action'=>'novorecurso', 'id' => $idMissao)); ?>">Alocar novo recurso</a>
-<a id="btn-voltar" class="btn btn-default" href="<?php echo $this->url('missao', array('action'=>'editarrecursos', 'id' => $idMissao)); ?>">Voltar</a>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		if (document.referrer.indexOf(window.location.hostname) != -1) {
-			$('#btn-voltar').attr('href', document.referrer);
-		}
-	})
-</script>
+<a id="btn-novorecurso" class="btn btn-primary" href="<?php echo $this->url('missao', array('action'=>'novorecurso', 'id' => $idMissao)); ?>">Alocar novo recurso</a>
+<a id="btn-voltar" class="btn btn-default" href="<?php echo $this->url('acidente', array('action'=>'info', 'id' => $idAcidente)); ?>">Voltar</a>

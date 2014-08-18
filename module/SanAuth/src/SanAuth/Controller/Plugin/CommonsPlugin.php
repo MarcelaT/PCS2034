@@ -125,16 +125,18 @@ class CommonsPlugin extends AbstractPlugin
 	
 	// traz a lagitude/longitude do endereço via google maps
 	public function getLatLng($address) {
-		try{
+		try {
 			$address = urlencode($address);
-			$geocode=file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+			$geocode = file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
 
-			$output= json_decode($geocode);
-
-			$lat = $output->results[0]->geometry->location->lat;
-			$lng = $output->results[0]->geometry->location->lng;
-			if(is_numeric($lat) && is_numeric($lng)){
-				return array("lat" => $lat, "lng" => $lng);
+			$output = json_decode($geocode);
+			
+			if (null != $output->results) {
+				$lat = $output->results[0]->geometry->location->lat;
+				$lng = $output->results[0]->geometry->location->lng;
+				if(is_numeric($lat) && is_numeric($lng)){
+					return array("lat" => $lat, "lng" => $lng);
+				}
 			}
 		} catch(Exception $e) {	
 			return false;
