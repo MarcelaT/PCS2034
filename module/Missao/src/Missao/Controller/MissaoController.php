@@ -106,14 +106,14 @@ class MissaoController extends AbstractActionController
 					}
 				}
 				
+				try {
+					$Missao = $this->getMissaoTable()->getMissao($idMissao);
+				} catch (\Exception $ex) {
+					return $this->redirect()->toRoute('missao', array('action' => 'index'));
+				}
+				
 				// atualiza a missão (apenas se houve algum recurso persistido)
 				if ($existeRecurso) {
-					try {
-						$Missao = $this->getMissaoTable()->getMissao($idMissao);
-					} catch (\Exception $ex) {
-						return $this->redirect()->toRoute('missao', array('action' => 'index'));
-					}
-					
 					$Missao->status = "em_andamento";
 					$Missao->recursosAlocados = true;
 					$this->getMissaoTable()->saveMissao($Missao);
