@@ -20,45 +20,24 @@ class MissaoForm extends Form
 		// nome
 		$this->add(array(
 			'name' => 'nome',
-			'type' => 'text',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
 			'options' => array(
 				'label' => 'Nome',
 			),
 		));
 		
-		// idTipoMissao
+		// tipoDeMissao
 		$this->add(array(
 			'name' => 'idTipoMissao',
-			'type' => 'text',
-			'options' => array(
-				'label' => 'idTipoMissao',
-			),
-		));
-		
-		// protocolo
-		$this->add(array(
-			'name' => 'protocolo',
-			'type' => 'text',
-			'options' => array(
-				'label' => 'Protocolo',
-			),
-		));
-		
-		// status
-		$this->add(array(
-			'name' => 'status',
 			'type' => 'select',
 			'attributes' => array(
 				'class' => 'form-control',
 			),
 			'options' => array(
-				'label' => 'Status',
-				'value_options' => array(
-					'cadastrada' => 'Cadastrada',
-					'em_andamento' => 'Em Andamento',
-					'abortada' => 'Abortada',
-					'concluida' => 'Concluída',
-				),
+				'label' => 'Tipo de missão',
 			),
 		));
 		

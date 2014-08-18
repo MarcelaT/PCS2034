@@ -1,0 +1,57 @@
+<?php
+$title = 'Editar missão';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('missao', array('action' => 'edit', 'id' => $this->id,)));
+$form->prepare();
+
+echo $this->form()->openTag($form); ?>
+
+<input type="hidden" name="redirect-url" value="<?php echo $redirectUrl; ?>" />
+	
+<!-- Data, Protocolo e Status não podem ser alterados! -->
+<div class="form-group">
+	<label class="control-label">Data</label>
+	<input readonly class='form-control' name='data' type='text' value='<?php echo $missaoData ?>'>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Protocolo</label>
+	<input readonly class='form-control' name='data' type='text' value='<?php echo $missaoProtocolo ?>'>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Status</label>
+	<input readonly class='form-control' name='data' type='text' value='<?php echo $missaoStatusNome ?>'>
+</div>
+
+<?php foreach ($form as $element) :?>
+	<div class="form-group">
+		<?php 
+			if ($element->getOption('required')) { $req = 'required'; }
+			$type = $element->getAttribute('type');
+			$name = $element->getAttribute('name'); 
+			$label = $element->getLabel();
+			$value = $element->getValue();
+		?>
+		<?php if ($name == 'id') { ?>
+			<div class="hidden"><?php echo $this->formElement($element); ?></div>
+		<?php } else if ($name == 'submit') { ?>
+			<input type='submit' class='btn btn-default' name='submit' value='<?php echo $value ?>'>
+			<input class='btn' name='submit' type='submit' value='Cancelar'>
+		<?php } else if ($type == 'select' || $type == 'checkbox') {
+			echo $this->formRow($form->get($name)); ?>
+		<?php } else if ($label != '') { ?>
+			<label class="control-label"><?php echo $label ?></label>
+			<input class='form-control' name='<?php echo $name ?>' type='<?php echo $type ?>'
+				value='<?php echo $value ?>'>
+		<?php } ?> 
+	</div>
+<?php 
+endforeach;
+echo $this->form()->closeTag();
+?>

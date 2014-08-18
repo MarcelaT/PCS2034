@@ -79,9 +79,11 @@ $this->headScript()->prependFile('/js/bootstrap-datepicker.js');
 	<td><?php echo $this->escapeHtml($acidente->descricao);?></td>
 	<td>
 		<a href="<?php echo $this->url('acidente',
-			array('action' => 'info', 'id' => $acidente->id));?>">Mais informações</a> |
-		<a href="<?php echo $this->url('acidente',
+			array('action' => 'info', 'id' => $acidente->id));?>">Mais informações</a>
+		<?php if ($isCoordenador) : ?>
+		 | <a href="<?php echo $this->url('acidente',
 			array('action' => 'edit', 'id' => $acidente->id));?>">Editar</a>
+		<?php endif; ?>
 		<?php if ($isAdmin) : ?>
 		 | <a href="<?php echo $this->url('acidente',
 			array('action' => 'delete', 'id' => $acidente->id));?>">Remover</a>

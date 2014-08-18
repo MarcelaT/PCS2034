@@ -297,6 +297,96 @@ class AcidenteController extends AbstractActionController
 		);
 	}
 	
+	public function editAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('coordenador');
+
+		$idAcidente = (int) $this->params()->fromRoute('id', 0);
+		if (!$idAcidente) {
+			return $this->redirect()->toRoute('acidente', array('action' => 'add'));
+		}
+		
+		// recupera o acidente pelo id
+		try {
+			$acidente = $this->getAcidenteTable()->getAcidente($idAcidente);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('acidente', array('action' => 'index'));
+		}
+		
+		// armazena valores antigos que não são editados
+		$acidenteData = $acidente->data;
+		$acidenteStatus = $acidente->status;
+		$acidenteStatusNome = $acidente->statusNome;
+		
+		$form = new AcidenteForm();
+		$form->get('submit')->setValue('Editar');
+		$form->bind($acidente);
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				return $this->redirect()->toRoute('acidente');
+			}
+			
+			$form->setInputFilter($acidente->getInputFilter());
+			$form->setData($request->getPost());
+			if ($submit == 'Editar') {
+				$acidente->id = $request->getPost('id');
+				$acidente->localizacao = $request->getPost('localizacao');
+				$acidente->descricao = $request->getPost('descricao');
+				$acidente->bombeiro = $request->getPost('bombeiro');
+				$acidente->policia = $request->getPost('policia');
+				$acidente->numeroVitimas = $request->getPost('numeroVitimas');
+				$acidente->obstrucao = $request->getPost('obstrucao');
+				$acidente->data = $acidenteData;
+				$acidente->status = $acidenteStatus;
+				$this->getAcidenteTable()->saveAcidente($acidente);
+			}
+			
+			// Redirect to list of usuarios
+			return $this->redirect()->toRoute('acidente');
+		}
+
+		return array(
+			'id' => $idAcidente,
+			'form' => $form,
+			'acidenteData' => $acidenteData,
+			'acidenteStatusNome' => $acidenteStatusNome,
+		);
+	}
+	
+	public function deleteAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('administrador');
+				
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('acidente');
+		}
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$del = $request->getPost('del');
+			
+			if ($del == 'Sim') {
+				$id = (int) $request->getPost('id');
+				$this->getAcidenteTable()->deleteAcidente($id);
+			}
+			
+			// Redirect to list of acidentes
+			return $this->redirect()->toRoute('acidente');
+		}
+		
+		return array(
+			'id' => $id,
+			'acidente' => $this->getAcidenteTable()->getAcidente($id),
+		);
+	}
+	
 	////////////
 	// Tables //
 	////////////

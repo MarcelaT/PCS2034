@@ -169,9 +169,80 @@ class MissaoController extends AbstractActionController
 		);
 	}
 	
-	/*
-	 * Não utilizamos (ainda?) a ação de deletar missões
-	 *
+	public function editAction()
+	{
+		// verifica a permissão do usuário
+		$this->commonsPlugin()->verificaPermissao('especialista');
+		
+		// para redirecionar o usuário para acidente ou missão, depende de onde ele veio
+		$redirectUrl = $this->getRequest()->getHeader('Referer')->getUri();
+		
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id) {
+			// retorna para a última página visitada pelo usuário (via acidentes ou missão)
+			return $this->redirect()->toUrl($request->getPost('redirect-url'));
+		}
+		
+		// recupera a missao pelo id
+		try {
+			$missao = $this->getMissaoTable()->getMissao($id);
+		} catch (\Exception $ex) {
+			// retorna para a última página visitada pelo usuário (via acidentes ou missão)
+			return $this->redirect()->toUrl($request->getPost('redirect-url'));
+		}
+		
+		// armazena valores antigos que não são editados
+		$missaoData = $missao->dataCriacao;
+		$missaoProtocolo = $missao->protocolo;
+		$missaoStatus = $missao->status;
+		$missaoStatusNome = $missao->statusNome;
+		
+		$form = new MissaoForm();
+		$form->get('submit')->setValue('Editar');
+		
+		// popula o select do tipo de missão
+		$arrayTiposMissao = $this->getTipoMissaoTable()->getArrayNomes();
+		$form->get('idTipoMissao')->setOptions(array(
+			'value_options' => $arrayTiposMissao
+		));
+		
+		$form->bind($missao);
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			// verifica se o usuário clicou em 'cancelar'
+			$submit = $request->getPost('submit');
+			if ($submit == 'Cancelar') {
+				// retorna para a última página visitada pelo usuário (via acidentes ou missão)
+				return $this->redirect()->toUrl($request->getPost('redirect-url'));
+			}
+			
+			$form->setInputFilter($missao->getInputFilter());
+			$form->setData($request->getPost());
+			if ($submit == 'Editar') {
+				$missao->id = $request->getPost('id');
+				$missao->nome = $request->getPost('nome');
+				$missao->idTipoMissao = $request->getPost('idTipoMissao');
+				$missao->dataCriacao = $missaoData;
+				$missao->status = $missaoStatus;
+				$missao->protocolo = $missaoProtocolo;
+				$this->getMissaoTable()->saveMissao($missao);
+			}
+			
+			// retorna para a última página visitada pelo usuário (via acidentes ou missão)
+			return $this->redirect()->toUrl($request->getPost('redirect-url'));
+		}
+
+		return array(
+			'id' => $id,
+			'form' => $form,
+			'missaoData' => $missaoData,
+			'missaoProtocolo' => $missaoProtocolo,
+			'missaoStatusNome' => $missaoStatusNome,
+			'redirectUrl' => $redirectUrl,
+		);
+	}
+	
 	public function deleteAction()
 	{
 		// verifica a permissão do usuário
@@ -182,6 +253,21 @@ class MissaoController extends AbstractActionController
 			return $this->redirect()->toRoute('missao');
 		}
 
+		try {
+			$missao = $this->getMissaoTable()->getMissao($id);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+		
+		try {
+			$tipoMissao = $this->getTipoMissaoTable()->getTipoMissao($missao->idTipoMissao);
+		} catch (\Exception $ex) {
+			return $this->redirect()->toRoute('missao', array('action' => 'index'));
+		}
+		
+		// para redirecionar o usuário para acidente ou missão, depende de onde ele veio
+		$redirectUrl = $this->getRequest()->getHeader('Referer')->getUri();
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$del = $request->getPost('del');
@@ -190,17 +276,18 @@ class MissaoController extends AbstractActionController
 				$id = (int) $request->getPost('id');
 				$this->getMissaoTable()->deleteMissao($id);
 			}
-
-			// Redirect to list of Missao
-			return $this->redirect()->toRoute('missao');
+			
+			// retorna para a última página visitada pelo usuário (via acidentes ou missão)
+			return $this->redirect()->toUrl($request->getPost('redirect-url'));
 		}
-
+		
 		return array(
 			'id' => $id,
-			'Missao' => $this->getMissaoTable()->getMissao($id)
+			'missao' => $this->getMissaoTable()->getMissao($id),
+			'tipoMissao' => $tipoMissao,
+			'redirectUrl' => $redirectUrl,
 		);
 	}
-	*/
 	
 	public function missaoprotocoloAction()
 	{
@@ -216,11 +303,11 @@ class MissaoController extends AbstractActionController
 			if ($submit == 'Cancelar') {
 				return $this->redirect()->toRoute('success');
 			}
-
+			
 			$form->setData($request->getPost());
 			if ($form->isValid()) {
 				$protocolo = $request->getPost('protocolo');
-
+				
 				if ($protocolo == '') {
 					$this->flashmessenger()->addMessage('Preencha o campo \'Protocolo\'.');
 					return $this->redirect()->toRoute('missao', array('action'=>'missaoprotocolo'));
