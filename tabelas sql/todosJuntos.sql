@@ -181,6 +181,6 @@ INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriaca
 INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
 	VALUES  ('espec',  md5('espec'), 'especialista', 'Especialista Em Acidentes', 'especialista@sgcav.com', '2014-07-28 08:20:00', '2014-07-29 12:00:00');
 INSERT INTO `sgcav`.`usuarios` (login, senha, permissao, nome, email, dataCriacao, dataEdicao)
-	VALUES  ('lider',  md5('lider'), 'lider_missao', 'Lider da `sgcav`.`Missao`', 'lider@sgcav.com', '2014-07-29 08:20:00', '2014-07-30 12:00:00');
+	VALUES  ('lider',  md5('lider'), 'lider_missao', 'Lider da Missao', 'lider@sgcav.com', '2014-07-29 08:20:00', '2014-07-30 12:00:00');
 
 /*-------------------------------------------------------------------------*/
